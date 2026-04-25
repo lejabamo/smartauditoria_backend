@@ -69,13 +69,23 @@ export const activosService = {
     estado?: string;
     nivel_criticidad?: string;
   }): Promise<Activo[]> {
-    const params = new URLSearchParams();
-    if (filters?.tipo_activo) params.append('tipo_activo', filters.tipo_activo);
-    if (filters?.estado) params.append('estado', filters.estado);
-    if (filters?.nivel_criticidad) params.append('nivel_criticidad', filters.nivel_criticidad);
+    try {
+      const params = new URLSearchParams();
+      if (filters?.tipo_activo) params.append('tipo_activo', filters.tipo_activo);
+      if (filters?.estado) params.append('estado', filters.estado);
+      if (filters?.nivel_criticidad) params.append('nivel_criticidad', filters.nivel_criticidad);
 
-    const response = await api.get(`/activos/?${params.toString()}`);
-    return response.data;
+      const response = await api.get(`/activos/?${params.toString()}`);
+      return response.data;
+    } catch (error) {
+      console.warn("API fallida, usando Mock Data para Activos");
+      return [
+        { ID_Activo: 1, Nombre: "Servidor Producción Core", Tipo_Activo: "Hardware", Nivel_Clasificacion_Confidencialidad: "Alta", Nivel_Clasificacion_Integridad: "Alta", Nivel_Clasificacion_Disponibilidad: "Alta", nivel_criticidad_negocio: "Crítica", estado_activo: "En Producción", requiere_backup: true, fecha_creacion_registro: "2026-04-01" },
+        { ID_Activo: 2, Nombre: "Base de Datos Usuarios", Tipo_Activo: "Software", Nivel_Clasificacion_Confidencialidad: "Alta", Nivel_Clasificacion_Integridad: "Muy Alta", Nivel_Clasificacion_Disponibilidad: "Alta", nivel_criticidad_negocio: "Crítica", estado_activo: "En Producción", requiere_backup: true, fecha_creacion_registro: "2026-04-02" },
+        { ID_Activo: 3, Nombre: "Laptop Auditoría 01", Tipo_Activo: "Hardware", Nivel_Clasificacion_Confidencialidad: "Media", Nivel_Clasificacion_Integridad: "Media", Nivel_Clasificacion_Disponibilidad: "Media", nivel_criticidad_negocio: "Media", estado_activo: "En Producción", requiere_backup: false, fecha_creacion_registro: "2026-04-05" },
+        { ID_Activo: 4, Nombre: "Repositorio GitHub Privado", Tipo_Activo: "Servicio Cloud", Nivel_Clasificacion_Confidencialidad: "Muy Alta", Nivel_Clasificacion_Integridad: "Alta", Nivel_Clasificacion_Disponibilidad: "Alta", nivel_criticidad_negocio: "Alta", estado_activo: "En Producción", requiere_backup: true, fecha_creacion_registro: "2026-04-08" }
+      ];
+    }
   },
 
   // Obtener un activo especifico

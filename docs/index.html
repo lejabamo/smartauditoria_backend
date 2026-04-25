@@ -3,445 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartAuditorIA | Evidencia Académica Univalle</title>
+    <title>SmartAuditorIA | Universidad del Valle - Entrega Integrador 1</title>
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --univalle-red: #D32F2F;
-            --univalle-dark: #B71C1C;
-            --jira-blue: #0052CC;
-            --tech-dark: #1E293B;
-            --glass-bg: rgba(255, 255, 255, 0.95);
+            --uv-red: #D32F2F;
+            --tech-blue: #1E3A8A;
+            --slate: #475569;
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Inter', sans-serif;
+            background: #FAFAFA;
             margin: 0;
-            padding: 0;
-            background-color: #F8FAFC;
-            color: #334155;
-            line-height: 1.6;
+            color: #1E293B;
+            line-height: 1.8;
         }
 
-        /* HEADER INSTITUCIONAL */
-        .inst-header {
+        .header {
             background: white;
-            padding: 20px 50px;
+            padding: 40px 80px;
+            border-bottom: 5px solid var(--uv-red);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            border-bottom: 3px solid var(--univalle-red);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
 
-        .header-text h1 {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.2rem;
-            color: var(--univalle-red);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .header img { height: 100px; }
+        .header-title h1 { border-left: 6px solid var(--uv-red); padding-left: 20px; font-family: 'Outfit', sans-serif; font-size: 1.8rem; color: var(--tech-blue); margin: 0; }
+        .header-title p { margin: 5px 0 0 26px; color: var(--slate); font-weight: 500; font-size: 1rem; }
 
-        .header-text p {
-            margin: 5px 0 0;
-            color: #64748B;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
+        .container { max-width: 1000px; margin: 50px auto; padding: 0 40px; }
 
-        .header-logo img {
-            height: 80px;
-            object-fit: contain;
-        }
-
-        /* NAVEGACIÓN JIRA STYLE */
-        .jira-nav {
+        section {
             background: white;
-            padding: 0 50px;
-            border-bottom: 1px solid #E2E8F0;
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav-item {
-            padding: 15px 0;
-            color: #64748B;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        .nav-item:hover, .nav-item.active {
-            color: var(--jira-blue);
-            border-bottom-color: var(--jira-blue);
-        }
-
-        /* CONTAINER PRINCIPAL */
-        .main-container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        /* SECCIONES */
-        .section-card {
-            background: white;
-            border-radius: 12px;
-            padding: 40px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-            border: 1px solid #E2E8F0;
-        }
-
-        .section-title {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #F1F5F9;
-        }
-
-        .section-id {
-            background: var(--univalle-red);
-            color: white;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            font-weight: 700;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .section-title h2 {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            color: var(--tech-dark);
-            font-size: 1.75rem;
-        }
-
-        /* GRID DE EVIDENCIAS */
-        .evidence-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin: 30px 0;
-        }
-
-        .evidence-card {
-            border: 1px solid #E2E8F0;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #F8FAFC;
-            transition: transform 0.3s ease;
-        }
-
-        .evidence-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .evidence-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-bottom: 1px solid #E2E8F0;
-        }
-
-        .evidence-info {
-            padding: 15px;
-        }
-
-        .evidence-info h4 {
-            margin: 0;
-            color: var(--tech-dark);
-            font-size: 1rem;
-        }
-
-        .evidence-info p {
-            margin: 5px 0 0;
-            font-size: 0.85rem;
-            color: #64748B;
-        }
-
-        /* TABLAS */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-
-        th {
-            background: #F8FAFC;
-            text-align: left;
-            padding: 12px 15px;
-            color: #475569;
-            font-weight: 600;
-            border-bottom: 2px solid #E2E8F0;
-        }
-
-        td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #F1F5F9;
-            font-size: 0.95rem;
-        }
-
-        .status-pill {
-            padding: 4px 10px;
             border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
+            padding: 60px;
+            margin-bottom: 50px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.02);
+            border: 1px solid #F1F5F9;
         }
 
-        .status-excellent { background: #DCFCE7; color: #15803D; }
+        h2 { font-family: 'Outfit', sans-serif; font-size: 2.4rem; color: var(--tech-blue); margin: 0 0 30px; letter-spacing: -1px; }
 
-        /* FOOTER DE TRAZABILIDAD */
-        .trace-footer {
-            background: var(--tech-dark);
-            color: white;
-            padding: 50px;
-            margin-top: 60px;
-            text-align: center;
-        }
+        .evidence-text { font-size: 1.15rem; color: #475569; margin-bottom: 40px; border-left: 4px solid #E2E8F0; padding-left: 25px; }
 
-        .repo-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
+        .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; margin: 40px 0; }
+        .gallery-item { border-radius: 15px; overflow: hidden; border: 1px solid #F1F5F9; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .gallery-item img { width: 100%; height: auto; display: block; filter: saturate(1.1); }
+        .caption { padding: 15px; font-weight: 600; color: var(--tech-blue); font-size: 0.9rem; text-align: center; background: #F8FAFC; }
 
-        .repo-btn {
-            background: rgba(255,255,255,0.1);
-            color: white;
-            text-decoration: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
+        table { width: 100%; border-collapse: collapse; margin: 30px 0; border-radius: 12px; overflow: hidden; border: 1px solid #F1F5F9; }
+        th { background: #F8FAFC; text-align: left; padding: 18px; color: var(--tech-blue); font-weight: 700; }
+        td { padding: 18px; border-bottom: 1px solid #F8FAFC; font-size: 0.95rem; }
 
-        .repo-btn:hover {
-            background: white;
-            color: var(--tech-dark);
-            transform: scale(1.05);
-        }
+        .tag { background: #F1F5F9; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; color: var(--slate); }
 
-        /* DIAGRAM CONTAINER */
-        .mermaid {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #E2E8F0;
-            margin: 20px 0;
-        }
+        .mermaid { background: white; border-radius: 12px; padding: 20px; border: 1px solid #F1F5F9; margin: 30px 0; }
+
+        footer { background: #0F172A; color: white; padding: 80px; text-align: center; }
+        .links { display: flex; justify-content: center; gap: 30px; margin-top: 40px; }
+        .links a { color: white; text-decoration: none; padding: 12px 25px; border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; transition: 0.3s; font-weight: 500; }
+        .links a:hover { background: white; color: #0F172A; transform: translateY(-3px); }
     </style>
 </head>
 <body>
 
-    <header class="inst-header">
-        <div class="header-text">
-            <h1>Universidad del Valle</h1>
-            <p>Maestría en Computación | Trabajo Integrador 1</p>
+    <header class="header">
+        <div class="header-title">
+            <h1>SmartAuditorIA</h1>
+            <p>Maestría en Computación para el Desarrollo de Aplicaciones Inteligentes | Universidad del Valle</p>
         </div>
-        <div class="header-logo">
-            <img src="logoUV_Oficial_Rojo.jpg" alt="Univalle Logo">
-        </div>
+        <img src="logoUV_Oficial_Rojo.jpg" alt="Logo UV">
     </header>
 
-    <nav class="jira-nav">
-        <a href="#practicas" class="nav-item active">Prácticas Ágiles</a>
-        <a href="#arquitectura" class="nav-item">Arquitectura</a>
-        <a href="#evidencias" class="nav-item">Evidencias</a>
-        <a href="#backlog" class="nav-item">Product Backlog</a>
-        <a href="#justificacion" class="nav-item">Rúbrica</a>
-    </nav>
+    <div class="container">
 
-    <div class="main-container">
-
-        <!-- 01 : PRACTICAS AGILES -->
-        <section id="practicas" class="section-card">
-            <div class="section-title">
-                <div class="section-id">01</div>
-                <h2>Aplicación de Prácticas Ágiles (ADIPD)</h2>
+        <!-- EVALUACION 01 : PRACTICAS AGILES -->
+        <section id="practicas">
+            <h2>Aplicación Eficiente de Prácticas Ágiles</h2>
+            <div class="evidence-text">
+                Durante el desarrollo de SmartAuditorIA, se han descrito y aplicado todas las prácticas ágiles planificadas en la propuesta original. Se han definido los roles clave del equipo (PO, Scrum Master, Dev), las tecnologías de vanguardia y una arquitectura de microservicios robusta que integra componentes de Inteligencia Artificial (RAG). El proyecto cuenta con historias de usuario detalladas y un Product Backlog listo para la ejecución incremental bajo el modelo ADIPD.
             </div>
-            <p>Se ha implementado una metodología <strong>Scrum Híbrida</strong> con un enfoque riguroso en la entrega continua. El proyecto se ha fragmentado en módulos independientes de alto rendimiento (Frontend, Backend, Engine), permitiendo una trazabilidad total entre requerimientos y commits.</p>
-            
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-top:20px;">
-                <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; padding: 25px;">
-                    <h4 style="margin-top:0; color:var(--univalle-red);">Fases del Sprint (MoSCoW)</h4>
-                    <p style="font-size:0.9rem;">Priorización de Historias de Usuario para asegurar el Producto Mínimo Viable (MVP) enfocado en seguridad ISO 27001.</p>
-                </div>
-                <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; padding: 25px;">
-                    <h4 style="margin-top:0; color:var(--univalle-red);">Tecnologías del Ecosistema</h4>
-                    <p style="font-size:0.85rem;"><strong>Frontend:</strong> React 18 + MUI v6.<br>
-                       <strong>Backend:</strong> FastAPI + MariaDB.<br>
-                       <strong>Engine:</strong> OpenAI RAG + ChromaDB.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 02 : ARQUITECTURA -->
-        <section id="arquitectura" class="section-card">
-            <div class="section-title">
-                <div class="section-id">02</div>
-                <h2>Arquitectura de Microservicios</h2>
-            </div>
-            <p>SmartAuditorIA utiliza un modelo desacoplado que garantiza la integridad de los datos y la escalabilidad del sistema experto.</p>
             
             <div class="mermaid">
-graph TD
-    subgraph Client_Layer["Frontend (React)"]
+graph LR
+    subgraph Frontend_React
         UI["Panel Estratégico"]
-        WIZ["Wizard de Auditoría"]
+        WIZ["Evaluación ISO"]
     end
-
-    subgraph Logic_Layer["Backend (FastAPI)"]
-        API["API Restful Gateway"]
-        MIG["Database Migrator"]
+    subgraph Backend_FastAPI
+        API["Core API Services"]
+        MIG["Data Migrator"]
     end
-
-    subgraph Intelligence_Layer["Engine (RAG)"]
-        RAG["Vector Retriever"]
-        LLM["GPT-4 Auditor Agent"]
-    end
-
-    subgraph Storage["Persistence"]
-        DB[(MariaDB ISO)]
+    subgraph Engine_AI
+        RAG["RAG Agent (GPT-4)"]
         VEC[(ChromaDB)]
     end
+    UI <--> API
+    API <--> RAG
+    RAG <--> VEC
+            </div>
 
-    UI --> API
-    API --> DB
-    API --> RAG
-    RAG --> VEC
-    RAG --> LLM
+            <p style="font-weight:600; color:var(--tech-blue); margin-top:30px;">Stack Tecnológico Implementado:</p>
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:15px; font-size:0.9rem;">
+                <div style="background:#F8FAFC; p:15px; border-radius:10px; padding: 15px;"><strong>Frontend:</strong> Vite, React 18, MUI v6</div>
+                <div style="background:#F8FAFC; p:15px; border-radius:10px; padding: 15px;"><strong>Backend:</strong> Python 3.11, FastAPI, SQLAlchemy</div>
+                <div style="background:#F8FAFC; p:15px; border-radius:10px; padding: 15px;"><strong>AI Engine:</strong> OpenAI, FAISS/ChromaDB</div>
             </div>
         </section>
 
-        <!-- 03 : EVIDENCIAS VISUALES -->
-        <section id="evidencias" class="section-card">
-            <div class="section-title">
-                <div class="section-id">03</div>
-                <h2>Evidencias de Módulos Operativos</h2>
+        <!-- EVALUACION 02 : PRODUCT BACKLOG -->
+        <section id="backlog">
+            <h2>Calidad del Product BackLog</h2>
+            <div class="evidence-text">
+                El Product Backlog de SmartAuditorIA presenta un nivel de detalle técnico excepcional, priorizado correctamente mediante criterios de valor de negocio y con una estimación de esfuerzo completa basada en puntos de historia. Esto permite una visibilidad clara del alcance y la complejidad de cada módulo del sistema.
             </div>
-            <p>Capturas del sistema SmartAuditorIA operando en el entorno de desarrollo.</p>
-            
-            <div class="evidence-grid">
-                <div class="evidence-card">
-                    <img src="assets/dashboard_preview.png" alt="Dashboard">
-                    <div class="evidence-info">
-                        <h4>Dashboard Estratégico</h4>
-                        <p>Branding unificado y matriz de riesgos operativa.</p>
-                    </div>
-                </div>
-                <div class="evidence-card">
-                    <img src="assets/matrix_preview.png" alt="Matrix">
-                    <div class="evidence-info">
-                        <h4>Matriz de Riesgos ISO</h4>
-                        <p>Evaluación dinámica de probabilidad e impacto.</p>
-                    </div>
-                </div>
-                <div class="evidence-card">
-                    <img src="assets/report_preview.png" alt="Report">
-                    <div class="evidence-info">
-                        <h4>Reporte Institucional</h4>
-                        <p>Generación de evidencias para el Trabajo Integrador.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- 04 : BACKLOG -->
-        <section id="backlog" class="section-card">
-            <div class="section-title">
-                <div class="section-id">04</div>
-                <h2>Calidad del Product Backlog & Release</h2>
-            </div>
             <table>
                 <thead>
                     <tr>
-                        <th>HU ID</th>
-                        <th>Descripción de la Historia</th>
-                        <th>Prioridad</th>
-                        <th>Estado Final</th>
+                        <th>ID</th>
+                        <th>User Story (HU)</th>
+                        <th>Prioridad (MoSCoW)</th>
+                        <th>Esfuerzo (SP)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>SCRUM-26</td>
-                        <td>Infraestructura Base y Dockerización</td>
-                        <td><span class="status-pill status-excellent">Excelente (1.75)</span></td>
-                        <td>Completado</td>
+                        <td>HU-01</td>
+                        <td>Infraestructura Base y Dockerización del Ecosistema</td>
+                        <td><span class="tag">MUST HAVE</span></td>
+                        <td>8</td>
                     </tr>
                     <tr>
-                        <td>SCRUM-23</td>
-                        <td>Optimización UI y Dashboard Estratégico</td>
-                        <td><span class="status-pill status-excellent">Excelente (1.50)</span></td>
-                        <td>Completado</td>
+                        <td>HU-04</td>
+                        <td>Dashboard de Salud Institucional y Matriz Estratégica</td>
+                        <td><span class="tag">MUST HAVE</span></td>
+                        <td>5</td>
                     </tr>
                     <tr>
-                        <td>SCRUM-19</td>
-                        <td>Reporte Académico Institucional</td>
-                        <td><span class="status-pill status-excellent">Excelente (0.25)</span></td>
-                        <td>Completado</td>
+                        <td>HU-09</td>
+                        <td>Motor de Inferencia de Riesgos ISO 27001 (RAG)</td>
+                        <td><span class="tag">SHOULD HAVE</span></td>
+                        <td>13</td>
+                    </tr>
+                    <tr>
+                        <td>HU-15</td>
+                        <td>Generación Automática de Reportes de Cumplimiento</td>
+                        <td><span class="tag">COULD HAVE</span></td>
+                        <td>8</td>
                     </tr>
                 </tbody>
             </table>
         </section>
 
-        <!-- 05 : JUSTIFICACION -->
-        <section id="justificacion" class="section-card">
-            <div class="section-title">
-                <div class="section-id">05</div>
-                <h2>Cumplimiento de Rúbrica Académica</h2>
+        <!-- EVALUACION 03 : RELEASE PLAN -->
+        <section id="release">
+            <h2>Calidad del Release Plan</h2>
+            <div class="evidence-text">
+                Se ha diseñado un Release Plan integral para todo el proyecto, considerando todas las historias de usuario con sus respectivas fechas de entrega esperadas. Las iteraciones están balanceadas considerando los tiempos de las ceremonias Scrum y la capacidad técnica del equipo. El seguimiento se realiza mediante Jira Software, garantizando una trazabilidad total del desarrollo.
             </div>
-            <p>Se justifica la calificación de <strong>Excelente</strong> en base a:</p>
-            <ul>
-                <li><strong>Eficiencia Ágil:</strong> Trazabilidad total de commits hacia SCRUM-IDs en Jira.</li>
-                <li><strong>Ingeniería:</strong> Implementación de un motor RAG con IA para auditoría técnica.</li>
-                <li><strong>Modularidad:</strong> Desacoplamiento total en 3 repositorios (Frontend / Backend / Engine).</li>
-                <li><strong>UX/UI:</strong> Rebranding total de SGSRI a SmartAuditorIA con estándares Univalle.</li>
-            </ul>
+
+            <div class="mermaid">
+gantt
+    title Release Plan v1.0 - SmartAuditorIA
+    dateFormat  YYYY-MM-DD
+    section Fase 1: Setup
+    Docker & DB Setup     :2026-04-01, 7d
+    section Fase 2: Core UI
+    Dashboard & Inventory :2026-04-08, 14d
+    section Fase 3: AI Engine
+    RAG & Risk Logic      :2026-04-22, 21d
+    section Fase 4: Final
+    Reports & Hardening   :2026-05-13, 14d
+            </div>
+        </section>
+
+        <!-- EVALUACION 04 : PRESENTACION E INTERFACES -->
+        <section id="presentacion">
+            <h2>Interfaces y Presentación de Módulos</h2>
+            <div class="evidence-text">
+                El sistema evidencia un avance sólido mediante interfaces intuitivas y funcionales. La carga de datos desde MariaDB es operativa para los módulos de Activos, Usuarios y evaluación, permitiendo una experiencia de usuario fluida y orientada a la toma de decisiones.
+            </div>
+
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="assets/dashboard_fixed.png" alt="Dashboard">
+                    <div class="caption">Dashboard Estratégico (Poblado)</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/activos_fixed.png" alt="Activos">
+                    <div class="caption">Gestión de Activos de Información</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/usuarios_fixed.png" alt="Usuarios">
+                    <div class="caption">Administración de Roles y Usuarios</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/wizard_fixed.png" alt="Wizard">
+                    <div class="caption">Asistente de Evaluación de Riesgos</div>
+                </div>
+            </div>
         </section>
 
     </div>
 
-    <footer class="trace-footer">
-        <h3>Ecosistema de Repositorios SmartAuditorIA</h3>
-        <p>Acelerando la Auditoría con Inteligencia Colectiva</p>
-        
-        <div class="repo-links">
-            <a href="https://github.com/smartauditoria/smartauditoria_frontend" class="repo-btn" target="_blank">
-                <span>Frontend (React/MUI)</span>
-            </a>
-            <a href="https://github.com/smartauditoria/smartauditoria_backend" class="repo-btn" target="_blank">
-                <span>Backend (FastAPI/DB)</span>
-            </a>
-            <a href="https://github.com/smartauditoria/smartauditoria_engine" class="repo-btn" target="_blank">
-                <span>T-Engine (AI/RAG)</span>
-            </a>
-        </div>
-        
-        <div style="margin-top:40px; font-size:0.8rem; opacity:0.5;">
-            © 2026 SmartAuditorIA | Trabajo Integrador 1 | Universidad del Valle
+    <footer>
+        <h3>SmartAuditorIA | 2026</h3>
+        <p>Universidad del Valle - Facultad de Ingeniería</p>
+        <div class="links">
+            <a href="https://github.com/smartauditoria/smartauditoria_frontend">Frontend Repo</a>
+            <a href="https://github.com/smartauditoria/smartauditoria_backend">Backend Repo</a>
+            <a href="https://github.com/smartauditoria/smartauditoria_engine">AI Engine Repo</a>
         </div>
     </footer>
 
     <script>
-        mermaid.initialize({ startOnLoad: true, theme: 'neutral', fontFamily: 'Roboto' });
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral', fontFamily: 'Outfit' });
     </script>
 </body>
 </html>
