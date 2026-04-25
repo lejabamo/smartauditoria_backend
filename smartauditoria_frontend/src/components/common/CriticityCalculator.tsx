@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Card,
@@ -94,7 +94,7 @@ const CriticityCalculator: React.FC<CriticityCalculatorProps> = ({
     <Card sx={{ mb: 3 }}>
       <CardContent>
         <Typography variant="h6" sx={{ color: '#1E3A8A', mb: 3, textAlign: 'center' }}>
-          ðŸ”¢ Calculo Automatico de Criticidad
+          🔢 Cálculo Automático de Criticidad
         </Typography>
         
         <Grid container spacing={3}>
@@ -153,7 +153,7 @@ const CriticityCalculator: React.FC<CriticityCalculatorProps> = ({
         {/* Resultado del calculo */}
         <Box sx={{ mt: 4, p: 3, backgroundColor: '#F8F9FA', borderRadius: 2 }}>
           <Typography variant="h6" sx={{ color: '#1E3A8A', mb: 2, textAlign: 'center' }}>
-            Resultado del Calculo
+            Resultado del Cálculo
           </Typography>
           
           <Grid container spacing={2} alignItems="center">
@@ -189,7 +189,7 @@ const CriticityCalculator: React.FC<CriticityCalculatorProps> = ({
           
           <Alert severity="info" sx={{ mt: 2 }}>
             <Typography variant="body2">
-              <strong>Formula:</strong> Criticidad = (Confidencialidad + Disponibilidad + Integridad) Ã· 3
+              <strong>Fórmula:</strong> Criticidad = (Confidencialidad + Disponibilidad + Integridad) ÷ 3
             </Typography>
           </Alert>
         </Box>

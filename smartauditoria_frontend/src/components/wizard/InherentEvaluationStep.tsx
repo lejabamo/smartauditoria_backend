@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Card,
@@ -72,7 +72,7 @@ const InherentEvaluationStep: React.FC<InherentEvaluationStepProps> = ({
     {
       value: 'Frecuente',
       label: 'Frecuente',
-      description: 'Ocurre varias veces al ano',
+      description: 'Ocurre varias veces al año',
       color: '#EF4444',
       icon: <WarningIcon />,
       examples: ['Fallas diarias de sistema', 'Ataques de phishing semanales', 'Errores de usuario frecuentes']
@@ -80,23 +80,23 @@ const InherentEvaluationStep: React.FC<InherentEvaluationStepProps> = ({
     {
       value: 'Probable',
       label: 'Probable',
-      description: 'Ocurre al menos una vez al ano',
+      description: 'Ocurre al menos una vez al año',
       color: '#F59E0B',
       icon: <TrendingUpIcon />,
-      examples: ['Fallas mensuales', 'Incidentes de seguridad trimestrales', 'Errores de configuracion']
+      examples: ['Fallas mensuales', 'Incidentes de seguridad trimestrales', 'Errores de configuración']
     },
     {
       value: 'Ocasional',
       label: 'Ocasional',
-      description: 'Ocurre cada 2-3 anos',
+      description: 'Ocurre cada 2-3 años',
       color: '#F59E0B',
       icon: <InfoIcon />,
-      examples: ['Fallas de hardware', 'Ataques dirigidos', 'Errores de software criticos']
+      examples: ['Fallas de hardware', 'Ataques dirigidos', 'Errores de software críticos']
     },
     {
       value: 'Posible',
       label: 'Posible',
-      description: 'Ocurre cada 5-10 anos',
+      description: 'Ocurre cada 5-10 años',
       color: '#10B981',
       icon: <CheckCircleIcon />,
       examples: ['Desastres naturales', 'Ataques avanzados', 'Fallas de infraestructura']
@@ -104,10 +104,10 @@ const InherentEvaluationStep: React.FC<InherentEvaluationStepProps> = ({
     {
       value: 'Improbable',
       label: 'Improbable',
-      description: 'Muy raro, menos de una vez cada 10 anos',
+      description: 'Muy raro, menos de una vez cada 10 años',
       color: '#10B981',
       icon: <CheckCircleIcon />,
-      examples: ['Ataques de estado', 'Desastres catastroficos', 'Fallas multiples simultaneas']
+      examples: ['Ataques de estado', 'Desastres catastróficos', 'Fallas múltiples simultáneas']
     }
   ];
 
@@ -115,18 +115,18 @@ const InherentEvaluationStep: React.FC<InherentEvaluationStepProps> = ({
     {
       value: 'Insignificante',
       label: 'Insignificante',
-      description: 'Sin impacto significativo en la operacion',
+      description: 'Sin impacto significativo en la operación',
       color: '#10B981',
       icon: <CheckCircleIcon />,
-      examples: ['Interrupcion menor', 'Perdida de datos no criticos', 'Retraso minimo']
+      examples: ['Interrupción menor', 'Pérdida de datos no críticos', 'Retraso mínimo']
     },
     {
       value: 'Menor',
       label: 'Menor',
-      description: 'Impacto limitado, recuperacion rapida',
+      description: 'Impacto limitado, recuperación rápida',
       color: '#10B981',
       icon: <CheckCircleIcon />,
-      examples: ['Interrupcion de horas', 'Perdida de datos recuperables', 'Retraso de dias']
+      examples: ['Interrupción de horas', 'Pérdida de datos recuperables', 'Retraso de días']
     },
     {
       value: 'Moderado',
@@ -134,23 +134,23 @@ const InherentEvaluationStep: React.FC<InherentEvaluationStepProps> = ({
       description: 'Impacto significativo pero manejable',
       color: '#F59E0B',
       icon: <WarningIcon />,
-      examples: ['Interrupcion de dias', 'Perdida de datos parcial', 'Retraso de semanas']
+      examples: ['Interrupción de días', 'Pérdida de datos parcial', 'Retraso de semanas']
     },
     {
       value: 'Mayor',
       label: 'Mayor',
-      description: 'Impacto severo en operaciones criticas',
+      description: 'Impacto severo en operaciones críticas',
       color: '#EF4444',
       icon: <WarningIcon />,
-      examples: ['Interrupcion de semanas', 'Perdida de datos importantes', 'Retraso de meses']
+      examples: ['Interrupción de semanas', 'Pérdida de datos importantes', 'Retraso de meses']
     },
     {
       value: 'Catastrofico',
-      label: 'Catastrofico',
-      description: 'Perdida total o impacto critico',
+      label: 'Catastrófico',
+      description: 'Pérdida total o impacto crítico',
       color: '#EF4444',
       icon: <WarningIcon />,
-      examples: ['Perdida total del activo', 'Interrupcion permanente', 'Impacto legal severo']
+      examples: ['Pérdida total del activo', 'Interrupción permanente', 'Impacto legal severo']
     }
   ];
 
@@ -194,31 +194,21 @@ const InherentEvaluationStep: React.FC<InherentEvaluationStepProps> = ({
     }
   };
 
-  // Efectos para sincronizar con datos externos
+  // Efectos para sincronizar con datos externos utilizando valores primitivos
   useEffect(() => {
     const probIndex = probabilityLevels.findIndex(p => p.value === data.probabilidad);
     const impIndex = impactLevels.findIndex(i => i.value === data.impacto);
-    setProbabilityValue(probIndex >= 0 ? probIndex : 0);
-    setImpactValue(impIndex >= 0 ? impIndex : 0);
-    setJustification(data.justificacion || '');
-  }, [data]);
+    
+    const targetProbIndex = probIndex >= 0 ? probIndex : 0;
+    const targetImpIndex = impIndex >= 0 ? impIndex : 0;
+    const targetJustification = data.justificacion || '';
+    
+    setProbabilityValue(prev => prev !== targetProbIndex ? targetProbIndex : prev);
+    setImpactValue(prev => prev !== targetImpIndex ? targetImpIndex : prev);
+    setJustification(prev => prev !== targetJustification ? targetJustification : prev);
+  }, [data.probabilidad, data.impacto, data.justificacion]);
 
-  // Actualizar datos cuando cambian los valores (solo probabilidad e impacto, no justificación)
-  useEffect(() => {
-    if (probabilityValue >= 0 && impactValue >= 0) {
-      const selectedProb = probabilityLevels[probabilityValue];
-      const selectedImp = impactLevels[impactValue];
-      const riskLevel = calculateRiskLevel(selectedProb.value, selectedImp.value);
-      
-      onUpdate({
-        probabilidad: selectedProb.value,
-        impacto: selectedImp.value,
-        nivelRiesgo: riskLevel,
-        justificacion: justification
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [probabilityValue, impactValue]);
+
 
   const handleProbabilityChange = (event: Event, newValue: number | number[]) => {
     setProbabilityValue(newValue as number);
@@ -257,181 +247,88 @@ const InherentEvaluationStep: React.FC<InherentEvaluationStepProps> = ({
       {/* Header con progreso */}
       <Box sx={{ mb: 1.5 }}>
         <Typography variant="h6" className="font-poppins" sx={{ color: '#1E3A8A', mb: 1 }}>
-          evaluación Inherente del Riesgo
+          Evaluación Inherente del Riesgo
         </Typography>
         
-        {/* Indicador de pasos */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
-          <Chip
-            label="1. Probabilidad"
-            color={currentStep === 'probability' ? 'primary' : 'default'}
-            variant={currentStep === 'probability' ? 'filled' : 'outlined'}
-            onClick={() => setCurrentStep('probability')}
-            sx={{ cursor: 'pointer' }}
-          />
-          <Chip
-            label="2. Impacto"
-            color={currentStep === 'impact' ? 'primary' : 'default'}
-            variant={currentStep === 'impact' ? 'filled' : 'outlined'}
-            onClick={() => setCurrentStep('impact')}
-            sx={{ cursor: 'pointer' }}
-          />
-          <Chip
-            label="3. justificación"
-            color={currentStep === 'justification' ? 'primary' : 'default'}
-            variant={currentStep === 'justification' ? 'filled' : 'outlined'}
-            onClick={() => setCurrentStep('justification')}
-            sx={{ cursor: 'pointer' }}
-          />
-        </Box>
+        {/* Indicador de pasos ELIMINADO para reducir sobrecarga cognitiva */}
       </Box>
-
       <Grid container spacing={2}>
-        {/* Panel Principal - evaluación Paso a Paso */}
-        <Grid  size={{ xs: 12, md: 8 }}>
+        {/* Panel Principal - evaluación Unificada */}
+        <Grid item xs={12} md={8}>
           <Card sx={{ borderRadius: '16px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
             <CardContent sx={{ p: 2.5, pt: 2.5, minHeight: '400px' }}>
               <Box>
-                {/* Paso 1: Probabilidad */}
-                {currentStep === 'probability' && (
-                <Fade in={true}>
-                <Box>
-                  <Typography variant="h6" className="font-poppins" sx={{ color: '#1E3A8A', mb: 2 }}>
-                    Paso 1: ¿Con que frecuencia puede ocurrir este riesgo?
-                  </Typography>
-                  
-                  <Box sx={{ mb: 4 }}>
-                    <Slider
-                      value={probabilityValue}
-                      onChange={handleProbabilityChange}
-                      min={0}
-                      max={probabilityLevels.length - 1}
-                      step={1}
-                      marks={probabilityLevels.map((_, index) => ({
-                        value: index,
-                        label: probabilityLevels[index].label
-                      }))}
-                      sx={{
-                        '& .MuiSlider-thumb': {
-                          width: 24,
-                          height: 24,
-                          backgroundColor: '#1E3A8A',
-                        },
-                        '& .MuiSlider-track': {
-                          backgroundColor: '#1E3A8A',
-                        },
-                        '& .MuiSlider-rail': {
-                          backgroundColor: '#E5E7EB',
-                        },
-                      }}
-                    />
-                  </Box>
+                <Alert severity="info" sx={{ mb: 3, borderRadius: '12px' }}>
+                  <strong>Interacción Rápida:</strong> Puedes establecer la probabilidad y el impacto haciendo clic directamente en las celdas de la <b>Matriz de Riesgo</b> del panel derecho, o seleccionándolos en las listas.
+                </Alert>
+                
+                <Grid container spacing={2} sx={{ mb: 3 }}>
+                  <Grid item xs={12} md={6}>
+                    <FormControl fullWidth variant="outlined">
+                      <InputLabel id="probabilidad-label">Probabilidad de Ocurrencia</InputLabel>
+                      <Select
+                        labelId="probabilidad-label"
+                        id="probabilidad-select"
+                        value={probabilityValue ?? 0}
+                        onChange={(e) => {
+                          const val = Number(e.target.value);
+                          setProbabilityValue(val);
+                          if (val >= 0 && impactValue >= 0) {
+                            const selectedProb = probabilityLevels[val];
+                            const selectedImp = impactLevels[impactValue];
+                            const riskLevel = calculateRiskLevel(selectedProb.value, selectedImp.value);
+                            onUpdate({
+                              probabilidad: selectedProb.value,
+                              impacto: selectedImp.value,
+                              nivelRiesgo: riskLevel,
+                              justificacion: justification
+                            });
+                          }
+                        }}
+                        label="Probabilidad de Ocurrencia"
+                      >
+                        {probabilityLevels.map((lvl, idx) => (
+                          <MenuItem key={`prob-item-${idx}`} value={idx}>{lvl.label} - {lvl.description}</MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
 
-                  {selectedProbability && (
-                    <Alert 
-                      severity="info" 
-                      sx={{ 
-                        mb: 3, 
-                        borderRadius: '12px',
-                        backgroundColor: '#F0F9FF',
-                        border: `2px solid ${selectedProbability.color}20`
-                      }}
-                    >
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Box sx={{ color: selectedProbability.color }}>
-                          {selectedProbability.icon}
-                        </Box>
-                        <Box>
-                          <Typography variant="subtitle1" className="font-poppins" sx={{ fontWeight: 600 }}>
-                            {selectedProbability.label}
-                          </Typography>
-                          <Typography variant="body2" className="font-roboto">
-                            {selectedProbability.description}
-                          </Typography>
-                          <Typography variant="caption" className="font-roboto" sx={{ color: '#6B7280', mt: 1, display: 'block' }}>
-                            Ejemplos: {selectedProbability.examples.join(', ')}
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </Alert>
-                  )}
-                </Box>
-              </Fade>
-              )}
+                  <Grid item xs={12} md={6}>
+                    <FormControl fullWidth variant="outlined">
+                      <InputLabel id="impacto-label">Nivel de Impacto</InputLabel>
+                      <Select
+                        labelId="impacto-label"
+                        id="impacto-select"
+                        value={impactValue ?? 0}
+                        onChange={(e) => {
+                          const val = Number(e.target.value);
+                          setImpactValue(val);
+                          if (probabilityValue >= 0 && val >= 0) {
+                            const selectedProb = probabilityLevels[probabilityValue];
+                            const selectedImp = impactLevels[val];
+                            const riskLevel = calculateRiskLevel(selectedProb.value, selectedImp.value);
+                            onUpdate({
+                              probabilidad: selectedProb.value,
+                              impacto: selectedImp.value,
+                              nivelRiesgo: riskLevel,
+                              justificacion: justification
+                            });
+                          }
+                        }}
+                        label="Nivel de Impacto"
+                      >
+                        {impactLevels.map((lvl, idx) => (
+                          <MenuItem key={`imp-item-${idx}`} value={idx}>{lvl.label} - {lvl.description}</MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                </Grid>
 
-              {/* Paso 2: Impacto */}
-              {currentStep === 'impact' && (
-              <Fade in={true}>
-                <Box>
-                  <Typography variant="h6" className="font-poppins" sx={{ color: '#1E3A8A', mb: 2 }}>
-                    Paso 2: ¿Cual seria el impacto si ocurriera?
-                  </Typography>
-                  
-                  <Box sx={{ mb: 4 }}>
-                    <Slider
-                      value={impactValue}
-                      onChange={handleImpactChange}
-                      min={0}
-                      max={impactLevels.length - 1}
-                      step={1}
-                      marks={impactLevels.map((_, index) => ({
-                        value: index,
-                        label: impactLevels[index].label
-                      }))}
-                      sx={{
-                        '& .MuiSlider-thumb': {
-                          width: 24,
-                          height: 24,
-                          backgroundColor: '#1E3A8A',
-                        },
-                        '& .MuiSlider-track': {
-                          backgroundColor: '#1E3A8A',
-                        },
-                        '& .MuiSlider-rail': {
-                          backgroundColor: '#E5E7EB',
-                        },
-                      }}
-                    />
-                  </Box>
-
-                  {selectedImpact && (
-                    <Alert 
-                      severity="info" 
-                      sx={{ 
-                        mb: 3, 
-                        borderRadius: '12px',
-                        backgroundColor: '#F0F9FF',
-                        border: `2px solid ${selectedImpact.color}20`
-                      }}
-                    >
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Box sx={{ color: selectedImpact.color }}>
-                          {selectedImpact.icon}
-                        </Box>
-                        <Box>
-                          <Typography variant="subtitle1" className="font-poppins" sx={{ fontWeight: 600 }}>
-                            {selectedImpact.label}
-                          </Typography>
-                          <Typography variant="body2" className="font-roboto">
-                            {selectedImpact.description}
-                          </Typography>
-                          <Typography variant="caption" className="font-roboto" sx={{ color: '#6B7280', mt: 1, display: 'block' }}>
-                            Ejemplos: {selectedImpact.examples.join(', ')}
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </Alert>
-                  )}
-                </Box>
-              </Fade>
-              )}
-
-              {/* Paso 3: justificación */}
-              {currentStep === 'justification' && (
-              <Fade in={true}>
-                <Box>
+                <Box sx={{ mt: 3 }}>
                   <Typography variant="h6" className="font-poppins" sx={{ color: '#1E3A8A', mb: 1.5 }}>
-                    Paso 3: Justifica tu evaluación
+                    Justifica tu evaluación
                   </Typography>
                   
                   {/* Sugerencias de normatividad ISO - Foco principal */}
@@ -468,7 +365,7 @@ const InherentEvaluationStep: React.FC<InherentEvaluationStepProps> = ({
                     rows={6}
                     value={justification}
                     onChange={handleJustificationChange}
-                    placeholder="Explica por que seleccionaste estos niveles de probabilidad e impacto. Incluye evidencia, datos historicos, o analisis que respalde tu evaluación. Puedes usar las sugerencias de normatividad ISO arriba..."
+                    placeholder="Explica por qué seleccionaste estos niveles de probabilidad e impacto. Incluye evidencia, datos históricos, o análisis que respalde tu evaluación. Puedes usar las sugerencias de normatividad ISO arriba..."
                     sx={{
                       '& .MuiOutlinedInput-root': {
                         borderRadius: '12px',
@@ -484,11 +381,9 @@ const InherentEvaluationStep: React.FC<InherentEvaluationStepProps> = ({
                   />
                   
                   <Typography variant="caption" className="font-roboto" sx={{ color: '#6B7280', mt: 1, display: 'block' }}>
-                    💡 Tip: Usa las sugerencias de normatividad ISO arriba para crear una justificación solida basada en estandares reconocidos.
+                    💡 Tip: Usa las sugerencias de normatividad ISO arriba para crear una justificación sólida basada en estándares reconocidos.
                   </Typography>
                 </Box>
-              </Fade>
-              )}
               </Box>
             </CardContent>
           </Card>
@@ -501,7 +396,7 @@ const InherentEvaluationStep: React.FC<InherentEvaluationStepProps> = ({
             <Card sx={{ borderRadius: '16px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
               <CardContent sx={{ p: 3 }}>
                 <Typography variant="h6" className="font-poppins" sx={{ color: '#1E3A8A', mb: 3 }}>
-                  Resultado de la evaluación
+                  Resultado de la Evaluación
                 </Typography>
                 
                 {selectedProbability && selectedImpact ? (
@@ -565,19 +460,19 @@ const InherentEvaluationStep: React.FC<InherentEvaluationStepProps> = ({
                     title={
                       <Box>
                         <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-                          ¿Como usar esta matriz?
+                          ¿Cómo usar esta matriz?
                         </Typography>
                         <Typography variant="body2" sx={{ mb: 1 }}>
-                          <strong>1. Visualizacion:</strong> Cada celda muestra el nivel de riesgo resultante de combinar probabilidad (filas) e impacto (columnas).
+                          <strong>1. Visualización:</strong> Cada celda muestra el nivel de riesgo resultante de combinar probabilidad (filas) e impacto (columnas).
                         </Typography>
                         <Typography variant="body2" sx={{ mb: 1 }}>
-                          <strong>2. Seleccion rapida:</strong> Haz clic en cualquier celda para seleccionar esa combinacion directamente.
+                          <strong>2. Selección rápida:</strong> Haz clic en cualquier celda para seleccionar esa combinación directamente.
                         </Typography>
                         <Typography variant="body2" sx={{ mb: 1 }}>
-                          <strong>3. Interpretacion:</strong> Los colores indican la criticidad: Verde (Bajo), Naranja (Medio), Rojo (Alto).
+                          <strong>3. Interpretación:</strong> Los colores indican la criticidad: Verde (Bajo), Naranja (Medio), Rojo (Alto).
                         </Typography>
                         <Typography variant="body2">
-                          <strong>4. Referencia:</strong> Úsala para validar tu evaluación o para seleccion rapida si ya conoces los valores.
+                          <strong>4. Referencia:</strong> Úsala para validar tu evaluación o para selección rápida si ya conoces los valores.
                         </Typography>
                       </Box>
                     }
@@ -592,7 +487,7 @@ const InherentEvaluationStep: React.FC<InherentEvaluationStepProps> = ({
                 
                 <Alert severity="info" sx={{ mb: 2, borderRadius: '8px', fontSize: '0.75rem' }}>
                   <Typography variant="caption" className="font-roboto">
-                    <strong>Tip:</strong> Haz clic en cualquier celda para seleccionar esa combinacion de probabilidad e impacto. La celda resaltada muestra tu seleccion actual.
+                    <strong>Tip:</strong> Haz clic en cualquier celda para seleccionar esa combinación de probabilidad e impacto. La celda resaltada muestra tu selección actual.
                   </Typography>
                 </Alert>
                 

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metodología Smart Commits - SmartAuditorIA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --univalle-red: #c22026;
+            --univalle-blue: #1e3a8a;
+            --univalle-grey: #64748b;
+            --bg: #f8fafc;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        /* Cabecera Institucional */
+        .header {
+            background: white;
+            padding: 40px 10%;
+            border-bottom: 2px solid var(--univalle-red);
+            position: relative;
+        }
+
+        .header-title-container {
+            display: flex;
+            align-items: center;
+            border-left: 5px solid var(--univalle-red);
+            padding-left: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #0f172a;
+            font-weight: 700;
+        }
+
+        .header .subtitle {
+            color: var(--univalle-grey);
+            font-size: 1rem;
+            margin-top: 5px;
+            font-weight: 400;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        /* Card Style based on Screenshot */
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            padding: 50px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            color: var(--univalle-blue);
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .intro-text {
+            color: #475569;
+            font-size: 1.2rem;
+            border-left: 3px solid #e2e8f0;
+            padding-left: 30px;
+            margin-bottom: 40px;
+        }
+
+        /* Technical Content */
+        .methodology-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .step-item {
+            padding: 25px;
+            border: 1px solid #f1f5f9;
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .step-label {
+            color: var(--univalle-red);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .code-box {
+            background: #F1F5F9;
+            color: #0F172A;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 20px 0;
+            font-size: 0.95rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Repository Link Styling */
+        .repo-links-container {
+            margin-top: 40px;
+            padding: 30px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .repo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .repo-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #f1f5f9;
+            text-align: center;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .repo-card:hover {
+            border-color: var(--univalle-red);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .repo-card strong {
+            display: block;
+            color: var(--univalle-blue);
+            margin-bottom: 5px;
+        }
+
+        .repo-card span {
+            font-size: 0.8rem;
+            color: var(--univalle-grey);
+            word-break: break-all;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--univalle-grey);
+            font-size: 0.9rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        ul { list-style: none; }
+        li { margin-bottom: 12px; position: relative; padding-left: 20px; }
+        li::before { content: '•'; color: var(--univalle-red); position: absolute; left: 0; font-weight: bold; }
+
+    </style>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { 
+            fontFamily: 'Outfit',
+            primaryColor: '#e2e8f0'
+        }});
+    </script>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-title-container">
+            <div>
+                <h1>SmartAuditorIA</h1>
+                <div class="subtitle">Maestría en Computación para el Desarrollo de Aplicaciones Inteligentes | Universidad del Valle</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <div class="content-card">
+            <h2>Trazabilidad Mediante Smart Commits</h2>
+            
+            <div class="intro-text">
+                Durante el desarrollo de SmartAuditorIA, se ha implementado un flujo de trazabilidad técnica que garantiza la vinculación directa entre el código fuente y las Historias de Usuario (HU). Esta metodología permite evidenciar el cumplimiento de requerimientos de forma automatizada y auditable.
+            </div>
+
+            <div class="methodology-grid">
+                <div class="step-item">
+                    <span class="step-label">Fase 1: Etiquetado Semántico</span>
+                    <p>Cada cambio en el código debe incluir el ID de la HU correspondiente en Jira, permitiendo el despliegue de evidencia forense.</p>
+                    <div class="code-box">
+                        git commit -m "SCRUM-14: Implementacion de dashboard estratégico."
+                    </div>
+                </div>
+
+                <div class="step-item">
+                    <span class="step-label">Fase 2: Orquestación MLOps</span>
+                    <p>El agente DevOps detecta los prefijos y actualiza el panel de "Development" en Jira, vinculando commits, ramas y pull requests.</p>
+                </div>
+            </div>
+
+            <!-- Repository Section -->
+            <div class="repo-links-container">
+                <p style="font-weight: 600; color: var(--univalle-blue); margin-bottom: 15px;">Repositorios Oficiales del Proyecto:</p>
+                <div class="repo-grid">
+                    <a href="https://github.com/lejabamo/smartauditoria_frontend" target="_blank" class="repo-card">
+                        <strong>Frontend UI</strong>
+                        <span>lejabamo/smartauditoria_frontend</span>
+                    </a>
+                    <a href="https://github.com/lejabamo/smartauditoria_backend" target="_blank" class="repo-card">
+                        <strong>Backend Core</strong>
+                        <span>lejabamo/smartauditoria_backend</span>
+                    </a>
+                    <a href="https://github.com/lejabamo/smartauditoria_engine" target="_blank" class="repo-card">
+                        <strong>AI RAG Engine</strong>
+                        <span>lejabamo/smartauditoria_engine</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Diagrama de Trazabilidad Real -->
+        <div class="content-card">
+            <h2>📈 Mapa de Trazabilidad en Vivo: Jira a Repositorios</h2>
+            <p style="margin-bottom: 20px;">A continuación se presenta un diagrama generado en base a la sincroniación actual entre los Tickets de Jira, los Hashes de Commit en Git y los Módulos de la Arquitectura:</p>
+            
+            <div class="mermaid" style="display: flex; justify-content: center; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                graph TD
+                %% Definición de Estilos Institucionales
+                classDef jira fill:#1e3a8a,stroke:#c22026,stroke-width:2px,color:#fff,rx:10px;
+                classDef commit fill:#f1f5f9,stroke:#64748b,stroke-width:1px,color:#334155,rx:5px;
+                classDef repo fill:#c22026,stroke:#1e3a8a,stroke-width:2px,color:#fff,rx:10px;
+
+                %% Nodos de Jira
+                J1["📋 SCRUM-14 & 26<br/>Frontend Dashboard"]:::jira
+                J2["📋 SCRUM-29 & 30<br/>RAG Context & Lineage"]:::jira
+                J3["📋 SCRUM-12 & 15<br/>Backend Core API"]:::jira
+
+                %% Nodos de Commit
+                C1("Commit: 282c8ec<br/>feat: Mejoras Dashboard y Auth"):::commit
+                C2("Commit: 0643dd4<br/>feat: Fallback y Confianza"):::commit
+                C3("Commit: 724930d<br/>feat: Rutas Evaluacion"):::commit
+
+                %% Nodos de Repositorios
+                R1["📦 lejabamo/smartauditoria_frontend"]:::repo
+                R2["📦 lejabamo/smartauditoria_engine"]:::repo
+                R3["📦 lejabamo/smartauditoria_backend"]:::repo
+
+                %% Conexiones
+                J1 -->|Smart Tag| C1
+                C1 -->|Subtree Push| R1
+
+                J2 -->|Smart Tag| C2
+                C2 -->|Subtree Push| R2
+
+                J3 -->|Smart Tag| C3
+                C3 -->|Subtree Push| R3
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>Beneficios de la Metodología</h2>
+
+            <p style="margin-bottom: 25px;">La implementación de esta práctica ágil reporta los siguientes beneficios para el proyecto:</p>
+            <ul>
+                <li><strong>Gobernanza de Datos:</strong> Historial completo de cambios por cada control de seguridad ISO 27001 implementado.</li>
+                <li><strong>Visibilidad Gerencial:</strong> El Product Owner puede ver el avance real del código sin salir de Jira.</li>
+                <li><strong>Auditoría Automatizada:</strong> Generación de reportes de evidencia para la sustentación final ante el jurado.</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            Metodología de Desarrollo Seguro | Proyecto de Grado 2026
+        </div>
+    </div>
+
+</body>
+</html>

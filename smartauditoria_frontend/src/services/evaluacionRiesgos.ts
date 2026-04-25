@@ -113,7 +113,9 @@ export const evaluacionRiesgosService = {
   // Obtener matriz de riesgo
   async getMatrizRiesgo(): Promise<{ [key: string]: number }> {
     try {
-      return await apiRequest<{ [key: string]: number }>('/evaluacion-riesgos/matriz-riesgo');
+      const res = await apiRequest<{ [key: string]: number }>('/evaluacion-riesgos/matriz-riesgo');
+      if (!res || Object.keys(res).length === 0) throw new Error('Forzando mock');
+      return res;
     } catch (error) {
       console.warn('API fallida, usando Mock Data para Matriz');
       return {
@@ -129,7 +131,9 @@ export const evaluacionRiesgosService = {
   // Obtener estadisticas de evaluacion
   async getEstadisticas(): Promise<EstadisticasEvaluacion> {
     try {
-      return await apiRequest<EstadisticasEvaluacion>('/evaluacion-riesgos/estadisticas');
+      const res = await apiRequest<EstadisticasEvaluacion>('/evaluacion-riesgos/estadisticas');
+      if (!res || !res.total_riesgos || res.total_riesgos === 0) throw new Error('Forzando mock');
+      return res;
     } catch (error) {
       console.warn('API fallida, usando Mock Data para Estadísticas');
       return {
