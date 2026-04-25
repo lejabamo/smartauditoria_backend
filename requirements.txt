@@ -1,0 +1,45 @@
+# Flask Core
+Flask==3.0.0
+Flask-SQLAlchemy==3.1.1
+Flask-CORS==4.0.0
+Flask-Compress==1.14
+
+# Base de Datos
+SQLAlchemy==2.0.44
+mysql-connector-python==8.2.0
+PyMySQL==1.1.0
+
+# Autenticación y Seguridad
+PyJWT==2.8.0
+cryptography==41.0.7
+bcrypt==4.0.1
+werkzeug==3.0.1
+
+# Utilidades
+python-dotenv==1.0.0
+requests==2.31.0
+
+# Servidor de Producción
+gunicorn==21.2.0
+
+# Procesamiento de Archivos
+python-magic==0.4.27
+
+# Validación y Serialización
+marshmallow==3.20.1
+
+# Logging y Monitoreo
+python-json-logger==2.0.7
+
+# Fechas y Tiempo
+python-dateutil==2.8.2
+
+# Vector Database y Embeddings (para RAG)
+chromadb==0.5.3
+numpy<2.0
+sentence-transformers==2.2.2
+
+# Procesamiento de PDFs
+PyPDF2==3.0.1
+pdfplumber==0.10.3
+

@@ -1,0 +1,335 @@
+﻿
+--- TABLAS EN LA BASE DE DATOS ---
+('activo_dependencias',)
+('activos',)
+('activos_detalles_sistemas_informacion',)
+('activos_detalles_tecnologicos',)
+('activos_software',)
+('amenazaactivo',)
+('amenazas',)
+('auditorias',)
+('calificacioneficaciacontrol',)
+('controles',)
+('controles_seguridad',)
+('documentos_adjuntos',)
+('evaluacion_riesgo_activo',)
+('evaluacion_riesgo_activo_historico',)
+('hallazgos_auditoria',)
+('incidente_activos_afectados',)
+('incidentes',)
+('incidentes_seguridad',)
+('logs_sistema',)
+('matrizriesgodefinicion',)
+('niveles_impacto',)
+('niveles_probabilidad',)
+('nivelesimpacto',)
+('nivelesprobabilidad',)
+('nivelesriesgo',)
+('objetivos_proceso',)
+('opcionestratamiento',)
+('proceso_responsables',)
+('procesos',)
+('riesgo_activo',)
+('riesgocontrolaplicado',)
+('riesgos',)
+('riesgotratamiento',)
+('roles',)
+('roles_auth',)
+('roles_sistema',)
+('sesiones_usuario',)
+('software_catalogo',)
+('tratamiento_controles_planificados',)
+('usuario_rol_asignado',)
+('usuarios_auth',)
+('usuarios_sistema',)
+('valoracion_activos_historico',)
+('vulnerabilidadactivo',)
+('vulnerabilidades',)
+--- AUDITOR═A DE EVALUACIONES DE RIESGO ---
+Total evaluaciones encontradas: 10
+ID_EVAL    | ID_ACTIVO  | ID_RIESGO  | ACTIVO_NOMBRE
+------------------------------------------------------------
+2          | 1          | 1          | EBSST-5
+3          | 2          | 2          | EFINANCIERA-5
+4          | 3          | 3          | EADMTIVA-24
+5          | 4          | 4          | EFPM-16
+6          | 6          | 22         | EFINANCIERA-6
+7          | 7          | 23         | EFPM-7
+8          | 8          | 24         | ECOBERTURA-2
+9          | 10         | 25         | ECOBERTURA-16
+10         | 63         | 26         | UBUNTU ON GEORG ACCOUNT
+11         | 14         | 27         | ETALENTOH-4
+
+--- AUDITOR═A DE ACTIVOS ---
+Total activos en sistema: 216
+ID: 1 | Nombre: EBSST-5
+ID: 2 | Nombre: EFINANCIERA-5
+ID: 3 | Nombre: EADMTIVA-24
+ID: 4 | Nombre: EFPM-16
+ID: 5 | Nombre: ETALENTOH-25
+ID: 6 | Nombre: EFINANCIERA-6
+ID: 7 | Nombre: EFPM-7
+ID: 8 | Nombre: ECOBERTURA-2
+ID: 9 | Nombre: EFINANCIERA-1
+ID: 10 | Nombre: ECOBERTURA-16
+ID: 11 | Nombre: EPAE-3
+ID: 12 | Nombre: ESAC-4
+ID: 13 | Nombre: EADMTIVA-1
+ID: 14 | Nombre: ETALENTOH-4
+ID: 15 | Nombre: EADMTIVA-11
+ID: 16 | Nombre: EADMTIVA-3
+ID: 17 | Nombre: EFPM-8
+ID: 18 | Nombre: ESISE-2
+ID: 19 | Nombre: ECALIDAD-4
+ID: 20 | Nombre: ETALENTOH-3
+ID: 21 | Nombre: DESKTOP-VTOI5LE
+ID: 22 | Nombre: ECOBERTURA-9
+ID: 23 | Nombre: EFPM-9
+ID: 24 | Nombre: EFINANCIERA-12
+ID: 25 | Nombre: EJUIRIDICA-5
+ID: 26 | Nombre: EESCALAFON-3
+ID: 27 | Nombre: EADMTIVA-41
+ID: 28 | Nombre: ECALIDAD-5
+ID: 29 | Nombre: ESAC-1
+ID: 30 | Nombre: ESISE-6
+ID: 31 | Nombre: ESAC-13
+ID: 32 | Nombre: EJURIDICA-18
+ID: 33 | Nombre: EADMTIVA-9
+ID: 34 | Nombre: EFINANCIERA-3
+ID: 35 | Nombre: ENOMINA-1
+ID: 36 | Nombre: EUNIDADES-4
+ID: 37 | Nombre: ESAC-14
+ID: 38 | Nombre: ECALIDAD-13
+ID: 39 | Nombre: ESAC-5
+ID: 40 | Nombre: ESAC-11
+ID: 41 | Nombre: EADMTIVA-18
+ID: 42 | Nombre: EBSST-6
+ID: 43 | Nombre: ECALIDAD-13
+ID: 44 | Nombre: ETALENTOH-9
+ID: 45 | Nombre: ETALENTOH-2
+ID: 46 | Nombre: EHLABORALES-7
+ID: 47 | Nombre: ETALENTOH-11
+ID: 48 | Nombre: ETALENTOH-5
+ID: 49 | Nombre: ECOBERTURA-3
+ID: 50 | Nombre: EADMTIVA-30
+ID: 51 | Nombre: EESCALAFON-4
+ID: 52 | Nombre: EFINANCIERA-9
+ID: 53 | Nombre: EINSPECCION-7
+ID: 54 | Nombre: EGCALIDAD-1
+ID: 55 | Nombre: ETALENTOH-7
+ID: 56 | Nombre: EBSST-1
+ID: 57 | Nombre: ECALIDAD-2
+ID: 58 | Nombre: ECOBERTURA-5
+ID: 59 | Nombre: ESALA-4
+ID: 60 | Nombre: EESCALAFON-7
+ID: 61 | Nombre: EDESPACHO-3
+ID: 62 | Nombre: ESISE-0
+ID: 63 | Nombre: UBUNTU ON GEORG ACCOUNT
+ID: 64 | Nombre: DOCKER-DESKTOP ON GEORG ACCOUNT
+ID: 65 | Nombre: DOCKER-DESKTOP-DATA ON GEORG ACCOUNT
+ID: 66 | Nombre: EDESPACHO-5
+ID: 67 | Nombre: EADMTIVA-17
+ID: 68 | Nombre: EFINANCIERA-4
+ID: 69 | Nombre: ESAC-8
+ID: 70 | Nombre: ENOMINA-7
+ID: 71 | Nombre: ECALIDAD-6
+ID: 72 | Nombre: ESAC-16
+ID: 73 | Nombre: EADMTIVA-2
+ID: 74 | Nombre: ENOMINA-9
+ID: 75 | Nombre: ECALIDAD-10
+ID: 76 | Nombre: EHOJAVIDA-20
+ID: 77 | Nombre: EJURIDICA-6
+ID: 78 | Nombre: ETALENTOH-16
+ID: 79 | Nombre: EFPM-2
+ID: 80 | Nombre: ENOMINA-15
+ID: 81 | Nombre: EPLANEACION-5
+ID: 82 | Nombre: EFPM-5
+ID: 83 | Nombre: EADMTIVA-32
+ID: 84 | Nombre: ELSY
+ID: 85 | Nombre: ENOMINA-13
+ID: 86 | Nombre: EFPM-1
+ID: 87 | Nombre: ECOBERTURA-15
+ID: 88 | Nombre: ETALENTOH-6
+ID: 89 | Nombre: CALIDAD-18
+ID: 90 | Nombre: ETALENTOH18-
+ID: 91 | Nombre: ESAC-10
+ID: 92 | Nombre: EADMTIVA-33
+ID: 93 | Nombre: ECALIDAD-8
+ID: 94 | Nombre: ECOBERTURA-7
+ID: 95 | Nombre: ECOBERTURA-1
+ID: 96 | Nombre: EBSST-7
+ID: 97 | Nombre: EESCALAFON-8
+ID: 98 | Nombre: ESISE-1
+ID: 99 | Nombre: EADMTIVA-29
+ID: 100 | Nombre: EPLANEACION-4
+ID: 101 | Nombre: EJURIDICA-15
+ID: 102 | Nombre: EADMTIVA-3
+ID: 103 | Nombre: ECOBERTURA-14
+ID: 104 | Nombre: EHLABORALES-2
+ID: 105 | Nombre: EHOJAVIDA-7
+ID: 106 | Nombre: ENOMINA-8
+ID: 107 | Nombre: EHLABORALES--3
+ID: 108 | Nombre: EJURIDICA-13
+ID: 109 | Nombre: EHLABORALES-9
+ID: 110 | Nombre: EHOJAVIDA-2
+ID: 111 | Nombre: EHOJAVIDA-18
+ID: 112 | Nombre: ETALENTOH-1
+ID: 113 | Nombre: ENOMINA-10
+ID: 114 | Nombre: EFINANCIERA-2
+ID: 115 | Nombre: EHLABORALES-10
+ID: 116 | Nombre: EESCALAFON-5
+ID: 117 | Nombre: EESCALAFON-9
+ID: 118 | Nombre: EBSST-3
+ID: 119 | Nombre: EADMTIVA-5
+ID: 120 | Nombre: EPLANEACION-8
+ID: 121 | Nombre: EHOJAVIDA-15
+ID: 122 | Nombre: EADMTIVA-36
+ID: 123 | Nombre: EJURIDICA-7
+ID: 124 | Nombre: ESAC-6
+ID: 125 | Nombre: EHLABORALES-6
+ID: 126 | Nombre: ESAC-12
+ID: 127 | Nombre: EHLABORALES-11
+ID: 128 | Nombre: ENOMINA-2
+ID: 129 | Nombre: ECALIDAD-3
+ID: 130 | Nombre: ETALENTOH-20
+ID: 131 | Nombre: EHLABORALES-1
+ID: 132 | Nombre: EJURIDICA-17
+ID: 133 | Nombre: EADMTIVA-26
+ID: 134 | Nombre: EJURIDICA-2
+ID: 135 | Nombre: EJURIDICA-10
+ID: 136 | Nombre: ECOBERTURA-10
+ID: 137 | Nombre: ECOBERTURA-8
+ID: 138 | Nombre: ESISE-9
+ID: 139 | Nombre: ECALIDAD-12
+ID: 140 | Nombre: EINSPECCION-3
+ID: 141 | Nombre: EJURIDICA-4
+ID: 142 | Nombre: ETALENTOH-8
+ID: 143 | Nombre: EINSPECCION-4
+ID: 144 | Nombre: EINSPECCION-8
+ID: 145 | Nombre: ECALIDAD-13
+ID: 146 | Nombre: EADMTIVA-16
+ID: 147 | Nombre: EUNIDADES-2
+ID: 148 | Nombre: ECALIDAD-21
+ID: 149 | Nombre: ECOBERTURA-4
+ID: 150 | Nombre: EFPM-20
+ID: 151 | Nombre: EDESPACHO-6
+ID: 152 | Nombre: DESKTOP-NGHDHJL
+ID: 153 | Nombre: SISE03
+ID: 154 | Nombre: EPAE-2
+ID: 155 | Nombre: EPAE-12
+ID: 156 | Nombre: EUDAG-2
+ID: 157 | Nombre: EUNIDADES-5
+ID: 158 | Nombre: EUDAG-1
+ID: 159 | Nombre: ESISE-3
+ID: 160 | Nombre: ESISE-4
+ID: 161 | Nombre: GNOMINA-14
+ID: 162 | Nombre: ENOMINA-14
+ID: 163 | Nombre: ENOMINA-4
+ID: 164 | Nombre: ENOMINA-6
+ID: 165 | Nombre: ENOMINA-5
+ID: 166 | Nombre: ENOMINA-11
+ID: 167 | Nombre: ENOMINA-12
+ID: 168 | Nombre: EHLABORALES-5
+ID: 169 | Nombre: EHLABORALES-4
+ID: 170 | Nombre: EHLABORALES-5
+ID: 171 | Nombre: EHOJAVIDA-1
+ID: 172 | Nombre: EADMTIVA-6
+ID: 173 | Nombre: EGESDOCU-3
+ID: 174 | Nombre: ECALIDAD-11
+ID: 175 | Nombre: ECALIDAD-7
+ID: 176 | Nombre: ECALIDAD-7
+ID: 177 | Nombre: ECALIDAD-16
+ID: 178 | Nombre: ECALIDAD-15
+ID: 179 | Nombre: ESALA-1
+ID: 180 | Nombre: ECALIDAD-1
+ID: 181 | Nombre: EADMTIVA-8
+ID: 182 | Nombre: EADMTIVA-23
+ID: 183 | Nombre: ADMINISTRADOR
+ID: 184 | Nombre: EADMTIVA-37
+ID: 185 | Nombre: EALMACEN-1
+ID: 186 | Nombre: EALMACEN-2
+ID: 187 | Nombre: ETALENTOH-19
+ID: 188 | Nombre: ETALENTOH-14
+ID: 189 | Nombre: ETALENTOH-13
+ID: 190 | Nombre: ETALENTOH-10
+ID: 191 | Nombre: EPLANEACION-1
+ID: 192 | Nombre: EPLANEACION-6
+ID: 193 | Nombre: ETALENTOH-21
+ID: 194 | Nombre: EJURIDICA-1
+ID: 195 | Nombre: EJURIDICA-2
+ID: 196 | Nombre: EGCALIDAD-3
+ID: 197 | Nombre: KALI-LINUX ON ADMINISTRADOR1 ACCOUNT
+ID: 198 | Nombre: EFPM-2
+ID: 199 | Nombre: EFPM-4
+ID: 200 | Nombre: EFPM-5
+ID: 201 | Nombre: ESAC-3
+ID: 202 | Nombre: ESAC-9
+ID: 203 | Nombre: ESAC-17
+ID: 204 | Nombre: EADMTIVA-34
+ID: 205 | Nombre: CARONTE-LAPTOP
+ID: 206 | Nombre: LAPTOP-7KB3ONVV
+ID: 207 | Nombre: DESKTOP-U56AOQ8
+ID: 208 | Nombre: ECOBERTURA-11
+ID: 209 | Nombre: EADMTIVA-13
+ID: 210 | Nombre: EFPM-11
+ID: 211 | Nombre: EFPM-12
+ID: 212 | Nombre: EUDAG-5
+ID: 213 | Nombre: EFPM-13
+ID: 214 | Nombre: ESALA-6
+ID: 215 | Nombre: Gafas de realidad virtual
+ID: 216 | Nombre: Este PC
+
+--- DATOS DE LA TABLA: riesgocontrolaplicado ---
+EVAL_ID    | ID_CONTROL
+
+--- COMPARACIËN DE TABLAS DE CONTROLES ---
+CONTROLES (Correcta):
+
+CONTROLES_SEGURIDAD (Legacy):
+(1, 'Firewall')
+(2, 'Antivirus')
+(3, 'Monitoreo de Red')
+(4, 'Copia de Seguridad')
+(5, 'Seguridad en la Nube')
+
+--- ESQUEMA DE LA TABLA: controles ---
+('ID_Control', 'int(11)', 'NO', 'PRI', None, 'auto_increment')
+('codigo_control_iso', 'varchar(20)', 'YES', 'UNI', None, '')
+('Nombre', 'varchar(255)', 'NO', 'UNI', None, '')
+('Descripcion', 'text', 'YES', '', None, '')
+('Tipo_Control', "enum('Preventivo','Detectivo','Correctivo','Disuasorio','Recuperacion')", 'NO', '', None, '')
+('Formalidad_Control', "enum('Formal','Informal','Automatizado','Manual','Mixto')", 'NO', '', None, '')
+('categoria_control_iso', "enum('Organizacional','Personas','Fisico','Tecnologico','No Aplica ISO')", 'NO', '', 'No Aplica ISO', '')
+('estado_implementacion', "enum('Implementado','No Implementado','Parcialmente Implementado','No Aplica','En Diseno','En Prueba','Obsoleto')", 'NO', '', 'No Implementado', '')
+('justificacion_no_aplicabilidad', 'text', 'YES', '', None, '')
+('id_responsable_control', 'int(11)', 'YES', 'MUL', None, '')
+('efectividad_control_evaluada', "enum('Alta','Media','Baja','No evaluada','Ineficaz')", 'YES', '', 'No evaluada', '')
+('Eficacia_Evaluada_Descripcion', 'text', 'YES', '', None, '')
+('Procedimiento_Revision_Regular', 'tinyint(1)', 'YES', '', '0', '')
+('Mecanismo_Monitoreo', 'tinyint(1)', 'YES', '', '0', '')
+('Fecha_Ultima_Revision', 'date', 'YES', '', None, '')
+('fecha_proxima_revision_control', 'date', 'YES', '', None, '')
+('documentacion_asociada_ref', 'text', 'YES', '', None, '')
+('fecha_creacion_registro', 'timestamp', 'YES', '', 'current_timestamp()', '')
+('fecha_ultima_actualizacion', 'timestamp', 'YES', '', None, 'on update current_timestamp()')
+
+--- ESQUEMA DE LA TABLA: controles_seguridad ---
+('ID_Control', 'int(11)', 'NO', 'PRI', None, 'auto_increment')
+('Nombre', 'varchar(100)', 'NO', '', None, '')
+('Descripcion', 'text', 'YES', '', None, '')
+('Categoria', 'varchar(50)', 'YES', '', None, '')
+('Tipo', 'varchar(50)', 'YES', '', None, '')
+('Eficacia_Esperada', 'varchar(20)', 'YES', '', None, '')
+('fecha_creacion_registro', 'timestamp', 'YES', '', 'current_timestamp()', '')
+
+--- ESQUEMA DE LA TABLA: riesgocontrolaplicado ---
+('id_riesgo_control_aplicado', 'int(11)', 'NO', 'PRI', None, 'auto_increment')
+('id_evaluacion_riesgo_activo', 'int(11)', 'NO', 'MUL', None, '')
+('ID_Control', 'int(11)', 'NO', 'MUL', None, '')
+('Fecha_Aplicacion_Control', 'date', 'NO', '', 'curdate()', '')
+('justificacion_aplicacion_control', 'text', 'YES', '', None, '')
+('id_calificacion_eficacia_esperada', 'int(11)', 'YES', 'MUL', None, '')
+('evaluacion_efectividad_real_fecha', 'date', 'YES', '', None, '')
+('efectividad_real_observada', "enum('Alta','Media','Baja','Ineficaz','No Verificada')", 'YES', '', 'No Verificada', '')
+('comentarios_efectividad_real', 'text', 'YES', '', None, '')
+('fecha_creacion_registro', 'timestamp', 'YES', '', 'current_timestamp()', '')
