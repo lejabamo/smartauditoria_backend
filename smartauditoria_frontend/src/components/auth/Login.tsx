@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -96,7 +96,7 @@ const Login: React.FC = () => {
                 letterSpacing: "-0.02em"
               }}
             >
-              SGSRI
+              SmartAuditorIA
             </Typography>
             <Typography
               variant="h6"
@@ -108,7 +108,7 @@ const Login: React.FC = () => {
                 mb: 0.5
               }}
             >
-              Sistema de Gestion de Riesgos
+              Sistema Experto de Auditoría
             </Typography>
             <Typography
               variant="body1"
@@ -118,7 +118,7 @@ const Login: React.FC = () => {
                 fontSize: "0.95rem"
               }}
             >
-              de Informacion
+              Gestión Integral de Activos y Riesgos ISO
             </Typography>
           </Box>
         </Box>
@@ -300,7 +300,7 @@ const Login: React.FC = () => {
               fontSize: "0.8rem"
             }}
           >
-            Â© 2025 Sistema de Gestion de Riesgos de Informacion
+            © 2026 SmartAuditorIA | Universidad del Valle
           </Typography>
         </Box>
       </Container>

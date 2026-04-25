@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import {
   AppBar,
   Box,
@@ -113,7 +113,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               lineHeight: 1.2
             }}
           >
-            SGSRI
+            SmartAuditorIA
           </Typography>
           <Typography
             variant="caption"
@@ -124,7 +124,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               fontWeight: 400
             }}
           >
-            Sistema de Gestion
+            Auditoría Inteligente
           </Typography>
         </Box>
       </Box>
@@ -278,7 +278,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 lineHeight: 1.2
               }}
             >
-              Sistema de Gestion de Riesgos de Informacion
+              SmartAuditorIA: Sistema Experto de Auditoría
             </Typography>
             <Typography
               variant="body2"
