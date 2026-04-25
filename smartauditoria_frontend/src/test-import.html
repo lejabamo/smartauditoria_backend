@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Import</title>
+</head>
+<body>
+    <script type="module">
+        console.log('=== TEST DE IMPORTACIÓN ===');
+        
+        try {
+            const module = await import('./services/documentos.ts');
+            console.log('✅ Módulo cargado:', Object.keys(module));
+            console.log('✅ DocumentoAdjunto disponible:', 'DocumentoAdjunto' in module);
+            
+            if ('DocumentoAdjunto' in module) {
+                console.log('✅ DocumentoAdjunto es:', typeof module.DocumentoAdjunto);
+                
+                // Intentar crear una instancia
+                const testDoc = {
+                    id: '1',
+                    nombre: 'test.pdf',
+                    tipo: 'application/pdf',
+                    tamaño: 1024,
+                    url: '/test',
+                    fechaSubida: new Date().toISOString()
+                };
+                console.log('✅ Instancia de prueba:', testDoc);
+            }
+        } catch (error) {
+            console.error('❌ Error:', error);
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

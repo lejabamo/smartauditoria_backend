@@ -1,0 +1,75 @@
+name: CI — SmartAuditorIA Backend
+
+on:
+  push:
+    branches: [main, develop, "feature/**"]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  quality:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt pytest pytest-cov
+
+      - name: Check syntax (py_compile)
+        run: python -m py_compile app/domain/entities/models.py app/domain/repositories/interfaces.py
+
+  test-domain:
+    name: Domain Unit Tests (no DB)
+    runs-on: ubuntu-latest
+    needs: quality
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install test deps
+        run: pip install pytest pytest-cov
+
+      - name: Run domain tests
+        run: |
+          pytest tests/unit/domain/ -v \
+            --cov=app/domain \
+            --cov-report=term-missing \
+            --ignore=tests/unit/application \
+            --ignore=tests/integration
+
+  test-application:
+    name: Application Unit Tests (mocked repos)
+    runs-on: ubuntu-latest
+    needs: quality
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt pytest pytest-cov
+
+      - name: Configure test env
+        run: |
+          cp .env.example .env
+          echo "FLASK_ENV=testing" >> .env
+          echo "DATABASE_URL=sqlite:///:memory:" >> .env
+
+      - name: Run application tests
+        run: |
+          pytest tests/unit/application/ -v \
+            --cov=app/application \
+            --cov-report=term-missing

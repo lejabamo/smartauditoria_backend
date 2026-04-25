@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Ruta</title>
+</head>
+<body>
+    <h1>Test de Ruta</h1>
+    <script type="module">
+        console.log('=== TEST DE RUTA ===');
+        
+        // Test directo de la ruta
+        try {
+            const response = await fetch('/src/types/documento.ts');
+            console.log('✅ Respuesta HTTP:', response.status);
+            
+            if (response.ok) {
+                const content = await response.text();
+                console.log('✅ Contenido del archivo:');
+                console.log(content);
+                
+                // Verificar si contiene las exportaciones
+                console.log('✅ Contiene DocumentoAdjunto:', content.includes('export interface DocumentoAdjunto'));
+                console.log('✅ Contiene DocumentoAccion:', content.includes('export interface DocumentoAccion'));
+            }
+        } catch (error) {
+            console.error('❌ Error al acceder al archivo:', error);
+        }
+        
+        // Test de importación
+        try {
+            console.log('\n=== TEST DE IMPORTACIÓN ===');
+            const module = await import('./types/documento.ts');
+            console.log('✅ Módulo importado:', Object.keys(module));
+            console.log('✅ DocumentoAdjunto:', 'DocumentoAdjunto' in module);
+            console.log('✅ DocumentoAccion:', 'DocumentoAccion' in module);
+        } catch (error) {
+            console.error('❌ Error en importación:', error);
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

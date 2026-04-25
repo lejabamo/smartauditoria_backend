@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  # ── Motor IA — FastAPI ──────────────────────────────────
+  engine:
+    build: .
+    container_name: smartauditoria_engine
+    ports:
+      - "8001:8001"
+    environment:
+      ENGINE_ENV: development
+      ENGINE_PORT: 8001
+      CHROMA_HOST: chromadb
+      CHROMA_PORT: 8000
+      CHROMA_MODE: server
+      EMBEDDING_MODEL: paraphrase-multilingual-MiniLM-L12-v2
+      CHROMA_COLLECTION_ISO: iso_documents
+      CHROMA_COLLECTION_LEGAL: marco_legal_co
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - chromadb
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── ChromaDB — Vector Store ─────────────────────────────
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: smartauditoria_chromadb
+    ports:
+      - "8000:8000"
+    volumes:
+      - chromadb_data:/chroma/chroma
+    environment:
+      IS_PERSISTENT: "TRUE"
+      ANONYMIZED_TELEMETRY: "FALSE"
+    restart: unless-stopped
+
+volumes:
+  chromadb_data:
+    driver: local

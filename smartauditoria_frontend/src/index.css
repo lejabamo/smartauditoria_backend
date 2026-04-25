@@ -1,0 +1,45 @@
+/* Tailwind CSS v4 - No need for @tailwind directives */
+
+/* Custom styles for the wizard */
+.wizard-step {
+  transition: all 0.3s ease-in-out;
+}
+
+.wizard-step-enter {
+  opacity: 0;
+  transform: translateX(1rem);
+}
+
+.wizard-step-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.wizard-step-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.wizard-step-exit-active {
+  opacity: 0;
+  transform: translateX(-1rem);
+}
+
+/* Custom scrollbar for wizard content */
+.wizard-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.wizard-content::-webkit-scrollbar-track {
+  background-color: #f3f4f6;
+  border-radius: 9999px;
+}
+
+.wizard-content::-webkit-scrollbar-thumb {
+  background-color: #2F3E46;
+  border-radius: 9999px;
+}
+
+.wizard-content::-webkit-scrollbar-thumb:hover {
+  background-color: #84A98C;
+}

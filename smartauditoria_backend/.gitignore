@@ -1,0 +1,42 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Entorno virtual
+venv/
+.venv/
+env/
+ENV/
+
+# Variables de entorno (nunca subir .env con datos reales)
+.env
+
+# Bases de datos locales
+*.db
+*.sqlite3
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Modelos ML entrenados (pesados, usar Git LFS si es necesario)
+app/modelos/*.bin
+app/modelos/*.pkl
+app/ml/cache/
+
+# Datos sensibles
+*.sql.backup
+chroma_storage/

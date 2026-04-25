@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartAuditorIA - Github Pages</title>
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- UI Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --navy-blue: #0A192F;
+            --accent-blue: #3B82F6;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-main: #1e293b;
+            --text-secondary: #475569;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: var(--navy-blue);
+            color: white;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.15);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(10, 25, 47, 0.1);
+            padding-bottom: 1rem;
+        }
+
+        .section-header i {
+            font-size: 1.8rem;
+            color: var(--accent-blue);
+            margin-right: 1rem;
+        }
+
+        .section-header h2 {
+            margin: 0;
+            color: var(--navy-blue);
+            font-size: 1.8rem;
+        }
+
+        /* DAG Diagram Emulation */
+        .dag-container {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px dashed var(--accent-blue);
+            text-align: center;
+        }
+
+        .dag-node {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--navy-blue);
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            min-width: 150px;
+        }
+
+        .dag-edge {
+            width: 2px;
+            height: 40px;
+            background: var(--accent-blue);
+            margin: 0 auto;
+            position: relative;
+        }
+        .dag-edge::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: -4px;
+            border-width: 5px 5px 0;
+            border-style: solid;
+            border-color: var(--accent-blue) transparent transparent transparent;
+        }
+        
+        .dag-row {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: -10px;
+        }
+
+        /* User Stories Grid */
+        .hu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .hu-item {
+            background: white;
+            border-left: 4px solid var(--accent-blue);
+            padding: 1.5rem;
+            border-radius: 6px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .hu-item h3 {
+            margin-top: 0;
+            color: var(--navy-blue);
+            font-size: 1.1rem;
+        }
+        
+        .badge {
+            background: var(--accent-blue);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-done { background: #10b981; }
+
+        /* MLOps Section */
+        .mlops-box {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: monospace;
+            margin-bottom: 1rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <h1><i class="fa-solid fa-shield-halved"></i> SmartAuditorIA</h1>
+        <div>
+            <span><i class="fa-solid fa-code-commit"></i> v1.0.0 MLOps Release</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <!-- Header Section -->
+        <div class="glass-card">
+            <h1 style="color: var(--navy-blue); margin-top:0;">Avances del Proyecto - Fase de Producción</h1>
+            <p>Este portal documenta la reestructuración del motor experto (Engine RAG) de SmartAuditorIA, enfocado en trazabilidad, mitigación de sesgos y prevención de fugas de datos (Data Leakage).</p>
+        </div>
+
+        <!-- Architecture Section -->
+        <div class="glass-card">
+            <div class="section-header">
+                <i class="fa-solid fa-network-wired"></i>
+                <h2>Arquitectura Híbrida RAG / SQL (DAG)</h2>
+            </div>
+            <p>Flujo interactivo con enrutamiento semántico estricto. La Inteligencia Artificial actúa como un agente segregado sin memoria transaccional para evitar la "atrofia".</p>
+            
+            <div class="dag-container">
+                <div class="dag-node">UI: Wizard Evaluación</div>
+                <div class="dag-edge"></div>
+                <div class="dag-node" style="background:#3B82F6;">Enrutador Semántico (Target Isolation)</div>
+                <div class="dag-edge"></div>
+                <div class="dag-row">
+                    <div>
+                        <div class="dag-edge"></div>
+                        <div class="dag-node" style="background:#475569;">Filtro vector:<br>norm='ISO27005'</div>
+                    </div>
+                    <div>
+                        <div class="dag-edge"></div>
+                        <div class="dag-node" style="background:#475569;">Filtro vector:<br>norm='Ley1581'</div>
+                    </div>
+                </div>
+                <!-- Merge down -->
+                <div style="height:40px;"></div>
+                <div class="dag-node" style="background:#10b981;">Validación de Similitud (Threshold > 0.75)</div>
+                <div class="dag-edge"></div>
+                <div class="dag-node" style="background:#eab308; color:black;">Generador LLM con Data Lineage (o SQL Fallback)</div>
+            </div>
+        </div>
+
+        <!-- MLOps & TDD Section -->
+        <div class="glass-card">
+            <div class="section-header">
+                <i class="fa-solid fa-microchip"></i>
+                <h2>Proceso de Construcción: MLOps y TDD</h2>
+            </div>
+            <p>La IA fue desarrollada aplicando <strong>Test Driven Development (TDD)</strong> para garantizar seguridad antes del despliegue.</p>
+            
+            <div class="mlops-box">
+                > test_iso_loader_metadata_injection()... [PASSED]<br>
+                > test_restructured_rag_engine_routing()... [PASSED]<br>
+                > Validating Target Isolation Rules... [OK]<br>
+                > Executing Semantic Perturbation Tests... [RESILIENT]
+            </div>
+            <p><strong>Despliegue en la Sombra (Shadow Deployment):</strong> El sistema capturará divergencias heurísticas en 2do plano almacenando los *F1-Scores* sin exponer autonomía no autorizada a los usuarios.</p>
+        </div>
+
+        <!-- User Stories Section -->
+        <div class="glass-card">
+            <div class="section-header">
+                <i class="fa-solid fa-list-check"></i>
+                <h2>Historias de Usuario Cumplidas (Sprint Activo)</h2>
+            </div>
+            
+            <div class="hu-grid">
+                <!-- HU 101 -->
+                <div class="hu-item">
+                    <h3>HU-101: Aislamiento Contextual <span class="badge status-done">Completada</span></h3>
+                    <p><strong>Objetivo:</strong> Ocultar memoria transaccional SQL al agente RAG para prevenir el Data Leakage y envenenamiento de respuestas.</p>
+                </div>
+                <!-- HU 102 -->
+                <div class="hu-item">
+                    <h3>HU-102: Trazabilidad Forense <span class="badge status-done">Completada</span></h3>
+                    <p><strong>Objetivo:</strong> Forzar al LLM a devolver un JSON con la cita exacta `{lineage_metadata}` previniendo alucinaciones narrativas.</p>
+                </div>
+                <!-- HU 103 -->
+                <div class="hu-item">
+                    <h3>HU-103: Tolerancia SQL (Fallback) <span class="badge status-done">Completada</span></h3>
+                    <p><strong>Objetivo:</strong> Si la IA calcula una similitud menor al 75%, el proceso recae automáticamente en recomendaciones humanas históricas de la BD SQL.</p>
+                </div>
+                <!-- HU 201 -->
+                <div class="hu-item">
+                    <h3>HU-201: Refactor UX Experto <span class="badge status-done">Completada</span></h3>
+                    <p><strong>Objetivo:</strong> Eliminación de lenguaje informal en el Frontend ("Amo") adoptando directrices de Gobierno de TI e ISO.</p>
+                </div>
+                <!-- HU 202 -->
+                <div class="hu-item">
+                    <h3>HU-202: Validación Human-in-The-Loop <span class="badge status-done">Completada</span></h3>
+                    <p><strong>Objetivo:</strong> El motor no insertará en la BD automáticamente; proveerá un Panel lateral "Top 3" forzando al juez humano a clickear su elección.</p>
+                </div>
+                <!-- HU 203 -->
+                <div class="hu-item">
+                    <h3>HU-203: Confidence Flagging <span class="badge status-done">Completada</span></h3>
+                    <p><strong>Objetivo:</strong> Mostrar advertencias amarillas/verdes renderizadas en la interfaz basadas en la certez del Embedder vectorial.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
