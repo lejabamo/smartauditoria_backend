@@ -1,0 +1,79 @@
+services:
+  # --------------------------------------------------------------------------
+  # DATABASE LAYER
+  # --------------------------------------------------------------------------
+  db:
+    image: mariadb:10.11
+    container_name: smartauditoria_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sgsri_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user123
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/mariadb:/var/lib/mysql
+
+  vector_db:
+    image: chromadb/chroma:0.5.3
+    container_name: smartauditoria_chroma
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data/chroma:/index_data
+
+  # --------------------------------------------------------------------------
+  # BACKEND LAYER (CLEAN ARCHITECTURE)
+  # --------------------------------------------------------------------------
+  backend:
+    build:
+      context: ./smartauditoria_backend
+      dockerfile: Dockerfile
+    container_name: smartauditoria_backend
+    depends_on:
+      - db
+      - engine
+    environment:
+      DATABASE_URL: mysql+pymysql://root:root@db:3306/sgsri_db
+      IA_SERVICE_URL: http://engine:8001/api/v1
+      FLASK_ENV: development
+    ports:
+      - "5000:5000"
+
+  # --------------------------------------------------------------------------
+  # ENGINE LAYER (FASTAPI RAG)
+  # --------------------------------------------------------------------------
+  engine:
+    build:
+      context: ./smartauditoria_engine
+      dockerfile: Dockerfile
+    container_name: smartauditoria_engine
+    depends_on:
+      - vector_db
+    environment:
+      CHROMA_HOST: vector_db
+      CHROMA_PORT: 8000
+    ports:
+      - "8001:8001"
+
+  # --------------------------------------------------------------------------
+  # FRONTEND LAYER (FEATURE-SLICED DESIGN)
+  # --------------------------------------------------------------------------
+  frontend:
+    build:
+      context: ./smartauditoria_frontend
+      dockerfile: Dockerfile
+    container_name: smartauditoria_frontend
+    environment:
+      VITE_API_URL: http://localhost:5000/api
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  mariadb_data:
+  chroma_data:

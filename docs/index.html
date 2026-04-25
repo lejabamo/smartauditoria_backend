@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartAuditorIA - Trabajo Integrador 1 - Universidad del Valle</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --uv-red: #BE1E2D;
+            --uv-blue: #003366;
+            --text-dark: #2D3748;
+            --text-light: #718096;
+            --border-light: #E2E8F0;
+            --bg-light: #F7FAFC;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #ffffff;
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 0;
+        }
+
+        .page-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 40px;
+        }
+
+        /* Cabecera Estilo Univalle */
+        .rubric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--uv-blue);
+            margin-bottom: 50px;
+        }
+
+        .header-title-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-id {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            border-left: 2px solid var(--border-light);
+            padding-left: 15px;
+        }
+
+        .univ-logo {
+            height: 60px;
+        }
+
+        /* Sección Académica */
+        .academic-info {
+            margin-bottom: 40px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        section { margin-bottom: 60px; }
+
+        h2 { 
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.4rem; 
+            color: var(--uv-blue); 
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        p { margin-bottom: 20px; font-size: 1.05rem; text-align: justify; }
+
+        /* Tablas Profesionales */
+        .table-container {
+            overflow-x: auto;
+            margin: 30px 0;
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background-color: var(--uv-blue);
+            color: #ffffff;
+            font-weight: 600;
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        tr:nth-child(even) { background-color: var(--bg-light); }
+
+        /* Diagramas */
+        .diagram-block {
+            background: var(--bg-light);
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            margin: 30px 0;
+        }
+
+        /* Estado del Backlog */
+        .status-pill {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .status-done { background: #C6F6D5; color: #22543D; }
+        .status-progress { background: #BEE3F8; color: #2A4365; }
+        .status-todo { background: #EDF2F7; color: #4A5568; }
+
+        .links-bar {
+            display: flex;
+            gap: 30px;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .links-bar a {
+            color: var(--uv-red);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .links-bar a:hover { text-decoration: underline; }
+
+        /* JIRA TABS STYLE */
+        .jira-nav {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 40px;
+            border-bottom: 2px solid var(--border-light);
+            background: #ffffff;
+            padding-left: 5px;
+        }
+
+        .jira-nav a {
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #42526E;
+            font-size: 0.88rem;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .jira-nav a:hover {
+            background-color: #F4F5F7;
+            color: var(--uv-blue);
+        }
+
+        .jira-nav a.active {
+            color: #0052CC;
+            border-bottom: 2px solid #0052CC;
+        }
+
+        @media print {
+            .page-container { margin: 0; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        
+        <div class="academic-info">
+            Universidad del Valle | Maestría en Computación para el Desarrollo de Aplicaciones Inteligentes<br>
+            Trabajo Integrador 1 | Rúbrica de Evaluación Académica
+        </div>
+
+        <!-- 01 : PRACTICAS AGILES -->
+        <div class="rubric-header">
+            <div class="header-title-group">
+                <div class="section-id">01</div>
+                <div class="section-title">Aplicación de Prácticas Ágiles (ADIPD)</div>
+            </div>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Universidad_del_Valle_logo.svg/1000px-Universidad_del_Valle_logo.svg.png" alt="Univalle Logo" class="univ-logo">
+        </div>
+
+        <nav class="jira-nav">
+            <a href="#practicas">Resumen</a>
+            <a href="#release-plan">Cronograma</a>
+            <a href="#backlog">Backlog</a>
+            <a href="#">Sprints activos</a>
+            <a href="#">Calendario</a>
+            <a href="#">Informes</a>
+            <a href="#">Lista</a>
+            <a href="#">Formularios</a>
+            <a href="#" class="active">Publicaciones</a>
+        </nav>
+
+        <section id="practicas">
+            <h2>Marco Metodológico y Tecnológico</h2>
+            <p>Se ha implementado el marco adaptativo <strong>ADIPD (Adaptive Dynamic Iterative Process Development)</strong> para el desarrollo de la arquitectura de SmartAuditorIA. Esta elección metodológica ha permitido la integración continua de un componente de Inteligencia Artificial (OpenAI RAG) con un esquema de persistencia relacional robusto.</p>
+            
+            <p><strong>Configuración del Equipo de Trabajo:</strong> El desarrollo técnico ha sido gestionado bajo roles diferenciados: Arquitecto de IA (configuración del Vector DB y Embeddings), Full-Stack Developer (Vite/React para el Wizard e integración con FastAPI) y Auditor de Dominio (validación del cumplimiento normativo ISO).</p>
+
+            <div class="diagram-block">
+                <p style="text-align:center; font-weight:bold; color:var(--uv-blue); margin-bottom:20px; font-family:'Montserrat';">ARQUITECTURA TÉCNICA DEL COMPONENTE INTELIGENTE</p>
+                <div class="mermaid">
+                    graph TD
+                        subgraph Frontend
+                            W[Wizard Conversacional]
+                            D[Dashboard de Criticidad]
+                        end
+                        subgraph Backend_Middleware
+                            F[FastAPI Expert Engine]
+                            R[OpenAI RAG Module]
+                        end
+                        subgraph Persistencia
+                            M[(MariaDB: ISO Assets)]
+                            C[(ChromaDB: Knowledge Base)]
+                        end
+                        W -->|Contexto| F
+                        F -->|Búsqueda Semántica| R
+                        R -->|Embeddings| C
+                        F -->|Traza Auditoría| M
+                        D -->|Query KPI| M
+                </div>
+            </div>
+        </section>
+
+        <!-- 02 : PRODUCT BACKLOG -->
+        <div class="rubric-header">
+            <div class="header-title-group">
+                <div class="section-id">02</div>
+                <div class="section-title">Product Backlog Maestro — Estado Final</div>
+            </div>
+        </div>
+
+        <section id="backlog">
+            <h2>Calidad del Product Backlog</h2>
+            <p>El Product Backlog ha sido priorizado bajo la metodología MoSCoW, asegurando que los entregables mínimos viables (MVP) para la auditoría inteligente se completen antes del primer release plan. Las estimaciones se realizaron en Story Points basados en complejidad técnica.</p>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Historia de Usuario (HU)</th>
+                            <th>Prioridad</th>
+                            <th>Esfuerzo (SP)</th>
+                            <th>Estado Final</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>HU-01</td>
+                            <td>Gestión de activos de información bajo taxonomía ISO</td>
+                            <td>Must</td>
+                            <td>8</td>
+                            <td><span class="status-pill status-done">Completado</span></td>
+                        </tr>
+                        <tr>
+                            <td>HU-02</td>
+                            <td>Motor de evaluación de criticidad y probabilidad</td>
+                            <td>Must</td>
+                            <td>13</td>
+                            <td><span class="status-pill status-done">Completado</span></td>
+                        </tr>
+                        <tr>
+                            <td>HU-03</td>
+                            <td>Agente conversacional RAG con contexto técnico</td>
+                            <td>Must</td>
+                            <td>21</td>
+                            <td><span class="status-pill status-progress">En Estabilización</span></td>
+                        </tr>
+                        <tr>
+                            <td>HU-04</td>
+                            <td>Dashboard de riesgos interactivo (Heatmap)</td>
+                            <td>Should</td>
+                            <td>5</td>
+                            <td><span class="status-pill status-done">Completado</span></td>
+                        </tr>
+                        <tr>
+                            <td>HU-05</td>
+                            <td>Implementación de Infraestructura (Docker Stack)</td>
+                            <td>Must</td>
+                            <td>5</td>
+                            <td><span class="status-pill status-done">Completado</span></td>
+                        </tr>
+                        <tr>
+                            <td>HU-06</td>
+                            <td>Generación de reportes PDF normalizados</td>
+                            <td>Could</td>
+                            <td>8</td>
+                            <td><span class="status-pill status-todo">Por Iniciar</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 03 : RELEASE PLAN -->
+        <div class="rubric-header">
+            <div class="header-title-group">
+                <div class="section-id">03</div>
+                <div class="section-title">Plan de Versiones (Release Plan)</div>
+            </div>
+        </div>
+
+        <section id="release-plan">
+            <h2>Coherencia con Sprint Timeline</h2>
+            <p>El Release Plan proyecta un ciclo de desarrollo de 4 sprints principales. La coherencia entre el Product Backlog y la ejecución se garantiza mediante la sincronización bidireccional con el Timeline de Jira Software.</p>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fase / Release</th>
+                            <th>Iteración (Sprint)</th>
+                            <th>Historias Asociadas</th>
+                            <th>Fecha de Entrega</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Foundation Release</td>
+                            <td>Sprint 1-2</td>
+                            <td>Infraestructura, DB Schema, Activos</td>
+                            <td>10 Abr 2026</td>
+                        </tr>
+                        <tr>
+                            <td>Risk Engine V1</td>
+                            <td>Sprint 3-4</td>
+                            <td>Algoritmos de Riesgo, Matriz 4x5</td>
+                            <td>24 Abr 2026</td>
+                        </tr>
+                        <tr>
+                            <td>Expert Agent MVP</td>
+                            <td>Sprint 5-6</td>
+                            <td>RAG Integration, Conversational Auditing</td>
+                            <td>08 May 2026</td>
+                        </tr>
+                        <tr>
+                            <td>Official Release</td>
+                            <td>Sprint 7</td>
+                            <td>Reporting, Hardening, UX Polish</td>
+                            <td>22 May 2026</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 05 : RETROSPECTIVE -->
+        <div class="rubric-header">
+            <div class="header-title-group">
+                <div class="section-id">05</div>
+                <div class="section-title">Sprint Retrospective — Cierre Sprints 5 y 6</div>
+            </div>
+        </div>
+
+        <section id="retrospective">
+            <h2>Resultados de Auditoría Ética y Técnica</h2>
+            <p><strong>Resultados Obtenidos:</strong> Durante el Sprint 5 se logró la estabilización del motor RAG, reduciendo la alucinación del modelo mediante el refinamiento de los embeddings. El dashboard institucional ya refleja datos reales de la base de datos MariaDB.</p>
+            <p><strong>Ajustes de Iteración:</strong> Se requiere mejorar el balance de carga en la iteración 6 para incluir el endurecimiento de la seguridad (JWT/Roles) sin comprometer la velocidad del agente inteligente.</p>
+        </section>
+
+        <footer class="links-bar">
+            <span style="font-weight:700;">TRAZABILIDAD DEL PROYECTO:</span>
+            <a href="https://smartauditoria.atlassian.net/jira/software/projects/SCRUM/boards/1/timeline" target="_blank">Jira Software Timeline</a>
+            <a href="https://github.com/smartauditoria/smartauditoria_project" target="_blank">Repositorio Maestro GitHub</a>
+        </footer>
+    </div>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'neutral',
+            fontFamily: 'Roboto',
+            flowchart: { curve: 'basis' }
+        });
+    </script>
+</body>
+</html>
