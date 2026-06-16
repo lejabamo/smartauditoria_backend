@@ -51,7 +51,7 @@ def section(title):
 def get_token() -> Optional[str]:
     try:
         r = requests.post(f"{API_URL}/auth/login",
-            json={"email": ADMIN_EMAIL, "password": ADMIN_PASSWORD},
+            json={"username": ADMIN_EMAIL, "password": ADMIN_PASSWORD},
             timeout=TIMEOUT)
         if r.status_code == 200:
             data = r.json()
@@ -114,7 +114,7 @@ def test_authentication():
     section("4. Autenticación JWT")
     try:
         r = requests.post(f"{API_URL}/auth/login",
-            json={"email": ADMIN_EMAIL, "password": ADMIN_PASSWORD},
+            json={"username": ADMIN_EMAIL, "password": ADMIN_PASSWORD},
             timeout=TIMEOUT)
         if r.status_code == 200:
             data = r.json()
@@ -136,7 +136,7 @@ def test_protected_routes(token: str):
 
     endpoints = [
         ("GET", f"{API_URL}/activos", "Listado de activos"),
-        ("GET", f"{API_URL}/users", "Listado de usuarios"),
+        ("GET", f"{API_URL}/usuarios", "Listado de usuarios"),
         ("GET", f"{API_URL}/dashboard/stats", "Estadísticas dashboard"),
     ]
     for method, url, desc in endpoints:
@@ -167,7 +167,7 @@ def test_ia_pipeline(token: str):
     }
     try:
         r = requests.post(
-            f"{API_URL}/ia/analyze",
+            f"{API_URL}/v2/ia/analyze",
             json=payload, headers=headers, timeout=60)
         if r.status_code == 200:
             data = r.json()
@@ -189,9 +189,9 @@ def test_create_activo(token: str):
     headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
 
     activo_data = {
-        "nombre": f"Activo Test Producción {int(time.time())}",
-        "tipo": "Hardware",
-        "descripcion": "Servidor de prueba para validación de deploy",
+        "Nombre": f"Activo Test Producción {int(time.time())}",
+        "Tipo_Activo": "Hardware",
+        "Descripcion": "Servidor de prueba para validación de deploy",
         "propietario": "admin@smartauditoria.co",
         "valor": "Alto",
         "estado": "Activo"
@@ -220,7 +220,7 @@ def test_latency_backend_engine(token: str):
     }
     try:
         start = time.time()
-        r = requests.post(f"{API_URL}/ia/analyze", json=payload, headers=headers, timeout=60)
+        r = requests.post(f"{API_URL}/v2/ia/analyze", json=payload, headers=headers, timeout=60)
         elapsed = (time.time() - start) * 1000
 
         if r.status_code == 200:
