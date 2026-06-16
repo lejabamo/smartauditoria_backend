@@ -4,11 +4,19 @@ test_production.py — Prueba E2E de SmartAuditoria en producción (2 VPS)
 Uso: python test_production.py
 """
 
-import requests
 import sys
 import time
+import requests
 import json
 from typing import Optional
+from colorama import init, Fore, Style
+
+if sys.platform == 'win32':
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+
+init(autoreset=True)
 
 # =============================================================================
 # Configuración
@@ -25,19 +33,15 @@ TIMEOUT = 30
 # =============================================================================
 # Helpers
 # =============================================================================
-GREEN = "\033[92m"; RED = "\033[91m"; YELLOW = "\033[93m"; RESET = "\033[0m"
-BLUE  = "\033[94m"; BOLD = "\033[1m"
+GREEN = Fore.GREEN; RED = Fore.RED; YELLOW = Fore.YELLOW; RESET = Style.RESET_ALL
+BLUE  = Fore.BLUE; BOLD = Style.BRIGHT; DIM = Style.DIM
 
 passed = failed = 0
 
-def ok(msg):
-    global passed; passed += 1
-    print(f"  {GREEN}✔ PASS{RESET}  {msg}")
-
-def fail(msg, detail=""):
-    global failed; failed += 1
-    print(f"  {RED}✘ FAIL{RESET}  {msg}")
-    if detail: print(f"         {RED}{detail}{RESET}")
+def ok(msg, detail=""): print(f"  {GREEN}[OK]{RESET}  {msg}" + (f"\n       {DIM}{detail}{RESET}" if detail else ""))
+def fail(msg, detail=""): 
+    print(f"  {RED}[FAIL]{RESET}  {msg}" + (f"\n       {DIM}{detail}{RESET}" if detail else ""))
+    sys.exit(1)
 
 def section(title):
     print(f"\n{BOLD}{BLUE}{'='*55}{RESET}")

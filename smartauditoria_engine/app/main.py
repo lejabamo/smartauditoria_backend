@@ -50,7 +50,7 @@ class SimpleVectorStore:
 @app.middleware("http")
 async def security_barrier(request: Request, call_next):
     # 1. Healthcheck bypass
-    if request.url.path in ["/api/v1/health", "/docs", "/openapi.json"]:
+    if request.url.path in ["/health", "/api/v1/health", "/docs", "/openapi.json"]:
         return await call_next(request)
         
     # 2. X-API-KEY Validation
