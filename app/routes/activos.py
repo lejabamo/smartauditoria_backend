@@ -189,7 +189,7 @@ def create_activo():
         
         logger.info("Activo creado: id=%s nombre='%s' por usuario %s",
                     activo.ID_Activo, activo.Nombre,
-                    getattr(request, 'current_user', None) and request.current_user.id)
+                    getattr(request, 'current_user', None) and request.current_user.id_usuario_auth)
         return jsonify(activo.to_dict()), 201
     except ValueError as e:
         return jsonify({'error': f'Error en formato de fecha: {str(e)}'}), 400
