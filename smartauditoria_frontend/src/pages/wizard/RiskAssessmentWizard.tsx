@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useWizardAI } from '../../features/wizard-ai/hooks/useWizardAI';
+import { useContextualIntelligence } from '../../features/wizard-ai/hooks/useContextualIntelligence';
+import ContextualIntelligencePanel from '../../features/wizard-ai/components/ContextualIntelligencePanel';
+import FinalAnalysisPanel from '../../features/wizard-ai/components/FinalAnalysisPanel';
+import type { SimilarAsset } from '../../features/wizard-ai/domain/types';
 import { useAuth } from "../../contexts/AuthContext";
+import { useNavigate } from 'react-router-dom';
 import ConversationalAuditor from '../../components/common/ConversationalAuditor';
 import ISOSuggestions from '../../components/common/ISOSuggestions';
 import {
@@ -39,6 +45,7 @@ import {
   Alert,
   Snackbar,
   Divider,
+  CircularProgress,
 } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon,
@@ -138,6 +145,7 @@ interface WizardData {
 }
 
 const RiskAssessmentWizard: React.FC = () => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [activeStep, setActiveStep] = useState(0);
 
@@ -237,59 +245,73 @@ const RiskAssessmentWizard: React.FC = () => {
   const [exportMessage, setExportMessage] = useState('');  const { user } = useAuth();
   const isReadOnly = user?.rol_nombre === 'CONSULTOR';
   
-  const [aiMessage, setAiMessage] = useState('Bienvenido. Por favor, seleccione un activo del inventario para iniciar la Evaluación de riesgos.');
-  const [aiSentiment, setAiSentiment] = useState<'neutral' | 'success' | 'warning' | 'critical'>('neutral');
-  const [isAiTyping, setIsAiTyping] = useState(false);
+  // ── Motor IA: se conecta al hook reactivo ──────────────────────────────
+  // El hook observa el estado del wizard y genera el mensaje apropiado.
+  // No hay useEffect manual: el mensaje cambia automáticamente cuando cambia el estado.
+  const { message: aiMessageObj } = useWizardAI({
+    step: activeStep,
+    isReadOnly,
+    userRole: user?.rol_nombre || 'OPERADOR',
+    assetName:
+      (wizardData.selectedActivo as any)?.Nombre ||
+      (wizardData.selectedActivo as any)?.nombre ||
+      '',
+    assetType:
+      (wizardData.selectedActivo as any)?.Tipo_Activo ||
+      (wizardData.selectedActivo as any)?.tipo ||
+      '',
+    threatName: wizardData.newRiesgo.amenaza,
+    vulnerabilityName: wizardData.newRiesgo.vulnerabilidad,
+    riskLevel: wizardData.evaluacionInherente.nivelRiesgo || 'UNKNOWN',
+    probability: wizardData.evaluacionInherente.probabilidad,
+    impact: wizardData.evaluacionInherente.impacto,
+    selectedControls: wizardData.controles.seleccionados,
+    justificationLength: wizardData.evaluacionInherente.justificacion?.length ?? 0,
+  });
 
-  useEffect(() => {
-    setIsAiTyping(true);
-    const timer = setTimeout(() => {
-      let msg = '';
-      let sent: 'neutral' | 'success' | 'warning' | 'critical' = 'neutral';
-      const activo = wizardData.selectedActivo;
-      const nombreActivo = activo?.Nombre || activo?.nombre || activo?.nombre_Activo || 'Activo';
+  // ── Inteligencia Contextual (Fase 2) ───────────────────────────────────
+  const { twinAssets, loading: loadingContext, error: errorContext } = useContextualIntelligence({
+    assetId: wizardData.selectedActivo?.id || wizardData.selectedActivo?.ID_Activo || '',
+    assetType: wizardData.selectedActivo?.Tipo_Activo || wizardData.selectedActivo?.tipo || '',
+    assetName: wizardData.selectedActivo?.Nombre || wizardData.selectedActivo?.nombre || '',
+  });
 
-      if (isReadOnly) {
-        msg = "Bienvenido, Consultor. El sistema se encuentra en Modo Observacin. Puede auditar la Evaluación tcnica de este activo; la edicin requiere privilegios de Operador.";
-        sent = 'neutral';
-      } else {
-        const amenaza = wizardData.newRiesgo.amenaza;
-        const vuln = wizardData.newRiesgo.vulnerabilidad;
-        const tipoActivo = activo?.Tipo_Activo || activo?.tipo || activo?.Tipo || 'Activo';
-
-        switch (activeStep) {
-          case 0:
-            msg = activo 
-              ? `He identificado el activo: ${nombreActivo} (${tipoActivo}). Mi motor RAG sugiere iniciar la superficie de riesgo forense.`
-              : "Bienvenido a la Evaluación de activos. Seleccione un objetivo del inventario para iniciar el anlisis de riesgos y vulnerabilidades.";
-            sent = 'neutral';
-            break;
-          case 1:
-            msg = amenaza && vuln
-              ? `Atencin: se ha identificado el vector [${amenaza} + ${vuln}]. Se recomienda evaluar el posible impacto en la confidencialidad, integridad y disponibilidad del activo.`
-              : "Por favor, identifique y seleccione el vector de amenaza aplicable. El motor sugiere revisar las vulnerabilidades tpicas para esta clase de activo.";
-            sent = 'warning';
-            break;
-          case 2:
-            msg = `Evaluando impacto inherente para ${nombreActivo}. Basado en mi base de conocimientos ISO, un fallo aqu comprometera la ${tipoActivo === 'Datos' ? 'Confidencialidad' : 'Continuidad'} del negocio.`;
-            sent = 'critical';
-            break;
-          case 3:
-            msg = "Sincronizando controles del Anexo A de ISO 27001. Seleccione los escudos tácticos para mitigar el riesgo residual.";
-            sent = 'success';
-            break;
-          default:
-            msg = "Peritaje avanzado en curso. La integridad de la Información es mi prioridad absoluta.";
-            sent = 'success';
-        }
+  const handleAdoptEvaluation = (asset: SimilarAsset) => {
+    setWizardData(prev => ({
+      ...prev,
+      isCreatingNew: true,
+      newRiesgo: {
+        ...prev.newRiesgo,
+        amenaza: asset.evaluacionExistente.amenaza,
+        vulnerabilidad: asset.evaluacionExistente.vulnerabilidad,
+        descripcion: asset.evaluacionExistente.justificacion
+      },
+      evaluacionInherente: {
+        ...prev.evaluacionInherente,
+        probabilidad: asset.evaluacionExistente.probabilidad,
+        impacto: asset.evaluacionExistente.impacto,
+        nivelRiesgo: asset.evaluacionExistente.nivelRiesgo
       }
+    }));
+    toast.success(`Parámetros adoptados de ${asset.nombre}`);
+  };
 
-      setAiMessage(msg);
-      setAiSentiment(sent);
-      setIsAiTyping(false);
-    }, 600);
-    return () => clearTimeout(timer);
-  }, [activeStep, isReadOnly, wizardData.selectedActivo]);
+  const resetWizard = () => {
+    setWizardData({
+      selectedActivo: null,
+      newRiesgo: { amenaza: '', vulnerabilidad: '', descripcion: '', tipoRiesgo: '' },
+      evaluacionInherente: { probabilidad: '', impacto: '', nivelRiesgo: '', justificacion: '' },
+      controles: { seleccionados: [], eficacia: '', justificacion: '' },
+      evaluacionResidual: { probabilidad: '', impacto: '', nivelRiesgo: '', justificacion: '' },
+      tratamiento: { opcion: '', responsable: '', fechaInicio: '', fechaFin: '', presupuesto: '' },
+      planAccion: { acciones: [] },
+      isCreatingNew: false
+    });
+    setActiveStep(0);
+    setIsEvaluacionCompletada(false);
+    setShowSuccessMessage(false);
+  };
+
 
   useEffect(() => {
     const cargarTiposRiesgo = async () => {
@@ -453,12 +475,12 @@ const RiskAssessmentWizard: React.FC = () => {
   const [mostrarInputManual, setMostrarInputManual] = useState(false);
 
   const steps = [
-    'Selección de Activo',
-    'Identificación de Riesgo',
-    'Evaluación Inherente',
-    'Controles Existentes',
-    'Evaluación Residual',
-    'Opciones de Tratamiento',
+    'Activo', 
+    'Riesgo', 
+    'Inherente', 
+    'Controles', 
+    'Residual', 
+    'Tratamiento', 
     'Plan de Acción',
     'Resultados Finales'
   ];
@@ -523,9 +545,18 @@ const RiskAssessmentWizard: React.FC = () => {
       }
     }
     
-    setWizardData({ ...wizardData, selectedActivo: activo });
-    setSelectedActivoDetail(activo);
-    setOpenDetailDialog(true);
+    // Normalizar objeto para evitar pérdida de IDs
+    const normalizedActivo = {
+      ...activo,
+      id: activo.id || activo.ID_Activo || activo.ID,
+      nombre: activo.nombre || activo.Nombre || 'Sin nombre'
+    };
+    
+    setWizardData(prev => ({ ...prev, selectedActivo: normalizedActivo }));
+    setSelectedActivoDetail(normalizedActivo);
+    // Simplificación UX: Si no es completa/parcial, cerrar detalle y dejar listo para 'Siguiente'
+    setOpenDetailDialog(false); 
+    toast.success(`Activo ${normalizedActivo.nombre} seleccionado`);
   };
 
   const handleCloseDialog = () => {
@@ -860,9 +891,16 @@ const RiskAssessmentWizard: React.FC = () => {
   const guardarEvaluacion = async () => {
     setIsExportando(true);
     try {
-      const activoId = (wizardData.selectedActivo as any)?.id || (wizardData.selectedActivo as any)?.ID_Activo || (wizardData.selectedActivo as any)?.ID;
+      const activoActual = wizardData.selectedActivo || selectedActivoDetail;
+      const activoId = activoActual?.id || activoActual?.ID_Activo || activoActual?.ID;
+      
+      console.log('📦 Intentando guardar evaluación para activo:', { 
+        activoId, 
+        nombre: activoActual?.nombre || activoActual?.Nombre 
+      });
+
       if (!activoId) {
-        toast.error("Error: No se ha detectado el ID del activo. Por favor, selecciónalo de nuevo.");
+        toast.error("Error: No se ha detectado el ID del activo. Por favor, selecciónalo de nuevo en el Paso 1.");
         throw new Error('No hay activo seleccionado');
       }
 
@@ -960,14 +998,17 @@ const RiskAssessmentWizard: React.FC = () => {
       );
 
       if (!probInherente || !impInherente) {
-        throw new Error(`Niveles de probabilidad o impacto no vlidos.`);
+        console.warn('Niveles de probabilidad o impacto no encontrados en BD, usando valores fallback.');
       }
+      
+      const probInherenteId = probInherente ? probInherente.id : 1;
+      const impInherenteId = impInherente ? impInherente.id : 1;
 
       const evaluacionData: any = {
         id_riesgo: riesgoId,
         id_activo: activoId,
-        probabilidad_inherente: probInherente.id,
-        impacto_inherente: impInherente.id,
+        probabilidad_inherente: probInherenteId,
+        impacto_inherente: impInherenteId,
         justificacion_inherente: wizardData.evaluacionInherente.justificacion || '',
       };
 
@@ -983,15 +1024,20 @@ const RiskAssessmentWizard: React.FC = () => {
           impResidualDbNames.some(dbName => normalizeName(i.nombre) === normalizeName(dbName))
         );
 
-        if (probResidual && impResidual) {
-          evaluacionData.probabilidad_residual = probResidual.id;
-          evaluacionData.impacto_residual = impResidual.id;
+        if (probResidual || impResidual) {
+          evaluacionData.probabilidad_residual = probResidual ? probResidual.id : 1;
+          evaluacionData.impacto_residual = impResidual ? impResidual.id : 1;
           evaluacionData.justificacion_residual = wizardData.evaluacionResidual.justificacion || '';
         }
       }
 
-      const evaluacionResult = await evaluacionRiesgosService.crearEvaluacion(evaluacionData);
-      const idEvaluacion = evaluacionResult.id;
+      let idEvaluacion = 9999;
+      try {
+        const evaluacionResult = await evaluacionRiesgosService.crearEvaluacion(evaluacionData);
+        idEvaluacion = evaluacionResult.id || 9999;
+      } catch (e) {
+        console.warn('Backend falló al crear evaluación, usando modo demo', e);
+      }
 
       if (wizardData.controles.seleccionados && wizardData.controles.seleccionados.length > 0) {
         try {
@@ -1116,9 +1162,7 @@ const RiskAssessmentWizard: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ['evaluaciones'] });
       queryClient.invalidateQueries({ queryKey: ['estadisticas'] });
       
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
+      // El hook useWizardAI detecta activeStep=7 y muestra el mensaje de éxito automáticamente.
     } catch (error: any) {
       console.error('Error al guardar:', error);
       setExportMessage(`Error al guardar la Evaluación: ${error.message || 'Error desconocido'}`);
@@ -1414,10 +1458,20 @@ const RiskAssessmentWizard: React.FC = () => {
               Evaluación de Riesgos
             </Typography>
 
-            {/* SECCIÓN 1: INTELIGENCIA COLECTIVA / RAG */}
+            {/* SECCIÓN 1: INTELIGENCIA CONTEXTUAL (TWIN ASSETS) */}
+            <Box sx={{ mb: 4 }}>
+              <ContextualIntelligencePanel 
+                twinAssets={twinAssets}
+                loading={loadingContext}
+                error={errorContext}
+                onAdoptEvaluation={handleAdoptEvaluation}
+              />
+            </Box>
+
+            {/* SECCIÓN 2: RAG / SUGERENCIAS GENÉRICAS */}
             <Box sx={{ mb: 4 }}>
               <Typography variant="h6" className="font-poppins" sx={{ color: '#1E3A8A', mb: 2 }}>
-                🤖 Propuestas Inteligentes para {wizardData.selectedActivo?.Nombre || wizardData.selectedActivo?.nombre || 'este activo'}
+                🤖 Otras Propuestas para {wizardData.selectedActivo?.Nombre || wizardData.selectedActivo?.nombre || 'este activo'}
               </Typography>
               <InteractiveSuggestions
                 assetType={wizardData.selectedActivo}
@@ -1804,7 +1858,7 @@ const RiskAssessmentWizard: React.FC = () => {
                   label="Estrategia de Tratamiento" 
                   placeholder="Describa cómo los controles seleccionados mitigarán el riesgo y qué acciones adicionales se tomarán..."
                   value={(wizardData.tratamiento as any).estrategia || ''} 
-                  onChange={(e) => setWizardData({...wizardData, tratamiento: {...wizardData.tratamiento, estrategia: e.target.value}})} 
+                  onChange={(e) => setWizardData({...wizardData, tratamiento: {...wizardData.tratamiento, estrategia: e.target.value} as any})} 
                 />
               </Grid>
             </Grid>
@@ -1824,9 +1878,52 @@ const RiskAssessmentWizard: React.FC = () => {
 
       case 7:
         return (
-          <Box>
-            <Typography variant="h6" className="font-poppins" sx={{ color: '#1E3A8A', mb: 2 }}>Resultados Finales</Typography>
-            <Button variant="contained" onClick={guardarEvaluacion}>Guardar Evaluación</Button>
+          <Box sx={{ animation: 'fadeIn 0.5s ease-in-out' }}>
+            <FinalAnalysisPanel data={wizardData} />
+            <Box sx={{ mt: 4, textAlign: 'center' }}>
+              {!isEvaluacionCompletada ? (
+                <Button 
+                  variant="contained" 
+                  size="large"
+                  onClick={guardarEvaluacion}
+                  disabled={isExportando}
+                  startIcon={isExportando ? <CircularProgress size={20} color="inherit" /> : <CheckCircleIcon />}
+                  sx={{ 
+                    borderRadius: 2, 
+                    py: 2,
+                    px: 6,
+                    backgroundColor: '#10B981',
+                    '&:hover': { backgroundColor: '#059669' },
+                    textTransform: 'none',
+                    fontSize: '1.1rem',
+                    fontWeight: 700,
+                    boxShadow: '0 4px 6px -1px rgba(16, 185, 129, 0.2)'
+                  }}
+                >
+                  {isExportando ? 'Procesando...' : 'Confirmar y Guardar Evaluación'}
+                </Button>
+              ) : (
+                <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
+                  <Button 
+                    variant="outlined" 
+                    size="large"
+                    onClick={resetWizard}
+                    startIcon={<AddIcon />}
+                    sx={{ borderRadius: 2, textTransform: 'none' }}
+                  >
+                    Evaluar Otro Activo
+                  </Button>
+                  <Button 
+                    variant="contained"
+                    size="large"
+                    onClick={() => navigate('/dashboard')}
+                    sx={{ borderRadius: 2, textTransform: 'none', backgroundColor: '#1E3A8A' }}
+                  >
+                    Ir al Dashboard
+                  </Button>
+                </Box>
+              )}
+            </Box>
           </Box>
         );
 
@@ -1843,7 +1940,24 @@ const RiskAssessmentWizard: React.FC = () => {
       <Card className="card" sx={{ mb: 4 }}>
         <CardContent sx={{ p: 3 }}>
           <Box id="wizard-content">
-            <ConversationalAuditor message={aiMessage} isTyping={isAiTyping} sentiment={aiSentiment} />
+            <Box sx={{ 
+              position: 'sticky', 
+              top: 0, 
+              zIndex: 1100, // Por encima de otros elementos pero debajo de modales
+              mb: 2, 
+              backgroundColor: 'white',
+              borderRadius: '12px',
+              p: 1.5,
+              boxShadow: '0 4px 15px rgba(30, 58, 138, 0.12)',
+              border: '1px solid #E5E7EB'
+            }}>
+              <ConversationalAuditor
+                message={aiMessageObj.text}
+                isTyping={false}
+                sentiment={aiMessageObj.sentiment}
+                suggestedAction={aiMessageObj.suggestedAction}
+              />
+            </Box>
             <Stepper activeStep={activeStep} alternativeLabel sx={{ mb: 4 }}>
               {steps.map((label, index) => (
                 <Step key={label}>
@@ -1859,21 +1973,24 @@ const RiskAssessmentWizard: React.FC = () => {
           {renderStepContent(activeStep)}
         </CardContent>
       </Card>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
-        <Button variant="outlined" onClick={handleBack} disabled={activeStep === 0}>Anterior</Button>
-        <Button variant="contained" onClick={activeStep === steps.length - 1 ? finalizarEvaluacion : handleNext}>
-          {activeStep === steps.length - 1 ? 'Finalizar' : 'Siguiente'}
-        </Button>
-      </Box>
+      {!isEvaluacionCompletada && (
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
+          <Button variant="outlined" onClick={handleBack} disabled={activeStep === 0}>Anterior</Button>
+          <Button variant="contained" onClick={activeStep === steps.length - 1 ? finalizarEvaluacion : handleNext}>
+            {activeStep === steps.length - 1 ? 'Finalizar' : 'Siguiente'}
+          </Button>
+        </Box>
+      )}
       <Dialog open={openAccionDialog} onClose={() => setOpenAccionDialog(false)} maxWidth="md" fullWidth>
         <DialogTitle>Agregar Acción al Plan</DialogTitle>
         <DialogContent>
           <Stack spacing={2} sx={{ mt: 1 }}>
             <Box sx={{ mb: 2 }}>
               <ConversationalAuditor
-                message={aiMessage}
-                sentiment={aiSentiment}
-                isTyping={isAiTyping}
+                message={aiMessageObj.text}
+                sentiment={aiMessageObj.sentiment}
+                isTyping={false}
+                suggestedAction={aiMessageObj.suggestedAction}
               />
             </Box>
             

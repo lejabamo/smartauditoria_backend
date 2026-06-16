@@ -258,7 +258,7 @@ const PredictiveSuggestionPanel: React.FC<PredictiveSuggestionPanelProps> = ({
 
       <Grid container spacing={3}>
         {/* Amenazas */}
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Card>
             <CardContent>
               <Box display="flex" alignItems="center" mb={2}>
@@ -325,7 +325,7 @@ const PredictiveSuggestionPanel: React.FC<PredictiveSuggestionPanelProps> = ({
         </Grid>
 
         {/* Vulnerabilidades */}
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Card>
             <CardContent>
               <Box display="flex" alignItems="center" mb={2}>
@@ -392,7 +392,7 @@ const PredictiveSuggestionPanel: React.FC<PredictiveSuggestionPanelProps> = ({
         </Grid>
 
         {/* Controles */}
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Card>
             <CardContent>
               <Box display="flex" alignItems="center" mb={2}>

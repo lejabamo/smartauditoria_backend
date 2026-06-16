@@ -20,6 +20,7 @@ const EstadisticasActivos = lazy(() => import("./pages/reportes/EstadisticasActi
 const TendenciasSeguridad = lazy(() => import("./pages/reportes/TendenciasSeguridad"));
 const ReportesUsuarios = lazy(() => import("./pages/reportes/ReportesUsuarios"));
 const RiskAssessmentWizard = lazy(() => import("./pages/wizard/RiskAssessmentWizard"));
+const AuditControl = lazy(() => import("./pages/auditoria/AuditControl"));
 
 const theme = createTheme({
   palette: {
@@ -283,6 +284,14 @@ const App: React.FC = () => {
                   element={
                     <ProtectedRoute allowedRoles={["ADMIN", "OPERADOR", "CONSULTOR"]}>
                       <RiskAssessmentWizard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/auditoria"
+                  element={
+                    <ProtectedRoute allowedRoles={["ADMIN", "OPERADOR"]}>
+                      <AuditControl />
                     </ProtectedRoute>
                   }
                 />

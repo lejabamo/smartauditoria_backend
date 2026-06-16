@@ -254,7 +254,7 @@ const InherentEvaluationStep: React.FC<InherentEvaluationStepProps> = ({
       </Box>
       <Grid container spacing={2}>
         {/* Panel Principal - evaluación Unificada */}
-        <Grid item xs={12} md={8}>
+        <Grid size={{ xs: 12, md: 8 }}>
           <Card sx={{ borderRadius: '16px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
             <CardContent sx={{ p: 2.5, pt: 2.5, minHeight: '400px' }}>
               <Box>
@@ -262,8 +262,8 @@ const InherentEvaluationStep: React.FC<InherentEvaluationStepProps> = ({
                   <strong>Interacción Rápida:</strong> Puedes establecer la probabilidad y el impacto haciendo clic directamente en las celdas de la <b>Matriz de Riesgo</b> del panel derecho, o seleccionándolos en las listas.
                 </Alert>
                 
-                <Grid container spacing={2} sx={{ mb: 3 }}>
-                  <Grid item xs={12} md={6}>
+                  <Grid container spacing={2} sx={{ mb: 3 }}>
+                  <Grid size={{ xs: 12, md: 6 }}>
                     <FormControl fullWidth variant="outlined">
                       <InputLabel id="probabilidad-label">Probabilidad de Ocurrencia</InputLabel>
                       <Select
@@ -294,7 +294,7 @@ const InherentEvaluationStep: React.FC<InherentEvaluationStepProps> = ({
                     </FormControl>
                   </Grid>
 
-                  <Grid item xs={12} md={6}>
+                  <Grid size={{ xs: 12, md: 6 }}>
                     <FormControl fullWidth variant="outlined">
                       <InputLabel id="impacto-label">Nivel de Impacto</InputLabel>
                       <Select

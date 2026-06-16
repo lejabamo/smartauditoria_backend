@@ -30,6 +30,8 @@ import {
   Star,
   Shield,
   Settings,
+  FactCheck,
+  ArrowForwardIos
 } from "@mui/icons-material";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -72,6 +74,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { text: "Usuarios", icon: <People />, path: "/usuarios", roles: ["ADMIN"] },
     { text: "Riesgos", icon: <Assessment />, path: "/riesgos", roles: ["ADMIN", "OPERADOR", "CONSULTOR"] },
     { text: "Evaluacion", icon: <Star />, path: "/wizard", roles: ["ADMIN", "OPERADOR"] },
+    { text: "Auditoría", icon: <FactCheck />, path: "/auditoria", roles: ["ADMIN", "OPERADOR"] },
     { text: "Reportes", icon: <Report />, path: "/reportes", roles: ["ADMIN", "OPERADOR", "CONSULTOR"] },
   ].filter(item => item.roles.includes(user?.rol_nombre || ""));
 
@@ -178,6 +181,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   fontSize: '0.95rem'
                 }}
               />
+              <ArrowForwardIos sx={{ 
+                fontSize: '0.75rem', 
+                color: location.pathname === item.path ? '#FACC15' : 'rgba(255,255,255,0.3)',
+                transition: 'transform 0.2s ease',
+                ml: 1
+              }} />
             </ListItemButton>
           </ListItem>
         ))}

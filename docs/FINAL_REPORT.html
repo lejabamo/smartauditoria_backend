@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartAuditorIA - Informe Final de Proyecto</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
+    <style>
+        :root {
+            --uv-red: #c22026;
+            --uv-red-light: #fde8e8;
+            --tech-blue: #1e3a8a;
+            --tech-blue-dark: #172554;
+            --slate: #475569;
+            --bg: #f8fafc;
+            --glass: rgba(255, 255, 255, 0.85);
+            --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: #1e293b;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--tech-blue-dark), var(--tech-blue));
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/cubes.png');
+            opacity: 0.1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 4rem;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        .uv-badge-hero {
+            display: inline-block;
+            background: var(--uv-red);
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(194, 32, 38, 0.4);
+        }
+
+        /* Nav */
+        nav {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 15px 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--slate);
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--uv-red);
+            background: var(--uv-red-light);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1100px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        section {
+            margin-bottom: 100px;
+            animation: slideUp 0.8s ease-out both;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            margin-bottom: 40px;
+            border-left: 6px solid var(--uv-red);
+            padding-left: 20px;
+        }
+
+        .section-header h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            color: var(--tech-blue);
+        }
+
+        .section-header p {
+            color: var(--slate);
+            font-size: 1.1rem;
+        }
+
+        /* Cards & Content */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+            border: 1px solid #f1f5f9;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .info-box {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .info-box h3 {
+            color: var(--tech-blue);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th {
+            background: #f1f5f9;
+            text-align: left;
+            padding: 15px;
+            color: var(--tech-blue);
+            font-weight: 700;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-done { background: #dcfce7; color: #166534; }
+        .status-progress { background: #dbeafe; color: #1e40af; }
+        .status-planned { background: #fef3c7; color: #92400e; }
+
+        /* Diagrams */
+        .diagram-container {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            margin: 30px 0;
+            overflow-x: auto;
+        }
+
+        /* Images */
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .image-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .image-card:hover {
+            transform: scale(1.02);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: auto;
+            border-bottom: 1px solid #eee;
+        }
+
+        .image-caption {
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--tech-blue);
+        }
+
+        /* Retro Section */
+        .retro-card {
+            background: linear-gradient(135deg, #1e1b4b, #0f172a);
+            color: white;
+            padding: 40px;
+            border-radius: 25px;
+        }
+
+        .retro-card h3 { color: #22d3ee; }
+        .retro-card li { color: #cbd5e1; margin-bottom: 10px; }
+
+        /* Footer */
+        footer {
+            background: var(--tech-blue-dark);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .footer-logo {
+            height: 80px;
+            margin-bottom: 20px;
+        }
+
+        .social-links {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--uv-red);
+        }
+
+        /* Floating Nav Active */
+        .active-link {
+            color: var(--uv-red) !important;
+            background: var(--uv-red-light);
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <div class="hero-content">
+            <div class="uv-badge-hero">MAESTRÍA EN COMPUTACIÓN - UNIVALLE</div>
+            <h1>SmartAuditorIA</h1>
+            <p>Sistema Inteligente de Gestión de Seguridad y Riesgos Institucionales impulsado por IA Generativa y RAG (Retrieval-Augmented Generation).</p>
+            <div style="margin-top: 40px;">
+                <img src="logoUV_Oficial_Rojo.jpg" alt="Univalle" style="height: 100px; filter: brightness(0) invert(1);">
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="nav-container">
+            <a href="#resumen">Resumen</a>
+            <a href="#agile">Gestión Ágil</a>
+            <a href="#arquitectura">Arquitectura</a>
+            <a href="#producto">Producto MVP</a>
+            <a href="#trazabilidad">Trazabilidad</a>
+            <a href="#retrospectiva">Retrospectiva</a>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <!-- RESUMEN EJECUTIVO -->
+        <section id="resumen">
+            <div class="section-header">
+                <h2>Resumen Ejecutivo</h2>
+                <p>Visión general del proyecto y objetivos alcanzados.</p>
+            </div>
+            <div class="card">
+                <p style="font-size: 1.2rem; color: var(--slate); border-left: 4px solid var(--uv-red); padding-left: 20px; margin-bottom: 30px;">
+                    SmartAuditorIA es una solución integral para la gestión de riesgos bajo normativas ISO 27001/27005, que utiliza agentes inteligentes para automatizar la auditoría y proporcionar sugerencias de control en tiempo real.
+                </p>
+                <div class="grid-2">
+                    <div class="info-box">
+                        <h3><i class="fas fa-bullseye"></i> Objetivo</h3>
+                        <p>Digitalizar y profesionalizar el proceso de gestión de activos y riesgos, integrando un motor experto que asista al auditor institucional.</p>
+                    </div>
+                    <div class="info-box">
+                        <h3><i class="fas fa-check-circle"></i> Logros Clave</h3>
+                        <ul>
+                            <li>Arquitectura modular escalable.</li>
+                            <li>Motor RAG funcional con normativa ISO.</li>
+                            <li>Wizard interactivo de evaluación 5x5.</li>
+                            <li>Trazabilidad total GitHub ↔ Jira.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GESTION AGIL -->
+        <section id="agile">
+            <div class="section-header">
+                <h2>Gestión Ágil y Jira</h2>
+                <p>Evidencia del proceso de desarrollo y cumplimiento de Sprints.</p>
+            </div>
+            <div class="card">
+                <h3 style="margin-bottom: 20px; color: var(--tech-blue);">Estado del Product Backlog (Jira)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ticket</th>
+                            <th>Historia de Usuario</th>
+                            <th>Complejidad (SP)</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>SCRUM-10</strong></td>
+                            <td>Configuración de Ecosistema MLOps</td>
+                            <td>8</td>
+                            <td><span class="status-badge status-done">DONE</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>SCRUM-14</strong></td>
+                            <td>Dashboard Estratégico ISO 27001</td>
+                            <td>5</td>
+                            <td><span class="status-badge status-done">DONE</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>SCRUM-26</strong></td>
+                            <td>Autenticación JWT y Control RBAC</td>
+                            <td>8</td>
+                            <td><span class="status-badge status-done">DONE</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>SCRUM-29</strong></td>
+                            <td>Motor RAG v1: Aislamiento Contextual</td>
+                            <td>5</td>
+                            <td><span class="status-badge status-done">DONE</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>SCRUM-30</strong></td>
+                            <td>Trazabilidad y Data Lineage de IA</td>
+                            <td>5</td>
+                            <td><span class="status-badge status-progress">IN PROGRESS</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 style="margin-top: 40px; margin-bottom: 20px; color: var(--tech-blue);">Cronograma de Liberación (Release Plan)</h3>
+                <div class="diagram-container">
+                    <div class="mermaid">
+                    gantt
+                        title Roadmap de Liberación SmartAuditorIA
+                        dateFormat  YYYY-MM-DD
+                        section V1.0 Baseline
+                        Setup & Inventario    :done, 2026-03-01, 20d
+                        section V1.5 Inteligencia
+                        Motor RAG & Wizard    :active, 2026-03-21, 40d
+                        section V2.0 Auditoría
+                        Planes de Acción      :planned, 2026-05-01, 30d
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ARQUITECTURA -->
+        <section id="arquitectura">
+            <div class="section-header">
+                <h2>Arquitectura del Sistema</h2>
+                <p>Diseño técnico y flujo de datos entre componentes.</p>
+            </div>
+            <div class="card">
+                <div class="grid-2">
+                    <div>
+                        <h3 style="color: var(--tech-blue);"><i class="fas fa-layer-group"></i> Stack Tecnológico</h3>
+                        <ul style="list-style: none; padding-top: 15px;">
+                            <li style="margin-bottom: 15px;"><i class="devicon-react-original colored" style="font-size: 1.5rem; vertical-align: middle; margin-right: 10px;"></i> <strong>Frontend:</strong> React 18, Material UI, Vite.</li>
+                            <li style="margin-bottom: 15px;"><i class="devicon-fastapi-plain colored" style="font-size: 1.5rem; vertical-align: middle; margin-right: 10px;"></i> <strong>Backend:</strong> FastAPI / Flask, SQLAlchemy.</li>
+                            <li style="margin-bottom: 15px;"><i class="devicon-python-plain colored" style="font-size: 1.5rem; vertical-align: middle; margin-right: 10px;"></i> <strong>IA Engine:</strong> LangChain, OpenAI, ChromaDB.</li>
+                            <li style="margin-bottom: 15px;"><i class="devicon-docker-plain colored" style="font-size: 1.5rem; vertical-align: middle; margin-right: 10px;"></i> <strong>DevOps:</strong> Docker Compose, GitHub Actions.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 style="color: var(--tech-blue);"><i class="fas fa-project-diagram"></i> Diagrama de Contexto</h3>
+                        <div class="mermaid">
+                        graph TD
+                            UI[Frontend React] <--> API[Backend Core]
+                            API <--> RAG[Engine IA]
+                            API --- DB[(MariaDB)]
+                            RAG --- VEC[(ChromaDB)]
+                        </div>
+                    </div>
+                </div>
+                <div class="diagram-container" style="margin-top: 40px;">
+                    <h4 style="text-align: center; margin-bottom: 20px;">Orquestación de Componentes MLOps</h4>
+                    <div class="mermaid">
+                    flowchart LR
+                        subgraph Client
+                        ReactUI[React UI]
+                        end
+                        subgraph Core
+                        FastAPI[FastAPI Router]
+                        Auth[JWT Auth]
+                        end
+                        subgraph AI_Layer
+                        LC[LangChain]
+                        VDB[(Vector Store)]
+                        end
+                        ReactUI --> Auth --> FastAPI
+                        FastAPI --> LC --> VDB
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRODUCTO MVP -->
+        <section id="producto">
+            <div class="section-header">
+                <h2>Evidencia del Producto (MVP)</h2>
+                <p>Capturas de pantalla del sistema en operación.</p>
+            </div>
+            <div class="image-gallery">
+                <div class="image-card">
+                    <img src="assets/dashboard_fixed.png" alt="Dashboard">
+                    <div class="image-caption">Dashboard Estratégico</div>
+                </div>
+                <div class="image-card">
+                    <img src="assets/wizard_fixed.png" alt="Wizard">
+                    <div class="image-caption">Asistente de Evaluación (RAG)</div>
+                </div>
+                <div class="image-card">
+                    <img src="assets/activos_fixed.png" alt="Activos">
+                    <div class="image-caption">Gestión de Activos CIA</div>
+                </div>
+                <div class="image-card">
+                    <img src="assets/usuarios_fixed.png" alt="Usuarios">
+                    <div class="image-caption">Control de Acceso (RBAC)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TRAZABILIDAD -->
+        <section id="trazabilidad">
+            <div class="section-header">
+                <h2>Trazabilidad Técnica (Smart Commits)</h2>
+                <p>Vinculación automatizada entre código y requerimientos.</p>
+            </div>
+            <div class="card">
+                <div class="mermaid" style="text-align: center; margin-bottom: 40px;">
+                sequenceDiagram
+                    participant J as Jira Ticket
+                    participant G as Git Commit
+                    participant R as GitHub Repo
+                    J->>G: Planificación (SCRUM-XX)
+                    G->>G: Smart Tagging: "SCRUM-XX: fix..."
+                    G->>R: Push / Subtree Sync
+                    R-->>J: Evidencia Forense en Panel Dev
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Repo</th>
+                            <th>Jira ID</th>
+                            <th>Hash Commit</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Frontend</td>
+                            <td>SCRUM-14</td>
+                            <td><code>282c8ec</code></td>
+                            <td>Implementación de Dashboard y corrección Layout</td>
+                        </tr>
+                        <tr>
+                            <td>Engine</td>
+                            <td>SCRUM-29</td>
+                            <td><code>0643dd4</code></td>
+                            <td>Motor IA, contexto seguro RAG</td>
+                        </tr>
+                        <tr>
+                            <td>Backend</td>
+                            <td>SCRUM-12</td>
+                            <td><code>724930d</code></td>
+                            <td>Endpoints de evaluación y auditoría</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- RETROSPECTIVA -->
+        <section id="retrospectiva">
+            <div class="section-header">
+                <h2>Retrospectiva y Lecciones Aprendidas</h2>
+                <p>Análisis crítico del proceso y plan de mejora.</p>
+            </div>
+            <div class="retro-card">
+                <div class="grid-2">
+                    <div>
+                        <h3>✨ Fortalezas</h3>
+                        <ul>
+                            <li>Adopción exitosa de arquitectura basada en agentes.</li>
+                            <li>Integración fluida de normativas ISO en el motor IA.</li>
+                            <li>Diseño UI premium orientado a la experiencia del auditor.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>🚀 Próximos Pasos (Spiral)</h3>
+                        <ul>
+                            <li>Migración a búsqueda semántica pura (RAG v2).</li>
+                            <li>Implementación de métricas de calidad RAGAS.</li>
+                            <li>Automatización de No Conformidades.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; font-style: italic; text-align: center;">
+                    "Paso dado, paso asegurado. Hacia el refinamiento profesional de la auditoría inteligente."
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <img src="logoUV_Oficial_Rojo.jpg" alt="Univalle" class="footer-logo" style="filter: brightness(0) invert(1);">
+        <p>© 2026 SmartAuditorIA | Maestría en Computación - Univalle</p>
+        <p>Ingeniería Leonardo Bastidas | Proyecto SGSRI</p>
+        <div class="social-links">
+            <a href="https://github.com/lejabamo/smartauditoria_project" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="https://smartauditoria.atlassian.net" target="_blank"><i class="fab fa-jira"></i></a>
+        </div>
+    </footer>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'base',
+            themeVariables: {
+                fontFamily: 'Outfit',
+                primaryColor: '#e0e7ff',
+                primaryTextColor: '#1e3a8a',
+                primaryBorderColor: '#1e3a8a',
+                lineColor: '#c22026',
+                secondaryColor: '#fde8e8',
+                tertiaryColor: '#f8fafc'
+            }
+        });
+
+        // Navigation highlighting
+        const sections = document.querySelectorAll("section");
+        const navLinks = document.querySelectorAll("nav a");
+
+        window.addEventListener("scroll", () => {
+            let current = "";
+            sections.forEach((section) => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute("id");
+                }
+            });
+
+            navLinks.forEach((a) => {
+                a.classList.remove("active-link");
+                if (a.getAttribute("href").includes(current)) {
+                    a.classList.add("active-link");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

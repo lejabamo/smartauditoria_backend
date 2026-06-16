@@ -479,6 +479,91 @@ class evaluacion_riesgo_activo(db.Model):
         }
 
 # ============================================================================
+# MODELOS DE CONTROL DE AUDITORÍA Y CUMPLIMIENTO
+# ============================================================================
+
+class Auditoria(db.Model):
+    """Modelo para auditorías internas de seguridad"""
+    __tablename__ = 'auditorias'
+    
+    id_auditoria = db.Column(db.Integer, primary_key=True)
+    titulo = db.Column(db.String(255), nullable=False)
+    descripcion = db.Column(db.Text)
+    fecha_inicio = db.Column(db.DateTime, default=datetime.utcnow)
+    fecha_fin = db.Column(db.DateTime)
+    estado = db.Column(db.String(50), default='Planificada') # Planificada, En Proceso, Finalizada
+    id_auditor_responsable = db.Column(db.Integer, db.ForeignKey('usuarios_sistema.id_usuario'))
+    
+    # Relaciones
+    hallazgos = db.relationship('HallazgoAuditoria', backref='auditoria', lazy='dynamic')
+    
+    def to_dict(self):
+        return {
+            'id_auditoria': self.id_auditoria,
+            'titulo': self.titulo,
+            'descripcion': self.descripcion,
+            'fecha_inicio': self.fecha_inicio.isoformat() if self.fecha_inicio else None,
+            'fecha_fin': self.fecha_fin.isoformat() if self.fecha_fin else None,
+            'estado': self.estado,
+            'id_auditor_responsable': self.id_auditor_responsable
+        }
+
+class HallazgoAuditoria(db.Model):
+    """Modelo para no conformidades y hallazgos de auditoría"""
+    __tablename__ = 'hallazgos_auditoria'
+    
+    id_hallazgo = db.Column(db.Integer, primary_key=True)
+    id_auditoria = db.Column(db.Integer, db.ForeignKey('auditorias.id_auditoria'), nullable=False)
+    descripcion = db.Column(db.Text, nullable=False)
+    tipo_hallazgo = db.Column(db.String(50)) # No Conformidad, Observación, Oportunidad de Mejora
+    severidad = db.Column(db.String(50)) # Crítica, Mayor, Menor
+    requisito_iso = db.Column(db.String(100)) # Referencia a la norma
+    analisis_causa_raiz = db.Column(db.Text)
+    fecha_deteccion = db.Column(db.DateTime, default=datetime.utcnow)
+    estado = db.Column(db.String(50), default='Pendiente') # Pendiente, En Análisis, Con Plan de Acción, Cerrado
+    
+    # Relaciones
+    planes_accion = db.relationship('PlanAccionCorreccion', backref='hallazgo', lazy='dynamic')
+    
+    def to_dict(self):
+        return {
+            'id_hallazgo': self.id_hallazgo,
+            'id_auditoria': self.id_auditoria,
+            'descripcion': self.descripcion,
+            'tipo_hallazgo': self.tipo_hallazgo,
+            'severidad': self.severidad,
+            'requisito_iso': self.requisito_iso,
+            'analisis_causa_raiz': self.analisis_causa_raiz,
+            'fecha_deteccion': self.fecha_deteccion.isoformat() if self.fecha_deteccion else None,
+            'estado': self.estado
+        }
+
+class PlanAccionCorreccion(db.Model):
+    """Modelo para planes de acción correctiva"""
+    __tablename__ = 'planes_accion_correccion'
+    
+    id_plan = db.Column(db.Integer, primary_key=True)
+    id_hallazgo = db.Column(db.Integer, db.ForeignKey('hallazgos_auditoria.id_hallazgo'), nullable=False)
+    descripcion_accion = db.Column(db.Text, nullable=False)
+    responsable = db.Column(db.String(255))
+    fecha_compromiso = db.Column(db.Date)
+    fecha_cierre_real = db.Column(db.Date)
+    estado = db.Column(db.String(50), default='Abierto') # Abierto, En Ejecución, Ejecutado, Verificado, Cerrado
+    evidencia_cierre = db.Column(db.Text)
+    
+    def to_dict(self):
+        return {
+            'id_plan': self.id_plan,
+            'id_hallazgo': self.id_hallazgo,
+            'descripcion_accion': self.descripcion_accion,
+            'responsable': self.responsable,
+            'fecha_compromiso': self.fecha_compromiso.isoformat() if self.fecha_compromiso else None,
+            'fecha_cierre_real': self.fecha_cierre_real.isoformat() if self.fecha_cierre_real else None,
+            'estado': self.estado,
+            'evidencia_cierre': self.evidencia_cierre
+        }
+
+# ============================================================================
 # MODELOS DE DOCUMENTOS
 # ============================================================================
 

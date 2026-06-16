@@ -21,6 +21,18 @@ PORT = int(os.getenv("PORT", 8001))
 def create_app() -> FastAPI:
     """Factory para la aplicación FastAPI."""
     _app = FastAPI(title="SmartAuditorIA Engine v2 (Certified)")
+    
+    # Import and register routers
+    from app.api.routes.suggestions import router as suggestions_router
+    from app.api.routes.justifications import router as justifications_router
+    
+    _app.include_router(suggestions_router, prefix="/api/v1")
+    _app.include_router(justifications_router, prefix="/api/v1")
+    
+    @_app.get("/health")
+    async def health_check():
+        return {"status": "ok", "service": "smartauditoria_engine"}
+        
     return _app
 
 app = create_app()

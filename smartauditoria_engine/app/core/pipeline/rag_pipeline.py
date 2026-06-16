@@ -101,3 +101,95 @@ class RAGPipeline:
         }
         self._tracer.add_step("abort", {"reason": message})
         return result
+
+    def get_threat_suggestions(self, context) -> Any:
+        from app.core.pipeline.augmenter import Augmenter
+        from app.core.pipeline.generator import SuggestionGenerator
+        from app.domain.suggestion import SuggestionResponse
+        
+        query = f"Amenazas comunes para activo tipo {context.activo.tipo.value if hasattr(context.activo.tipo, 'value') else context.activo.tipo}"
+        retrieved_docs = self._retriever.retrieve(query, quota=5)
+        aug_ctx = Augmenter().augment(context, retrieved_docs)
+        
+        generator = SuggestionGenerator()
+        suggestions = generator.generate_threat_suggestions(aug_ctx)
+        
+        return SuggestionResponse(
+            sugerencias=suggestions,
+            total=len(suggestions),
+            tipo="threats",
+            activo_tipo=context.activo.tipo.value if hasattr(context.activo.tipo, 'value') else str(context.activo.tipo)
+        )
+
+    def get_vulnerability_suggestions(self, context) -> Any:
+        from app.core.pipeline.augmenter import Augmenter
+        from app.core.pipeline.generator import SuggestionGenerator
+        from app.domain.suggestion import SuggestionResponse
+        
+        query = f"Vulnerabilidades que habilitan la amenaza {context.amenaza_nombre or ''}"
+        retrieved_docs = self._retriever.retrieve(query, quota=5)
+        aug_ctx = Augmenter().augment(context, retrieved_docs)
+        
+        generator = SuggestionGenerator()
+        suggestions = generator.generate_vulnerability_suggestions(aug_ctx)
+        
+        return SuggestionResponse(
+            sugerencias=suggestions,
+            total=len(suggestions),
+            tipo="vulnerabilities",
+            activo_tipo=context.activo.tipo.value if hasattr(context.activo.tipo, 'value') else str(context.activo.tipo)
+        )
+
+    def get_control_suggestions(self, context) -> Any:
+        from app.core.pipeline.augmenter import Augmenter
+        from app.core.pipeline.generator import SuggestionGenerator
+        from app.domain.suggestion import SuggestionResponse
+        
+        query = f"Controles para mitigar {context.amenaza_nombre or ''} y {context.vulnerabilidad_id or ''}"
+        retrieved_docs = self._retriever.retrieve(query, quota=5)
+        aug_ctx = Augmenter().augment(context, retrieved_docs)
+        
+        generator = SuggestionGenerator()
+        suggestions = generator.generate_control_suggestions(aug_ctx)
+        
+        return SuggestionResponse(
+            sugerencias=suggestions,
+            total=len(suggestions),
+            tipo="controls",
+            activo_tipo=context.activo.tipo.value if hasattr(context.activo.tipo, 'value') else str(context.activo.tipo)
+        )
+
+    def get_residual_justification(self, context) -> Any:
+        from app.core.pipeline.augmenter import Augmenter
+        from app.core.pipeline.generator import JustificationBuilder
+        from app.domain.suggestion import JustificationResponse
+        
+        query = f"Justificación técnica y normativa de controles para {context.activo.tipo.value if hasattr(context.activo.tipo, 'value') else context.activo.tipo}"
+        retrieved_docs = self._retriever.retrieve(query, quota=5)
+        aug_ctx = Augmenter().augment(context, retrieved_docs)
+        
+        builder = JustificationBuilder()
+        justification = builder.build(aug_ctx)
+        
+        return JustificationResponse(
+            justificaciones=[justification],
+            total=1
+        )
+
+
+class LocalTestVectorStore:
+    def search(self, query: str, limit: int = 5):
+        return [
+            {"metadata": {"control_id": "A.8.2", "norma": "ISO 27001", "description": "Clasificación de la información"}, "score": 0.95},
+            {"metadata": {"control_id": "A.5.1", "norma": "ISO 27001", "description": "Políticas de seguridad"}, "score": 0.88}
+        ]
+
+
+_pipeline_instance = None
+
+def get_pipeline() -> RAGPipeline:
+    global _pipeline_instance
+    if _pipeline_instance is None:
+        _pipeline_instance = RAGPipeline(vector_store=LocalTestVectorStore(), generator=None)
+    return _pipeline_instance
+

@@ -69,3 +69,16 @@ class HybridRetriever:
         final_results = sorted(scored_results, key=lambda x: x["hybrid_score"], reverse=True)
         
         return final_results[:quota]
+
+
+class Retriever:
+    """Clase compatible con los tests unitarios históricos."""
+    def __init__(self, vector_store, min_score: float = 0.5):
+        self.vector_store = vector_store
+        self.min_score = min_score
+
+    def retrieve_for_threats(self, context) -> list[dict[str, Any]]:
+        query = f"Activo de tipo {context.activo.tipo.value if hasattr(context.activo.tipo, 'value') else context.activo.tipo} expuesto a {context.amenaza_nombre}"
+        raw_results = self.vector_store.similarity_search(query)
+        return [r for r in raw_results if r.get("score", 0.0) >= self.min_score]
+

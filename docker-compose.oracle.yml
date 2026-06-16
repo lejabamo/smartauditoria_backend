@@ -1,0 +1,50 @@
+services:
+  # ==========================================================================
+  # VECTOR DATABASE — ChromaDB
+  # Solo accesible internamente (127.0.0.1), el engine lo accede por localhost
+  # ==========================================================================
+  vector_db:
+    image: chromadb/chroma:0.5.3
+    container_name: smartauditoria_chroma
+    restart: always
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - /data/chromadb:/index_data
+    environment:
+      - ANONYMIZED_TELEMETRY=false
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # ==========================================================================
+  # SMARTAUDITORIA ENGINE — FastAPI RAG + Sentence Transformers
+  # Puerto 8001 expuesto al exterior (solo se permite desde IP de SGSRI en UFW)
+  # ==========================================================================
+  engine:
+    build:
+      context: ./smartauditoria_engine
+      dockerfile: Dockerfile
+    image: smartauditoria_engine:latest
+    container_name: smartauditoria_engine
+    restart: always
+    depends_on:
+      vector_db:
+        condition: service_healthy
+    env_file:
+      - ./smartauditoria_engine/.env.production
+    ports:
+      - "8001:8001"
+    volumes:
+      - /data/models:/root/.cache
+      - /data/chromadb:/app/data/chroma
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+      start_period: 120s
+

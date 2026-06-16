@@ -477,7 +477,7 @@ const RiskMatrix4x5: React.FC = () => {
     <Box sx={{ p: 3 }}>
       <Grid container spacing={3}>
         {/* Matriz de Riesgos - Optimizada para ancho total */}
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <Card sx={{ borderRadius: '16px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
             <CardContent sx={{ p: 3 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>

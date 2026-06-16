@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe Final de Proyecto - SmartAuditorIA</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --uv-red: #c22026;
+            --uv-gray: #f1f5f9;
+            --tech-blue: #1E3A8A;
+            --slate: #475569;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #fff;
+            margin: 0;
+            color: #1E293B;
+            line-height: 1.6;
+        }
+
+        /* Cabecera Institucional */
+        .inst-header {
+            background: #fff;
+            padding: 40px 10%;
+            border-bottom: 4px solid var(--uv-red);
+            text-align: center;
+        }
+
+        .inst-header img {
+            height: 120px;
+            margin-bottom: 20px;
+        }
+
+        .inst-header h1 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--tech-blue);
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: -1px;
+        }
+
+        .inst-header .subtitle {
+            color: var(--slate);
+            font-size: 1.1rem;
+            margin-top: 10px;
+            font-weight: 400;
+        }
+
+        /* Nav Miga de Pan */
+        .nav-breadcrumbs {
+            background: var(--uv-gray);
+            padding: 15px 10%;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 15px;
+            font-size: 0.9rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-breadcrumbs a {
+            color: var(--tech-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .nav-breadcrumbs span { color: #cbd5e1; }
+
+        /* Contenedor Principal */
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 40px;
+        }
+
+        section {
+            margin-bottom: 80px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        h2 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--uv-red);
+            font-size: 2rem;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        h2::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: var(--uv-gray);
+        }
+
+        .pill-badge {
+            background: var(--tech-blue);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Cards e Información */
+        .info-card {
+            background: var(--uv-gray);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 5px solid var(--uv-red);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        /* Tablas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: #fff;
+        }
+
+        th {
+            background: var(--tech-blue);
+            color: white;
+            text-align: left;
+            padding: 15px;
+            font-size: 0.9rem;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+            color: var(--slate);
+        }
+
+        .hash {
+            font-family: monospace;
+            background: #f1f5f9;
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: var(--uv-red);
+            font-weight: 700;
+        }
+
+        /* Mermaid */
+        .mermaid-box {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        /* Gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .gallery-item {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .gallery-caption {
+            padding: 15px;
+            background: #fff;
+            text-align: center;
+            font-weight: 600;
+            color: var(--tech-blue);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--tech-blue);
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+            margin-top: 100px;
+        }
+
+        .retro-list li {
+            margin-bottom: 15px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .retro-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--uv-red);
+            font-weight: 800;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="inst-header">
+        <img src="logoUV_Oficial_Rojo.jpg" alt="Universidad del Valle">
+        <div class="pill-badge" style="margin-bottom: 20px;">TRABAJO INTEGRADOR - MAESTRÍA EN COMPUTACIÓN</div>
+        <h1>Informe Final: Proyecto SmartAuditorIA</h1>
+        <p class="subtitle">Ecosistema Inteligente para la Gestión de Riesgos y Seguridad de la Información</p>
+    </header>
+
+    <nav class="nav-breadcrumbs">
+        <a href="#lo-logrado">1. Evolución del Proyecto</a> <span>/</span>
+        <a href="#jira">2. Gestión en Jira</a> <span>/</span>
+        <a href="#release">3. Puntos de Liberación</a> <span>/</span>
+        <a href="#arquitectura">4. Arquitectura y Artefactos</a> <span>/</span>
+        <a href="#retrospectiva">5. Retrospectiva</a> <span>/</span>
+        <a href="#evidencias">6. Evidencias MVP</a>
+    </nav>
+
+    <div class="container">
+
+        <!-- 1: LO LOGRADO -->
+        <section id="lo-logrado">
+            <h2><i class="fas fa-history"></i> 1. Lo Logrado: Evolución del Proyecto</h2>
+            <div class="info-card">
+                <p>Desde el inicio de la fase de concepción, el proyecto ha evolucionado a través de ciclos iterativos (metodología Espiral), asegurando cada componente técnico antes de escalar a la siguiente fase de complejidad.</p>
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fase / Hito</th>
+                        <th>Hash Commit</th>
+                        <th>Logro Técnico</th>
+                        <th>Impacto en el Negocio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Setup Inicial</strong></td>
+                        <td><span class="hash">c71cac3</span></td>
+                        <td>Estructura multirepositorio y contenedores Docker.</td>
+                        <td>Estabilidad de entorno de desarrollo.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Core Backend</strong></td>
+                        <td><span class="hash">724930d</span></td>
+                        <td>Base de datos MariaDB y endpoints de Activos.</td>
+                        <td>Digitalización del inventario de activos CIA.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Seguridad</strong></td>
+                        <td><span class="hash">282c8ec</span></td>
+                        <td>Implementación de JWT y Roles (RBAC).</td>
+                        <td>Garantía de integridad y control de acceso.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Motor RAG v1</strong></td>
+                        <td><span class="hash">0643dd4</span></td>
+                        <td>Integración de LangChain y normativas ISO.</td>
+                        <td>Asistencia experta automatizada.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hardening UI</strong></td>
+                        <td><span class="hash">79d90a8</span></td>
+                        <td>Recuperación de estado en el Wizard y UX dinámica.</td>
+                        <td>Fluidez en la evaluación de riesgos institucionales.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 2: GESTIÓN EN JIRA -->
+        <section id="jira">
+            <h2><i class="fab fa-jira"></i> 2. Gestión del Backlog en Jira</h2>
+            <div class="info-card">
+                Se han gestionado un total de 12 Historias de Usuario (HU) distribuidas en 5 épicas principales, manteniendo una trazabilidad del 100% entre el ticket y el código.
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Épica</th>
+                        <th>Jira ID</th>
+                        <th>Historia de Usuario</th>
+                        <th>Peso (SP)</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>EP1: Infraestructura</td>
+                        <td><strong>SCRUM-10</strong></td>
+                        <td>Configuración Ecosistema MLOps</td>
+                        <td>8</td>
+                        <td><span class="pill-badge" style="background:#10b981">DONE</span></td>
+                    </tr>
+                    <tr>
+                        <td>EP2: Core Security</td>
+                        <td><strong>SCRUM-26</strong></td>
+                        <td>Gestión de Roles y JWT Auth</td>
+                        <td>8</td>
+                        <td><span class="pill-badge" style="background:#10b981">DONE</span></td>
+                    </tr>
+                    <tr>
+                        <td>EP3: Motor Experto</td>
+                        <td><strong>SCRUM-29</strong></td>
+                        <td>Aislamiento Contextual RAG</td>
+                        <td>5</td>
+                        <td><span class="pill-badge" style="background:#10b981">DONE</span></td>
+                    </tr>
+                    <tr>
+                        <td>EP3: Motor Experto</td>
+                        <td><strong>SCRUM-30</strong></td>
+                        <td>Trazabilidad Forense de IA</td>
+                        <td>5</td>
+                        <td><span class="pill-badge" style="background:#3b82f6">PROGRESS</span></td>
+                    </tr>
+                    <tr>
+                        <td>EP4: Dashboard</td>
+                        <td><strong>SCRUM-14</strong></td>
+                        <td>Interfaz de Matriz de Riesgo 5x5</td>
+                        <td>5</td>
+                        <td><span class="pill-badge" style="background:#10b981">DONE</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 3: PUNTOS DE LIBERACION -->
+        <section id="release">
+            <h2><i class="fas fa-rocket"></i> 3. Puntos de Liberación (Release Plan)</h2>
+            <div class="mermaid-box">
+                <div class="mermaid">
+                gantt
+                    title Roadmap Estratégico SmartAuditorIA
+                    dateFormat  YYYY-MM-DD
+                    section Release 1.0 (Baseline)
+                    Configuracion & Docker     :done, 2026-03-01, 14d
+                    Inventario de Activos      :done, 2026-03-15, 10d
+                    section Release 1.5 (Inteligencia)
+                    Motor RAG & Wizard         :active, 2026-03-25, 30d
+                    Matriz de Riesgo Dinámica  :active, 2026-04-10, 15d
+                    section Release 2.0 (Auditoría)
+                    Plan de Acción & Dashboards :planned, 2026-05-01, 20d
+                </div>
+            </div>
+            <div class="grid-2">
+                <div class="info-card" style="border-left-color: #10b981;">
+                    <h3 style="color:var(--tech-blue); margin-top:0;">V1.0 Baseline (Completado)</h3>
+                    <p>Foco en la digitalización de la norma ISO 27001 y el inventario de activos. Soporte multi-usuario y multi-rol.</p>
+                </div>
+                <div class="info-card" style="border-left-color: #3b82f6;">
+                    <h3 style="color:var(--tech-blue); margin-top:0;">V1.5 Inteligencia (En Progreso)</h3>
+                    <p>Integración de agentes inteligentes para la sugerencia automática de controles y evaluación guiada de riesgos.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4: ARQUITECTURA Y ARTEFACTOS -->
+        <section id="arquitectura">
+            <h2><i class="fas fa-sitemap"></i> 4. Arquitectura y Artefactos</h2>
+            <div class="mermaid-box">
+                <div class="mermaid">
+                flowchart TD
+                    UI[Frontend: React/Vite] --> API[Backend: FastAPI]
+                    API --> DB[(MariaDB SQL)]
+                    API --> RAG[IA: LangChain]
+                    RAG --> VEC[(ChromaDB Vectors)]
+                    
+                    style UI fill:#fff,stroke:#c22026,stroke-width:2px
+                    style API fill:#fff,stroke:#1E3A8A,stroke-width:2px
+                    style RAG fill:#f1f5f9,stroke:#c22026,stroke-width:2px
+                </div>
+            </div>
+            <div class="grid-2">
+                <div>
+                    <h3 style="color:var(--tech-blue);">Estructura del Repositorio</h3>
+                    <ul class="retro-list">
+                        <li><strong>smartauditoria_frontend</strong>: Componentes React, Wizard y Dashboard.</li>
+                        <li><strong>smartauditoria_backend</strong>: Lógica de negocio, SQLAlchemy y Seguridad.</li>
+                        <li><strong>smartauditoria_engine</strong>: Integración con OpenAI y bases normativas JSON.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color:var(--tech-blue);">Artefactos Clave</h3>
+                    <ul class="retro-list">
+                        <li><code>RELEASE_PLAN.md</code>: Hoja de ruta técnica.</li>
+                        <li><code>docker-compose.yml</code>: Orquestación de servicios.</li>
+                        <li><code>20260320_Retrospectiva.html</code>: Evidencia de mejora continua.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5: RETROSPECTIVA -->
+        <section id="retrospectiva">
+            <h2><i class="fas fa-sync"></i> 5. Retrospectiva y Lecciones Aprendidas</h2>
+            <div class="info-card">
+                <h3 style="color:var(--tech-blue); margin-top:0;">Análisis del Ciclo Actual</h3>
+                <ul class="retro-list" style="list-style:none; padding:0;">
+                    <li><strong>Fortalezas:</strong> La arquitectura de microservicios ha permitido un escalamiento limpio del motor RAG.</li>
+                    <li><strong>Desafíos:</strong> El manejo de estados complejos en el Wizard de evaluación requirió una refactorización profunda para evitar loops de renderizado.</li>
+                    <li><strong>Ajuste Espiral:</strong> Se decidió priorizar la persistencia del estado de evaluación para garantizar una mejor experiencia de usuario antes de finalizar el Dashboard.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 6: EVIDENCIAS MVP -->
+        <section id="evidencias">
+            <h2><i class="fas fa-camera"></i> 6. Evidencias del Producto Mínimo Viable (MVP)</h2>
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="assets/dashboard_fixed.png" alt="Dashboard">
+                    <div class="gallery-caption">Dashboard Estratégico</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/wizard_fixed.png" alt="Wizard RAG">
+                    <div class="gallery-caption">Motor Auditor Inteligente</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/activos_fixed.png" alt="Inventario">
+                    <div class="gallery-caption">Gestión de Activos CIA</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/usuarios_fixed.png" alt="Usuarios">
+                    <div class="gallery-caption">Control de Acceso Institucional</div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <img src="logoUV_Oficial_Rojo.jpg" alt="Univalle" style="filter: brightness(0) invert(1); height: 80px; margin-bottom: 20px;">
+        <p>© 2026 Universidad del Valle | Maestría en Computación</p>
+        <p>Ingeniería Leonardo Bastidas | Proyecto SmartAuditorIA</p>
+    </footer>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral', themeVariables: { 
+            fontFamily: 'Outfit',
+            primaryColor: '#fff',
+            lineColor: '#c22026'
+        }});
+    </script>
+</body>
+</html>

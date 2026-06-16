@@ -23,7 +23,12 @@ ENV FLASK_ENV=development
 ENV FLASK_HOST=0.0.0.0
 ENV FLASK_PORT=5000
 
+# Healthcheck
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:5000/api/health || exit 1
+
 EXPOSE 5000
 
-# Script de arranque (podría incluir migraciones si fuera necesario)
+# En desarrollo: python run.py
+# En producción, el docker-compose sobreescribe con: gunicorn -c gunicorn_config.py 'run:app'
 CMD ["python", "run.py"]

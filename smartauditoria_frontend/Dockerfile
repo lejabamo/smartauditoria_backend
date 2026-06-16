@@ -9,6 +9,11 @@ RUN npm install
 
 # Copiar código y construir
 COPY . .
+
+# ARG permite pasar la URL del backend al build (overrideable vía docker-compose build args)
+ARG VITE_API_BASE_URL=""
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
+
 RUN npm run build
 
 # production stage

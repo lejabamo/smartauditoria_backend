@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INFORME FINAL: SmartAuditorIA - Univalle MDAI</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --uv-red: #c22026;
+            --tech-blue: #1e3a8a;
+            --slate-900: #0f172a;
+            --slate-700: #334155;
+            --slate-500: #64748b;
+            --slate-100: #f1f5f9;
+            --bg: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-color);
+            line-height: 1.7;
+            padding: 0;
+        }
+
+        /* Academic Header */
+        .academic-header {
+            border-bottom: 4px solid var(--uv-red);
+            padding: 60px 10%;
+            text-align: center;
+            background: #fff;
+        }
+
+        .academic-header img.logo {
+            height: 150px;
+            margin-bottom: 30px;
+        }
+
+        .academic-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.8rem;
+            color: var(--slate-900);
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+
+        .academic-header p.subtitle {
+            font-size: 1.2rem;
+            color: var(--uv-red);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .academic-header .meta {
+            font-size: 1rem;
+            color: var(--slate-500);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 0 40px;
+        }
+
+        section { margin-bottom: 80px; }
+
+        h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            color: var(--slate-900);
+            border-bottom: 2px solid var(--slate-100);
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        h2::before {
+            content: '';
+            width: 10px;
+            height: 30px;
+            background: var(--uv-red);
+            display: block;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            color: var(--tech-blue);
+            margin: 40px 0 20px;
+            font-weight: 700;
+        }
+
+        p { margin-bottom: 20px; text-align: justify; }
+
+        /* Tables - Academic Style */
+        .table-wrapper { overflow-x: auto; margin: 30px 0; border: 1px solid var(--border-color); border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: var(--slate-100); padding: 15px; text-align: left; font-size: 0.85rem; text-transform: uppercase; color: var(--slate-700); font-weight: 800; }
+        td { padding: 15px; border-bottom: 1px solid var(--slate-100); font-size: 0.9rem; }
+        tr:hover { background: #fafafa; }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: #e2e8f0;
+        }
+        .badge-done { background: #dcfce7; color: #166534; }
+
+        /* Repository Links */
+        .repo-links {
+            display: flex;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .repo-btn {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--slate-900);
+            font-weight: 700;
+            transition: 0.2s;
+        }
+        .repo-btn:hover { border-color: var(--uv-red); background: var(--uv-red); color: white; }
+
+        /* Diagrams */
+        .mermaid {
+            background: #fff;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        /* Gallery */
+        .interface-gallery {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+        .gallery-item {
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        .gallery-item img { width: 100%; height: auto; display: block; }
+        .gallery-item .desc { padding: 20px; background: #fff; border-top: 1px solid var(--border-color); text-align: center; font-weight: 600; color: var(--tech-blue); }
+
+        footer {
+            background: var(--slate-900);
+            color: #94a3b8;
+            padding: 60px 0;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 0 20px; }
+            .academic-header h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="academic-header">
+        <img src="https://www.univalle.edu.co/images/univalle/logo-univalle.png" alt="Logo Universidad del Valle" class="logo">
+        <h1>SmartAuditorIA</h1>
+        <p class="subtitle">Informe Final de Ingeniería - Trabajo Integrador</p>
+        <div class="meta">
+            Maestría en Computación para el Desarrollo de Aplicaciones Inteligentes<br>
+            <strong>Estudiante:</strong> Leonardo Javier Bastidas Moreno<br>
+            <strong>Repositorio Maestro:</strong> smartauditoria_project
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- 1. INTRODUCCION -->
+        <section>
+            <h2>1. Descripción del Proyecto</h2>
+            <p>SmartAuditorIA es una solución de ingeniería avanzada diseñada para automatizar y optimizar la gestión de riesgos de seguridad de la información bajo el estándar ISO/IEC 27001. El sistema integra un motor de inteligencia artificial (RAG - Retrieval Augmented Generation) para proporcionar recomendaciones normativas precisas, eliminando la ambigüedad en la identificación de controles mitigantes.</p>
+            
+            <div class="repo-links">
+                <a href="https://github.com/lejabamo/smartauditoria_frontend" class="repo-btn">Repositorio Frontend</a>
+                <a href="https://github.com/lejabamo/smartauditoria_backend" class="repo-btn">Repositorio Backend</a>
+                <a href="https://github.com/lejabamo/smartauditoria_engine" class="repo-btn">Repositorio Engine IA</a>
+            </div>
+        </section>
+
+        <!-- 2. PRODUCT BACKLOG (5 EPICAS) -->
+        <section>
+            <h2>2. Gestión Integral del Backlog (Jira)</h2>
+            <p>El desarrollo se estructuró en 5 épicas estratégicas que cubren desde la infraestructura base hasta la generación de reportes de cumplimiento final. A continuación se detallan las 10 Historias de Usuario críticas del MVP.</p>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Épica</th>
+                            <th>ID Ticket</th>
+                            <th>Historia de Usuario</th>
+                            <th>SP</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>EP1: Infra & Config</td><td>SCRUM-10</td><td>Orquestación Docker Multirepositorio</td><td>8</td><td><span class="badge badge-done">DONE</span></td></tr>
+                        <tr><td>EP2: Assets & Auth</td><td>SCRUM-12</td><td>Modelado BD MariaDB Activos CIA</td><td>5</td><td><span class="badge badge-done">DONE</span></td></tr>
+                        <tr><td>EP2: Assets & Auth</td><td>SCRUM-26</td><td>Seguridad JWT y Roles RBAC</td><td>8</td><td><span class="badge badge-done">DONE</span></td></tr>
+                        <tr><td>EP2: Assets & Auth</td><td>SCRUM-15</td><td>Endpoints de Gestión de Evaluación</td><td>5</td><td><span class="badge badge-done">DONE</span></td></tr>
+                        <tr><td>EP3: AI Engine</td><td>SCRUM-29</td><td>Motor RAG con Target Isolation ISO</td><td>5</td><td><span class="badge badge-done">DONE</span></td></tr>
+                        <tr><td>EP3: AI Engine</td><td>SCRUM-30</td><td>Trazabilidad Forense de Respuestas</td><td>5</td><td><span class="badge badge-done">DONE</span></td></tr>
+                        <tr><td>EP3: AI Engine</td><td>SCRUM-31</td><td>Heurística de Mitigación Fallback</td><td>3</td><td><span class="badge badge-done">DONE</span></td></tr>
+                        <tr><td>EP4: Hardening UX</td><td>SCRUM-14</td><td>Dashboard de Matriz de Calor 5x5</td><td>5</td><td><span class="badge badge-done">DONE</span></td></tr>
+                        <tr><td>EP4: Hardening UX</td><td>HU-WIZARD</td><td>Wizard Paso a Paso Guiado por IA</td><td>8</td><td><span class="badge badge-done">DONE</span></td></tr>
+                        <tr><td>EP5: Compliance</td><td>SCRUM-35</td><td>Despliegue Local de Validación (Shadow)</td><td>5</td><td><span class="badge badge-done">DONE</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 3. ARQUITECTURA -->
+        <section>
+            <h2>3. Arquitectura y Modelado de Ingeniería</h2>
+            
+            <h3>3.1. Arquitectura de Módulos (Capa de Software)</h3>
+            <div class="mermaid">
+            graph TB
+                subgraph "Capa de Presentación (Frontend)"
+                    UI[React 18 / Vite]
+                end
+                subgraph "Capa de Lógica (Backend)"
+                    API[FastAPI / SQLAlchemy]
+                    AUTH[JWT Security]
+                end
+                subgraph "Capa de Inteligencia (Engine)"
+                    ENG[IA RAG Pipeline]
+                    VDB[(ChromaDB)]
+                end
+                UI -- REST API --> API
+                API -- Inferencia --> ENG
+                ENG -- Query Context --> VDB
+            </div>
+
+            <h3>3.2. Diagrama de Secuencia: Flujo de Evaluación</h3>
+            <div class="mermaid">
+            sequenceDiagram
+                participant U as Auditor
+                participant W as Wizard UI
+                participant B as Backend API
+                participant E as RAG Engine
+                U->>W: Selecciona Activo
+                W->>B: Solicita Evaluación
+                B->>E: Query normativo (ActivoContext)
+                E-->>B: Sugerencia Riesgos + Controles
+                B-->>W: Renderiza Sugerencia IA
+                W->>U: Muestra recomendación
+            </div>
+
+            <h3>3.3. Modelo Relacional (Base de Datos)</h3>
+            <div class="mermaid">
+            erDiagram
+                ACTIVO ||--o{ EVALUACION : registra
+                RIESGO ||--o{ EVALUACION : asigna
+                USUARIO ||--o{ ACTIVO : monitorea
+                ACTIVO {
+                    int id
+                    string nombre
+                    string nivel_cia
+                }
+                EVALUACION {
+                    int id
+                    int prob_inherente
+                    int imp_inherente
+                }
+            </div>
+        </section>
+
+        <!-- 4. INTERFACES DE PRUEBA -->
+        <section>
+            <h2>4. Evidencia de Funcionalidad e Interfaces</h2>
+            <p>Las siguientes capturas demuestran el cumplimiento de las interfaces de prueba validadas en el despliegue local.</p>
+            
+            <div class="interface-gallery">
+                <div class="gallery-item">
+                    <img src="./assets/dashboard_section.png" alt="Dashboard">
+                    <div class="desc">Figura 1. Dashboard Estratégico y Salud Institucional</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="./assets/riesgos_matrix_section.png" alt="Matriz">
+                    <div class="desc">Figura 2. Matriz de Calor 5x5 Dinámica</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="./assets/wizard_evidence.png" alt="Wizard">
+                    <div class="desc">Figura 3. Wizard de Evaluación Guiada por IA</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="./assets/activos_section.png" alt="Activos">
+                    <div class="desc">Figura 4. Gestión de Inventario de Activos (ISO 27001)</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="./assets/usuarios_section.png" alt="Usuarios">
+                    <div class="desc">Figura 5. Administración de Usuarios y Roles (RBAC)</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="./assets/reportes_section.png" alt="Reportes">
+                    <div class="desc">Figura 6. Módulo de Reportes y Analítica de Cumplimiento</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. PIPELINE ETL Y LOGICA -->
+        <section>
+            <h2>5. Ingeniería de Datos y Lógica de Negocio</h2>
+            <h3>5.1. Pipeline ETL de Activos</h3>
+            <p>El sistema implementa un proceso de extracción desde el inventario técnico (GLPI) hacia el repositorio de activos de seguridad:</p>
+            <div style="background: var(--slate-100); padding: 25px; border-radius: 12px; font-family: monospace; font-size: 0.9rem;">
+                GLPI_API_FETCH >> NORMALIZATION_ENGINE >> ISO_27001_MAPPING >> DB_LOAD
+            </div>
+
+            <h3>5.2. Algoritmo de Ponderación</h3>
+            <p>La evaluación del riesgo se calcula mediante la interacción de la probabilidad técnica y el impacto en la tríada de seguridad (CIA) del activo específico:</p>
+            <div style="background: var(--slate-100); padding: 25px; border-radius: 12px; font-family: monospace; font-size: 0.9rem;">
+                Nivel_Riesgo = (Probabilidad * Impacto) * Factor_Ajuste_Criticidad_Activo
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>UNIVERSIDAD DEL VALLE — FACULTAD DE INGENIERÍA</p>
+        <p>Maestría en Computación para el Desarrollo de Aplicaciones Inteligentes</p>
+        <p>© 2026 SmartAuditorIA — Santiago de Cali, Colombia</p>
+    </footer>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'base',
+            themeVariables: {
+                fontFamily: 'Inter',
+                primaryColor: '#ffffff',
+                primaryTextColor: '#1e293b',
+                primaryBorderColor: '#c22026',
+                lineColor: '#c22026',
+                secondaryColor: '#f1f5f9',
+                tertiaryColor: '#ffffff'
+            }
+        });
+    </script>
+</body>
+</html>

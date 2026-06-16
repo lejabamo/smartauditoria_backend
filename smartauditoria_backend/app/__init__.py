@@ -116,9 +116,11 @@ def create_app(config=None):
     from .routes.controles_evaluacion import controles_evaluacion_bp
     app.register_blueprint(controles_evaluacion_bp, url_prefix='/api/controles-evaluacion')
 
-    # Rutas de evaluación de riesgos (Corrigiendo 404 Crítico)
     from .routes.evaluacion_riesgos import evaluacion_riesgos_bp
     app.register_blueprint(evaluacion_riesgos_bp, url_prefix='/api/evaluacion-riesgos')
+
+    from .routes.auditorias import auditorias_bp
+    app.register_blueprint(auditorias_bp, url_prefix='/api/auditorias')
 
 
     # Ruta de prueba para verificar que el servidor está funcionando

@@ -8,7 +8,8 @@ import {
   Grid,
   LinearProgress,
   Stack,
-  Tooltip
+  Tooltip,
+  Button
 } from "@mui/material";
 import {
   Security,
@@ -25,8 +26,10 @@ import { dashboardService } from "../../services/backend";
 import { evaluacionRiesgosService } from "../../services/evaluacionRiesgos";
 import type { DashboardHistory } from "../../services/backend";
 import RiskMatrix4x5 from "../../components/riesgos/RiskMatrix4x5";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
   const [stats, setStats] = useState([
     { title: "Salud Institucional", value: "0%", icon: <Security />, color: "#1976d2" },
     { title: "Riesgos Activos", value: "0", icon: <Assessment />, color: "#f57c00" },
@@ -101,22 +104,43 @@ const Dashboard: React.FC = () => {
             Panel de Control Estratégico de Riesgos
           </Typography>
         </Box>
-        <Typography variant="body2" sx={{ color: '#94A3B8' }}>
-          Última actualización: {new Date().toLocaleTimeString()}
-        </Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 }}>
+          <Button 
+            variant="contained" 
+            size="large"
+            onClick={() => navigate('/wizard')}
+            startIcon={<Assessment />}
+            sx={{ 
+              borderRadius: '12px', 
+              px: 4, 
+              py: 1.5,
+              backgroundColor: '#1E3A8A',
+              textTransform: 'none',
+              fontWeight: 600,
+              boxShadow: '0 4px 12px rgba(30, 58, 138, 0.2)',
+              '&:hover': { backgroundColor: '#1e40af' }
+            }}
+          >
+            Nueva Evaluación
+          </Button>
+          <Typography variant="body2" sx={{ color: '#94A3B8' }}>
+            Última actualización: {new Date().toLocaleTimeString()}
+          </Typography>
+        </Box>
       </Box>
 
-      {/* Summary Cards */}
       <Grid container spacing={3} sx={{ mb: 6 }}>
         {stats.map((stat, index) => (
-          <Grid item xs={12} sm={6} md={3} key={index}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
             <Card sx={{ 
               borderRadius: '16px', 
               boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
               border: '1px solid #E2E8F0',
               transition: 'all 0.3s ease',
-              '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 12px 24px rgba(0,0,0,0.06)' }
-            }}>
+              '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 12px 24px rgba(0,0,0,0.06)', cursor: stat.title === 'Riesgos Activos' ? 'pointer' : 'default' }
+            }}
+            onClick={() => stat.title === 'Riesgos Activos' && navigate('/wizard')}
+            >
               <CardContent sx={{ p: 3 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Box sx={{ 
@@ -147,7 +171,7 @@ const Dashboard: React.FC = () => {
 
       {/* Main Section: Matrix & Health (THE CORE) */}
       <Grid container spacing={3} sx={{ mb: 6 }}>
-        <Grid item xs={12} lg={8}>
+        <Grid size={{ xs: 12, lg: 8 }}>
           <Paper sx={{ p: 3, borderRadius: '20px', boxShadow: '0 10px 30px rgba(0,0,0,0.04)', border: '1px solid #E2E8F0', height: '100%' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
               <Typography variant="h5" sx={{ fontWeight: 600, color: '#1E293B', fontFamily: "'Poppins', sans-serif" }}>
@@ -167,7 +191,7 @@ const Dashboard: React.FC = () => {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} lg={4}>
+        <Grid size={{ xs: 12, lg: 4 }}>
           <Paper sx={{ p: 4, borderRadius: '20px', boxShadow: '0 10px 30px rgba(0,0,0,0.04)', border: '1px solid #E2E8F0', height: '100%', display: 'flex', flexDirection: 'column' }}>
             <Typography variant="h5" sx={{ fontWeight: 600, color: '#1E293B', fontFamily: "'Poppins', sans-serif", mb: 4, textAlign: 'center' }}>
               Salud del Sistema
@@ -245,7 +269,7 @@ const Dashboard: React.FC = () => {
 
       {/* Breakdowns Section */}
       <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Paper sx={{ p: 4, borderRadius: '20px', boxShadow: '0 10px 30px rgba(0,0,0,0.04)', border: '1px solid #E2E8F0' }}>
             <Typography variant="h6" sx={{ fontWeight: 600, color: '#1E293B', mb: 3 }}>Activos por Categoría</Typography>
             <Stack spacing={3}>
@@ -266,7 +290,7 @@ const Dashboard: React.FC = () => {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Paper sx={{ p: 4, borderRadius: '20px', boxShadow: '0 10px 30px rgba(0,0,0,0.04)', border: '1px solid #E2E8F0' }}>
             <Typography variant="h6" sx={{ fontWeight: 600, color: '#1E293B', mb: 3 }}>Distribución de Criticidad</Typography>
             <Stack spacing={3}>

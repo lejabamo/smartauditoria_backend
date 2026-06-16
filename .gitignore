@@ -1,0 +1,31 @@
+# Entornos virtuales
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+
+# Variables de entorno y secretos
+.env
+.env.*
+!.env.example
+
+# Base de datos local
+data/
+*.sqlite3
+*.db
+
+# Node y Frontend
+node_modules/
+dist/
+build/
+.npm/
+
+# IDE y temporales
+.vscode/
+.idea/
+.DS_Store
+*.log
+tmp/
+scratch/
+.gemini/

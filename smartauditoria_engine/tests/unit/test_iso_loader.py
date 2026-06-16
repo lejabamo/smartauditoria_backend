@@ -30,7 +30,7 @@ def test_iso_loader_semantic_chunking():
     """Valida la integridad semántica del Chunking"""
     test_text = "Fase 1. \n\n Fase 2. \n\n Fase 3."
     loader = ISOAgnosticLoader("Test", "Test", "Test")
-    chunks = loader.process_text_to_chunks(test_text, chunk_size=20, chunk_overlap=0)
+    chunks = loader.process_text_to_chunks(test_text, chunk_size=10, chunk_overlap=0)
     
     # RecursiveCharacterTextSplitter debería dividir en los dobles saltos de línea
     assert len(chunks) == 3

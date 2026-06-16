@@ -49,6 +49,7 @@ export interface DashboardStats {
   total_activos: number;
   usuarios_activos: number;
   riesgos_identificados: number;
+  riesgos_mitigados: number;
   tendencia: number;
   activos_por_tipo: { [key: string]: number };
   riesgos_por_estado: { [key: string]: number };
@@ -255,6 +256,7 @@ export const dashboardService = {
         total_activos: 4,
         usuarios_activos: 4,
         riesgos_identificados: 15,
+        riesgos_mitigados: 8,
         tendencia: 12,
         activos_por_tipo: { "Hardware": 2, "Software": 1, "Cloud": 1 },
         riesgos_por_estado: { "Bajo": 3, "Medio": 5, "Alto": 4, "Crítico": 3 }
@@ -486,48 +488,46 @@ export const dashboardService = {
     }
   },
   async getTendenciasSeguridad(): Promise<any> {
+    const mockData = {
+      estadisticas: {
+        total_riesgos: 15,
+        con_controles: 12,
+        sin_controles: 3,
+        mejora_riesgo: 8,
+        por_categoria: {
+          "Infraestructura": { total: 5, con_controles: 4 },
+          "Seguridad": { total: 5, con_controles: 5 },
+          "Ciberseguridad": { total: 5, con_controles: 3 }
+        }
+      },
+      riesgos: [
+        {
+          id_riesgo: 101, nombre_riesgo: "Caída de Servidor Core", categoria: "Infraestructura",
+          activo: { nombre: "Servidor Producción Core" },
+          evaluacion_inherente: { nivel: "Alto" },
+          evaluacion_residual: { nivel: "Medio" },
+          controles: { aplicados: 2, nombres: ["Patching", "Redundancia"] }
+        },
+        {
+          id_riesgo: 102, nombre_riesgo: "Fuga de Datos Confidenciales", categoria: "Seguridad",
+          activo: { nombre: "Base de Datos Usuarios" },
+          evaluacion_inherente: { nivel: "Alto" },
+          evaluacion_residual: { nivel: "Bajo" },
+          controles: { aplicados: 3, nombres: ["TLS", "DLP", "Auditoría BD"] }
+        }
+      ]
+    };
+
     try {
       const res = await apiRequest<any>('/dashboard/tendencias-seguridad');
-      if (!res || !res.estadisticas || res.estadisticas.total_riesgos === 0) throw new Error('Forzando mock');
+      if (!res || !res.estadisticas || res.estadisticas.total_riesgos === 0) {
+        console.warn('API regresó datos vacíos para tendencias, usando fallback.');
+        return mockData;
+      }
       return res;
     } catch (error) {
-      console.warn('API fallida, usando Mock Data para Tendencias Seguridad');
-      return {
-        estadisticas: {
-          total_riesgos: 3,
-          con_controles: 2,
-          sin_controles: 1,
-          mejora_riesgo: 2,
-          por_categoria: {
-            "Infraestructura": { total: 1, con_controles: 1 },
-            "Seguridad": { total: 1, con_controles: 1 },
-            "Ciberseguridad": { total: 1, con_controles: 0 }
-          }
-        },
-        riesgos: [
-          {
-            id_riesgo: 101, nombre_riesgo: "Caída de Servidor Core", categoria: "Infraestructura",
-            activo: { nombre: "Servidor Producción Core" },
-            evaluacion_inherente: { nivel: "Alto" },
-            evaluacion_residual: { nivel: "Medio" },
-            controles: { aplicados: 2, nombres: ["Patching", "Redundancia"] }
-          },
-          {
-            id_riesgo: 102, nombre_riesgo: "Fuga de Datos Confidenciales", categoria: "Seguridad",
-            activo: { nombre: "Base de Datos Usuarios" },
-            evaluacion_inherente: { nivel: "Alto" },
-            evaluacion_residual: { nivel: "Bajo" },
-            controles: { aplicados: 3, nombres: ["TLS", "DLP", "Auditoría BD"] }
-          },
-          {
-            id_riesgo: 103, nombre_riesgo: "Ransomware en Equipos", categoria: "Ciberseguridad",
-            activo: { nombre: "Laptop Auditoría 01" },
-            evaluacion_inherente: { nivel: "Medio" },
-            evaluacion_residual: null,
-            controles: { aplicados: 0, nombres: [] }
-          }
-        ]
-      };
+      console.error('Error crítico en API de tendencias, activando Resiliencia Mock:', error);
+      return mockData;
     }
   },
   async getReporteUsuariosEvidencias(): Promise<any> {

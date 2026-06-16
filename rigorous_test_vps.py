@@ -108,7 +108,7 @@ class RigorousTester:
         results = []
         for q in queries:
             payload = {"activo_nombre": q, "activo_tipo": "Servidor", "tipo": "threats"}
-            resp = requests.post(f"{BACKEND_URL}/api/ia_v2/analyze", json=payload, headers=self.headers)
+            resp = requests.post(f"{BACKEND_URL}/api/v2/ia/analyze", json=payload, headers=self.headers)
             if resp.status_code == 200:
                 results.append(resp.json())
         
