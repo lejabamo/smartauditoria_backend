@@ -1,0 +1,36 @@
+name: Deploy Frontend to SGSRI VPS
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Copy files via SCP
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          source: "."
+          target: "/opt/smartauditoria/smartauditoria_frontend"
+          
+      - name: Restart Frontend Container
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script: |
+            cd /opt/smartauditoria
+            docker compose -f docker-compose.sgsri.yml build --no-cache frontend
+            docker compose -f docker-compose.sgsri.yml up -d frontend
+            echo "Frontend deployed successfully"
