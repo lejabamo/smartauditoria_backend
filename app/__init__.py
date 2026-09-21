@@ -122,6 +122,10 @@ def create_app(config=None):
     from .routes.auditorias import auditorias_bp
     app.register_blueprint(auditorias_bp, url_prefix='/api/auditorias')
 
+    # REGISTRO SMARTAUDITOR COPILOT (CAG + AGENTES)
+    from .routes.copilot import copilot_bp
+    app.register_blueprint(copilot_bp, url_prefix='/api/copilot')
+
 
     # Ruta de prueba para verificar que el servidor está funcionando
     @app.route('/api/health', methods=['GET'])
