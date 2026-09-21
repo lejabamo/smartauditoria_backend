@@ -939,7 +939,7 @@ def get_riesgos_altos_detalle():
     try:
         from sqlalchemy import text
         from ..models import Activo, Riesgo, evaluacion_riesgo_activo, nivelesriesgo
-        from ..models.documentos import DocumentoAdjunto
+        from ..models import DocumentoAdjunto
         
         # Obtener riesgos con nivel ALTO (residual o inherente) con responsable
         # Contar evaluaciones de riesgo (riesgo + activo) para que coincida con el reporte completo
@@ -1424,7 +1424,7 @@ def get_reporte_usuarios_evidencias():
     """Obtener reporte de usuarios con evidencias subidas"""
     try:
         from sqlalchemy import text
-        from ..models.documentos import DocumentoAdjunto
+        from ..models import DocumentoAdjunto
         from ..models import UsuarioSistema
         
         # Obtener todos los documentos con información del usuario

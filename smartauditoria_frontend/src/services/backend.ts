@@ -704,10 +704,108 @@ export const vulnerabilidadesService = {
   }
 };
 
+// Servicios de Auditorias
+export interface APIAuditoria {
+  id_auditoria: number;
+  titulo: string;
+  descripcion: string;
+  fecha_inicio: string;
+  fecha_fin: string;
+  estado: string;
+  id_auditor_responsable: number;
+}
+
+export interface APIHallazgo {
+  id_hallazgo: number;
+  id_auditoria: number;
+  descripcion: string;
+  tipo_hallazgo: string;
+  severidad: string;
+  requisito_iso: string;
+  analisis_causa_raiz: string;
+  fecha_deteccion: string;
+  estado: string;
+}
+
+export interface APIPlanAccion {
+  id_plan: number;
+  id_hallazgo: number;
+  descripcion_accion: string;
+  responsable: string;
+  fecha_compromiso: string;
+  estado: string;
+}
+
+export const auditoriasService = {
+  async getAll(): Promise<APIAuditoria[]> {
+    try {
+      const res = await apiRequest<APIAuditoria[]>('/auditorias/');
+      return res;
+    } catch (error) {
+      console.warn('API fallida o vacía, usando Mock Data para Auditorias');
+      return [
+        { id_auditoria: 1, titulo: "Auditoría Interna ISO 27001 - Q1", descripcion: "Auditoría de cumplimiento de seguridad", fecha_inicio: "2026-03-15", fecha_fin: "2026-03-20", estado: "Finalizada", id_auditor_responsable: 1 },
+        { id_auditoria: 2, titulo: "Revisión Técnica Controles de Acceso", descripcion: "Revisión técnica de accesos a servidores", fecha_inicio: "2026-04-20", fecha_fin: "2026-04-25", estado: "En Proceso", id_auditor_responsable: 2 }
+      ];
+    }
+  },
+
+  async create(auditoria: Omit<APIAuditoria, 'id_auditoria'>): Promise<APIAuditoria> {
+    try {
+      return await apiRequest<APIAuditoria>('/auditorias/', {
+        method: 'POST',
+        body: JSON.stringify(auditoria),
+      });
+    } catch (error) {
+      console.error('Error creating auditoria:', error);
+      throw error;
+    }
+  },
+
+  async getHallazgos(): Promise<APIHallazgo[]> {
+    try {
+      const res = await apiRequest<APIHallazgo[]>('/auditorias/hallazgos');
+      return res;
+    } catch (error) {
+      console.warn('API fallida o vacía, usando Mock Data para Hallazgos');
+      return [
+        { id_hallazgo: 1, id_auditoria: 1, tipo_hallazgo: "No Conformidad Mayor", severidad: "Mayor", descripcion: "Falta de evidencia en la revisión mensual de logs de firewall.", requisito_iso: "ISO 27001 - A.12.4.1", analisis_causa_raiz: "Falta de automatización", fecha_deteccion: "2026-03-16", estado: "En Análisis" },
+        { id_hallazgo: 2, id_auditoria: 1, tipo_hallazgo: "Observacion", severidad: "Menor", descripcion: "La política de contraseñas no se ha actualizado con los nuevos estándares NIST.", requisito_iso: "ISO 27001 - A.9.4.3", analisis_causa_raiz: "Falta de revisión de políticas", fecha_deteccion: "2026-03-18", estado: "Abierto" }
+      ];
+    }
+  },
+
+  async createHallazgo(hallazgo: Omit<APIHallazgo, 'id_hallazgo' | 'fecha_deteccion' | 'estado'>): Promise<APIHallazgo> {
+    try {
+      return await apiRequest<APIHallazgo>('/auditorias/hallazgos', {
+        method: 'POST',
+        body: JSON.stringify(hallazgo),
+      });
+    } catch (error) {
+      console.error('Error creating hallazgo:', error);
+      throw error;
+    }
+  },
+
+  async createPlanAccion(plan: Omit<APIPlanAccion, 'id_plan' | 'estado'>): Promise<APIPlanAccion> {
+    try {
+      return await apiRequest<APIPlanAccion>('/auditorias/planes-accion', {
+        method: 'POST',
+        body: JSON.stringify(plan),
+      });
+    } catch (error) {
+      console.error('Error creating plan de accion:', error);
+      throw error;
+    }
+  }
+};
+
 export default {
   activosService,
   usuariosService,
   riesgosService,
   dashboardService,
-  vulnerabilidadesService
+  vulnerabilidadesService,
+  auditoriasService
 };
+

@@ -3,7 +3,7 @@ from werkzeug.utils import secure_filename
 import os
 import uuid
 from datetime import datetime
-from ..models.documentos import DocumentoAdjunto
+from ..models import DocumentoAdjunto
 from app.auth.decorators import require_auth
 import mimetypes
 
