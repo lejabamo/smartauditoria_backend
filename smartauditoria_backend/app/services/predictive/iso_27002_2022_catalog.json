@@ -1,0 +1,2214 @@
+{
+  "version": "ISO/IEC 27002:2022 / GTC-ISO/IEC 27002:2022",
+  "total_controles": 93,
+  "temas": {
+    "5": {
+      "tema": "Organizacional",
+      "clausula": "5",
+      "total": 37
+    },
+    "6": {
+      "tema": "Personas",
+      "clausula": "6",
+      "total": 8
+    },
+    "7": {
+      "tema": "Físico",
+      "clausula": "7",
+      "total": 14
+    },
+    "8": {
+      "tema": "Tecnológico",
+      "clausula": "8",
+      "total": 34
+    }
+  },
+  "controles": [
+    {
+      "id": "A.5.1",
+      "codigo": "5.1",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Políticas de seguridad de la información",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de políticas de seguridad de la información.",
+      "descripcion": "Debe implementarse y mantenerse el control para políticas de seguridad de la información.",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.2",
+      "codigo": "5.2",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Roles y responsabilidades en materia de seguridad de la información",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de roles y responsabilidades en materia de seguridad de la información.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.3",
+      "codigo": "5.3",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Segregación de funciones",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I"
+      ],
+      "proposito": "Asegurar la gestión efectiva de segregación de funciones.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad Capacidades operativas Dominios de seguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.4",
+      "codigo": "5.4",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Responsabilidades de gestión",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de responsabilidades de gestión.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.5",
+      "codigo": "5.5",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Contacto con las autoridades",
+      "tipo_control": "Correctivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de contacto con las autoridades.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 75,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.6",
+      "codigo": "5.6",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Contacto con grupos de interés especiales",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de contacto con grupos de interés especiales.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.7",
+      "codigo": "5.7",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Inteligencia sobre amenazas",
+      "tipo_control": "Detectivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de inteligencia sobre amenazas.",
+      "descripcion": "Debe implementarse y mantenerse el control para inteligencia sobre amenazas.",
+      "eficacia_estimada": 75,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.8",
+      "codigo": "5.8",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Seguridad de la información en la gestión de proyectos",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de seguridad de la información en la gestión de proyectos.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.9",
+      "codigo": "5.9",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Inventario de información y otros activos asociados",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de inventario de información y otros activos asociados.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.10",
+      "codigo": "5.10",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Uso aceptable de la información y otros activos asociados",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de uso aceptable de la información y otros activos asociados.",
+      "descripcion": "Debe implementarse y mantenerse el control para uso aceptable de la información y otros activos asociados.",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.11",
+      "codigo": "5.11",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Devolución de activos",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de devolución de activos.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.12",
+      "codigo": "5.12",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Clasificación de la información",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I"
+      ],
+      "proposito": "Asegurar la gestión efectiva de clasificación de la información.",
+      "descripcion": "Debe implementarse y mantenerse el control para clasificación de la información.",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.13",
+      "codigo": "5.13",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Etiquetado de la información",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I"
+      ],
+      "proposito": "Asegurar la gestión efectiva de etiquetado de la información.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.14",
+      "codigo": "5.14",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Transferencia de información",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I"
+      ],
+      "proposito": "Asegurar la gestión efectiva de transferencia de información.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.15",
+      "codigo": "5.15",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Control de acceso",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de control de acceso.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.16",
+      "codigo": "5.16",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Gestión de identidades",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I"
+      ],
+      "proposito": "Asegurar la gestión efectiva de gestión de identidades.",
+      "descripcion": "Debe implementarse y mantenerse el control para gestión de identidades.",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.17",
+      "codigo": "5.17",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Información de autenticación",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I"
+      ],
+      "proposito": "Asegurar la gestión efectiva de información de autenticación.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.18",
+      "codigo": "5.18",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Derechos de acceso",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de derechos de acceso.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.19",
+      "codigo": "5.19",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Seguridad de la información en las relaciones con los proveedores",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de seguridad de la información en las relaciones con los proveedores.",
+      "descripcion": "Debe implementarse y mantenerse el control para seguridad de la información en las relaciones con los proveedores.",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.20",
+      "codigo": "5.20",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Tratamiento de la seguridad de la información en los acuerdos con proveedores",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de tratamiento de la seguridad de la información en los acuerdos con proveedores.",
+      "descripcion": "Debe implementarse y mantenerse el control para tratamiento de la seguridad de la información en los acuerdos con proveedores.",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.21",
+      "codigo": "5.21",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Gestión de la seguridad de la información en la cadena de suministro de TIC",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de gestión de la seguridad de la información en la cadena de suministro de tic.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.22",
+      "codigo": "5.22",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Monitoreo, revisión y gestión de cambios de los servicios de proveedores",
+      "tipo_control": "Detectivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de monitoreo, revisión y gestión de cambios de los servicios de proveedores.",
+      "descripcion": "Debe implementarse y mantenerse el control para monitoreo, revisión y gestión de cambios de los servicios de proveedores.",
+      "eficacia_estimada": 75,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.23",
+      "codigo": "5.23",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Seguridad de la información para el uso de servicios en la nube",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de seguridad de la información para el uso de servicios en la nube.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.24",
+      "codigo": "5.24",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Planificación y preparación de la gestión de incidentes de seguridad",
+      "tipo_control": "Correctivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de planificación y preparación de la gestión de incidentes de seguridad.",
+      "descripcion": "Debe implementarse y mantenerse el control para planificación y preparación de la gestión de incidentes de seguridad.",
+      "eficacia_estimada": 75,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.25",
+      "codigo": "5.25",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Evaluación y decisión sobre eventos de seguridad de la información",
+      "tipo_control": "Detectivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de evaluación y decisión sobre eventos de seguridad de la información.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 75,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.26",
+      "codigo": "5.26",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Respuesta a incidentes de seguridad de la información",
+      "tipo_control": "Correctivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de respuesta a incidentes de seguridad de la información.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 75,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.27",
+      "codigo": "5.27",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Aprendizaje derivado de los incidentes de seguridad de la información",
+      "tipo_control": "Correctivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de aprendizaje derivado de los incidentes de seguridad de la información.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 75,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.28",
+      "codigo": "5.28",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Recopilación de evidencia",
+      "tipo_control": "Correctivo",
+      "propiedades_cia": [
+        "C",
+        "I"
+      ],
+      "proposito": "Asegurar la gestión efectiva de recopilación de evidencia.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 75,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.29",
+      "codigo": "5.29",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Seguridad de la información durante una interrupción",
+      "tipo_control": "Correctivo",
+      "propiedades_cia": [
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de seguridad de la información durante una interrupción.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 75,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.30",
+      "codigo": "5.30",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Preparación de las TIC para la continuidad del negocio",
+      "tipo_control": "Correctivo",
+      "propiedades_cia": [
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de preparación de las tic para la continuidad del negocio.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 75,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.31",
+      "codigo": "5.31",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Requisitos legales, estatutarios, reglamentarios y contractuales",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de requisitos legales, estatutarios, reglamentarios y contractuales.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.32",
+      "codigo": "5.32",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Derechos de propiedad intelectual",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I"
+      ],
+      "proposito": "Asegurar la gestión efectiva de derechos de propiedad intelectual.",
+      "descripcion": "Información  Propiedades de  seguridad  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.33",
+      "codigo": "5.33",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Protección de registros",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de protección de registros.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad Capacidades operativas Dominios de",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.34",
+      "codigo": "5.34",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Privacidad y protección de datos personales (PII)",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C"
+      ],
+      "proposito": "Asegurar la gestión efectiva de privacidad y protección de datos personales (pii).",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad Capacidades operativas Dominios de",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.35",
+      "codigo": "5.35",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Revisión independiente de la seguridad de la información",
+      "tipo_control": "Detectivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de revisión independiente de la seguridad de la información.",
+      "descripcion": "Debe implementarse y mantenerse el control para revisión independiente de la seguridad de la información.",
+      "eficacia_estimada": 75,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.36",
+      "codigo": "5.36",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Cumplimiento de políticas y normas de seguridad de la información",
+      "tipo_control": "Detectivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de cumplimiento de políticas y normas de seguridad de la información.",
+      "descripcion": "Debe implementarse y mantenerse el control para cumplimiento de políticas y normas de seguridad de la información.",
+      "eficacia_estimada": 75,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.5.37",
+      "codigo": "5.37",
+      "clausula": 5,
+      "tema": "Organizacional",
+      "nombre": "Procedimientos operativos documentados",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de procedimientos operativos documentados.",
+      "descripcion": "Debe implementarse y mantenerse el control para procedimientos operativos documentados.",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.6.1",
+      "codigo": "6.1",
+      "clausula": 6,
+      "tema": "Personas",
+      "nombre": "Selección de personal",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de selección de personal.",
+      "descripcion": "Debe implementarse y mantenerse el control para selección de personal.",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.6.2",
+      "codigo": "6.2",
+      "clausula": 6,
+      "tema": "Personas",
+      "nombre": "Términos y condiciones de empleo",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de términos y condiciones de empleo.",
+      "descripcion": "Debe implementarse y mantenerse el control para términos y condiciones de empleo.",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.6.3",
+      "codigo": "6.3",
+      "clausula": 6,
+      "tema": "Personas",
+      "nombre": "Sensibilización, educación y formación en seguridad de la información",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de sensibilización, educación y formación en seguridad de la información.",
+      "descripcion": "Debe implementarse y mantenerse el control para sensibilización, educación y formación en seguridad de la información.",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.6.4",
+      "codigo": "6.4",
+      "clausula": 6,
+      "tema": "Personas",
+      "nombre": "Proceso disciplinario",
+      "tipo_control": "Correctivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de proceso disciplinario.",
+      "descripcion": "Debe implementarse y mantenerse el control para proceso disciplinario.",
+      "eficacia_estimada": 75,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.6.5",
+      "codigo": "6.5",
+      "clausula": 6,
+      "tema": "Personas",
+      "nombre": "Responsabilidades posteriores al empleo o cambio de puesto",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de responsabilidades posteriores al empleo o cambio de puesto.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad Capacidades operativas Dominios de",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.6.6",
+      "codigo": "6.6",
+      "clausula": 6,
+      "tema": "Personas",
+      "nombre": "Acuerdos de confidencialidad o no divulgación",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C"
+      ],
+      "proposito": "Asegurar la gestión efectiva de acuerdos de confidencialidad o no divulgación.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad Capacidades operativas Dominios de",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.6.7",
+      "codigo": "6.7",
+      "clausula": 6,
+      "tema": "Personas",
+      "nombre": "Trabajo a distancia (Teletrabajo)",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de trabajo a distancia (teletrabajo).",
+      "descripcion": "Debe implementarse y mantenerse el control para trabajo a distancia (teletrabajo).",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.6.8",
+      "codigo": "6.8",
+      "clausula": 6,
+      "tema": "Personas",
+      "nombre": "Notificación de eventos de seguridad de la información",
+      "tipo_control": "Detectivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de notificación de eventos de seguridad de la información.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 75,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.7.1",
+      "codigo": "7.1",
+      "clausula": 7,
+      "tema": "Físico",
+      "nombre": "Perímetros de seguridad física",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de perímetros de seguridad física.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.7.2",
+      "codigo": "7.2",
+      "clausula": 7,
+      "tema": "Físico",
+      "nombre": "Entrada física",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de entrada física.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad Capacidades operativas Dominios de",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.7.3",
+      "codigo": "7.3",
+      "clausula": 7,
+      "tema": "Físico",
+      "nombre": "Seguridad de oficinas, despachos y recursos",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de seguridad de oficinas, despachos y recursos.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.7.4",
+      "codigo": "7.4",
+      "clausula": 7,
+      "tema": "Físico",
+      "nombre": "Monitoreo de la seguridad física",
+      "tipo_control": "Detectivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de monitoreo de la seguridad física.",
+      "descripcion": "Propiedades de  seguridad de la   información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 75,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.7.5",
+      "codigo": "7.5",
+      "clausula": 7,
+      "tema": "Físico",
+      "nombre": "Protección contra amenazas físicas y ambientales",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de protección contra amenazas físicas y ambientales.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.7.6",
+      "codigo": "7.6",
+      "clausula": 7,
+      "tema": "Físico",
+      "nombre": "Trabajo en áreas seguras",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de trabajo en áreas seguras.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.7.7",
+      "codigo": "7.7",
+      "clausula": 7,
+      "tema": "Físico",
+      "nombre": "Puesto de trabajo despejado y pantalla limpia",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I"
+      ],
+      "proposito": "Asegurar la gestión efectiva de puesto de trabajo despejado y pantalla limpia.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.7.8",
+      "codigo": "7.8",
+      "clausula": 7,
+      "tema": "Físico",
+      "nombre": "Emplazamiento y protección de equipos",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de emplazamiento y protección de equipos.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.7.9",
+      "codigo": "7.9",
+      "clausula": 7,
+      "tema": "Físico",
+      "nombre": "Seguridad de los activos fuera de las instalaciones",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de seguridad de los activos fuera de las instalaciones.",
+      "descripcion": "Los activos fuera de las instalaciones debería estar protegidos.  Ejemplar para uso exclusivo - ICONTEC - DEMO MARZO -  Impreso por: Consulta   GUÍA TÉCNICA COLOMBIANA GTC-ISO/IEC 27002:2022",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.7.10",
+      "codigo": "7.10",
+      "clausula": 7,
+      "tema": "Físico",
+      "nombre": "Soportes de almacenamiento",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de soportes de almacenamiento.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.7.11",
+      "codigo": "7.11",
+      "clausula": 7,
+      "tema": "Físico",
+      "nombre": "Servicios de suministro (Energía, climatización)",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de servicios de suministro (energía, climatización).",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.7.12",
+      "codigo": "7.12",
+      "clausula": 7,
+      "tema": "Físico",
+      "nombre": "Seguridad del cableado",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de seguridad del cableado.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.7.13",
+      "codigo": "7.13",
+      "clausula": 7,
+      "tema": "Físico",
+      "nombre": "Mantenimiento de equipos",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de mantenimiento de equipos.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.7.14",
+      "codigo": "7.14",
+      "clausula": 7,
+      "tema": "Físico",
+      "nombre": "Eliminación segura o reutilización de equipos",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C"
+      ],
+      "proposito": "Asegurar la gestión efectiva de eliminación segura o reutilización de equipos.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.1",
+      "codigo": "8.1",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Dispositivos finales del usuario",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de dispositivos finales del usuario.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad Capacidades operativas Dominios de",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.2",
+      "codigo": "8.2",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Derechos de acceso privilegiado",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de derechos de acceso privilegiado.",
+      "descripcion": "Debe implementarse y mantenerse el control para derechos de acceso privilegiado.",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.3",
+      "codigo": "8.3",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Restricción de acceso a la información",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I"
+      ],
+      "proposito": "Asegurar la gestión efectiva de restricción de acceso a la información.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.4",
+      "codigo": "8.4",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Acceso al código fuente",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I"
+      ],
+      "proposito": "Asegurar la gestión efectiva de acceso al código fuente.",
+      "descripcion": "Debe implementarse y mantenerse el control para acceso al código fuente.",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.5",
+      "codigo": "8.5",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Autenticación segura",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I"
+      ],
+      "proposito": "Asegurar la gestión efectiva de autenticación segura.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.6",
+      "codigo": "8.6",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Gestión de capacidad",
+      "tipo_control": "Detectivo",
+      "propiedades_cia": [
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de gestión de capacidad.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 75,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.7",
+      "codigo": "8.7",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Protección contra código malicioso (Malware)",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de protección contra código malicioso (malware).",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.8",
+      "codigo": "8.8",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Gestión de vulnerabilidades técnicas",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de gestión de vulnerabilidades técnicas.",
+      "descripcion": "Debe implementarse y mantenerse el control para gestión de vulnerabilidades técnicas.",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.9",
+      "codigo": "8.9",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Gestión de configuración",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de gestión de configuración.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.10",
+      "codigo": "8.10",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Eliminación de información",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C"
+      ],
+      "proposito": "Asegurar la gestión efectiva de eliminación de información.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad Capacidades operativas Dominios de",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.11",
+      "codigo": "8.11",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Enmascaramiento de datos",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C"
+      ],
+      "proposito": "Asegurar la gestión efectiva de enmascaramiento de datos.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad Capacidades operativas Dominios de",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.12",
+      "codigo": "8.12",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Prevención de fuga de datos (DLP)",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C"
+      ],
+      "proposito": "Asegurar la gestión efectiva de prevención de fuga de datos (dlp).",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.13",
+      "codigo": "8.13",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Copias de seguridad de la información (Backup)",
+      "tipo_control": "Correctivo",
+      "propiedades_cia": [
+        "A",
+        "I"
+      ],
+      "proposito": "Asegurar la gestión efectiva de copias de seguridad de la información (backup).",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 75,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.14",
+      "codigo": "8.14",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Redundancia de las instalaciones de procesamiento de información",
+      "tipo_control": "Correctivo",
+      "propiedades_cia": [
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de redundancia de las instalaciones de procesamiento de información.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 75,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.15",
+      "codigo": "8.15",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Registro de eventos (Logging)",
+      "tipo_control": "Detectivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de registro de eventos (logging).",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 75,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.16",
+      "codigo": "8.16",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Monitoreo de actividades",
+      "tipo_control": "Detectivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de monitoreo de actividades.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 75,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.17",
+      "codigo": "8.17",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Sincronización del reloj (NTP)",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "I"
+      ],
+      "proposito": "Asegurar la gestión efectiva de sincronización del reloj (ntp).",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.18",
+      "codigo": "8.18",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Uso de programas de utilidad con privilegios",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I"
+      ],
+      "proposito": "Asegurar la gestión efectiva de uso de programas de utilidad con privilegios.",
+      "descripcion": "Debe implementarse y mantenerse el control para uso de programas de utilidad con privilegios.",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.19",
+      "codigo": "8.19",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Instalación de software en sistemas operativos",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de instalación de software en sistemas operativos.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad Capacidades operativas Dominios de",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.20",
+      "codigo": "8.20",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Seguridad en redes",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de seguridad en redes.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.21",
+      "codigo": "8.21",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Seguridad de los servicios de red",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de seguridad de los servicios de red.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.22",
+      "codigo": "8.22",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Segregación en redes (Segmentación / VLANs)",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de segregación en redes (segmentación / vlans).",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.23",
+      "codigo": "8.23",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Filtrado web",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de filtrado web.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.24",
+      "codigo": "8.24",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Uso de criptografía",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I"
+      ],
+      "proposito": "Asegurar la gestión efectiva de uso de criptografía.",
+      "descripcion": "Debe implementarse y mantenerse el control para uso de criptografía.",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.25",
+      "codigo": "8.25",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Ciclo de vida de desarrollo seguro (SDLC)",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de ciclo de vida de desarrollo seguro (sdlc).",
+      "descripcion": "Debe implementarse y mantenerse el control para ciclo de vida de desarrollo seguro (sdlc).",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.26",
+      "codigo": "8.26",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Requisitos de seguridad de las aplicaciones",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de requisitos de seguridad de las aplicaciones.",
+      "descripcion": "Debe implementarse y mantenerse el control para requisitos de seguridad de las aplicaciones.",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.27",
+      "codigo": "8.27",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Principios de ingeniería y arquitectura de sistemas seguros",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de principios de ingeniería y arquitectura de sistemas seguros.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad Capacidades operativas Dominios de",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.28",
+      "codigo": "8.28",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Codificación segura",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I"
+      ],
+      "proposito": "Asegurar la gestión efectiva de codificación segura.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad Capacidades operativas Dominios de",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.29",
+      "codigo": "8.29",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Pruebas de seguridad en el desarrollo y aceptación",
+      "tipo_control": "Detectivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de pruebas de seguridad en el desarrollo y aceptación.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad Capacidades operativas Dominios de",
+      "eficacia_estimada": 75,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.30",
+      "codigo": "8.30",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Desarrollo externalizado",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de desarrollo externalizado.",
+      "descripcion": "Debe implementarse y mantenerse el control para desarrollo externalizado.",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.31",
+      "codigo": "8.31",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Separación de entornos de desarrollo, pruebas y producción",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de separación de entornos de desarrollo, pruebas y producción.",
+      "descripcion": "Debe implementarse y mantenerse el control para separación de entornos de desarrollo, pruebas y producción.",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.32",
+      "codigo": "8.32",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Gestión de cambios",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de gestión de cambios.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad Capacidades operativas Dominios de",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.33",
+      "codigo": "8.33",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Información sobre pruebas",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C"
+      ],
+      "proposito": "Asegurar la gestión efectiva de información sobre pruebas.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad Capacidades operativas Dominios de",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    },
+    {
+      "id": "A.8.34",
+      "codigo": "8.34",
+      "clausula": 8,
+      "tema": "Tecnológico",
+      "nombre": "Protección de los sistemas de información durante las pruebas de auditoría",
+      "tipo_control": "Preventivo",
+      "propiedades_cia": [
+        "C",
+        "I",
+        "A"
+      ],
+      "proposito": "Asegurar la gestión efectiva de protección de los sistemas de información durante las pruebas de auditoría.",
+      "descripcion": "Propiedades de  seguridad de la  información  Conceptos de  ciberseguridad Capacidades operativas Dominios de",
+      "eficacia_estimada": 85,
+      "activo_tipos_aplicables": [
+        "Hardware",
+        "Software",
+        "Datos",
+        "Sistemas de Información",
+        "Redes",
+        "Personal"
+      ]
+    }
+  ]
+}

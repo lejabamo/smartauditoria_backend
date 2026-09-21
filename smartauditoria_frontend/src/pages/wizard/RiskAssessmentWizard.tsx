@@ -6,7 +6,8 @@ import FinalAnalysisPanel from '../../features/wizard-ai/components/FinalAnalysi
 import type { SimilarAsset } from '../../features/wizard-ai/domain/types';
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from 'react-router-dom';
-import ConversationalAuditor from '../../components/common/ConversationalAuditor';
+import AuditorCopilot from '../../components/copilot/AuditorCopilot';
+import type { ActionChip } from '../../services/copilotService';
 import ISOSuggestions from '../../components/common/ISOSuggestions';
 import {
   Box,
@@ -484,6 +485,86 @@ const RiskAssessmentWizard: React.FC = () => {
     'Plan de Acción',
     'Resultados Finales'
   ];
+
+  const handleCopilotAction = (chip: ActionChip) => {
+    switch (chip.action) {
+      case 'APPLY_CONTROL': {
+        const controlCode = chip.control_id || chip.label;
+        if (controlCode && !wizardData.controles.seleccionados.includes(controlCode)) {
+          setWizardData(prev => ({
+            ...prev,
+            controles: {
+              ...prev.controles,
+              seleccionados: [...prev.controles.seleccionados, controlCode],
+              eficacia: prev.controles.eficacia || 'Media',
+            }
+          }));
+          toast.success(`Control ${controlCode} añadido a la evaluación`);
+        }
+        break;
+      }
+      case 'APPLY_VECTOR': {
+        if (chip.threat || chip.vulnerability) {
+          setWizardData(prev => ({
+            ...prev,
+            newRiesgo: {
+              ...prev.newRiesgo,
+              amenaza: chip.threat || prev.newRiesgo.amenaza,
+              vulnerabilidad: chip.vulnerability || prev.newRiesgo.vulnerabilidad,
+            }
+          }));
+          toast.success('Vector de amenaza y vulnerabilidad aplicado');
+        }
+        break;
+      }
+      case 'SET_PROBABILITY_IMPACT': {
+        if (chip.probabilidad || chip.impacto) {
+          setWizardData(prev => ({
+            ...prev,
+            evaluacionInherente: {
+              ...prev.evaluacionInherente,
+              probabilidad: chip.probabilidad || prev.evaluacionInherente.probabilidad,
+              impacto: chip.impacto || prev.evaluacionInherente.impacto,
+            }
+          }));
+          toast.success(`Parámetros de probabilidad (${chip.probabilidad}) e impacto (${chip.impacto}) aplicados`);
+        }
+        break;
+      }
+      case 'FILL_JUSTIFICATION': {
+        if (chip.text) {
+          setWizardData(prev => ({
+            ...prev,
+            evaluacionInherente: {
+              ...prev.evaluacionInherente,
+              justificacion: chip.text || prev.evaluacionInherente.justificacion,
+            }
+          }));
+          toast.success('Justificación cargada desde Copilot');
+        }
+        break;
+      }
+      default:
+        console.log('Copilot action:', chip);
+    }
+  };
+
+  const copilotContext = {
+    assetName:
+      (wizardData.selectedActivo as any)?.Nombre ||
+      (wizardData.selectedActivo as any)?.nombre ||
+      '',
+    assetType:
+      (wizardData.selectedActivo as any)?.Tipo_Activo ||
+      (wizardData.selectedActivo as any)?.tipo ||
+      '',
+    threatName: wizardData.newRiesgo.amenaza,
+    vulnerabilityName: wizardData.newRiesgo.vulnerabilidad,
+    riskLevel: wizardData.evaluacionInherente.nivelRiesgo || 'UNKNOWN',
+    step: activeStep,
+    stepTitle: steps[activeStep] || `Paso ${activeStep + 1}`,
+  };
+
 
   const filteredActivos = activos.filter(activo => {
     if (!activo || !searchTerm) return true;
@@ -1940,22 +2021,12 @@ const RiskAssessmentWizard: React.FC = () => {
       <Card className="card" sx={{ mb: 4 }}>
         <CardContent sx={{ p: 3 }}>
           <Box id="wizard-content">
-            <Box sx={{ 
-              position: 'sticky', 
-              top: 0, 
-              zIndex: 1100, // Por encima de otros elementos pero debajo de modales
-              mb: 2, 
-              backgroundColor: 'white',
-              borderRadius: '12px',
-              p: 1.5,
-              boxShadow: '0 4px 15px rgba(30, 58, 138, 0.12)',
-              border: '1px solid #E5E7EB'
-            }}>
-              <ConversationalAuditor
-                message={aiMessageObj.text}
-                isTyping={false}
-                sentiment={aiMessageObj.sentiment}
-                suggestedAction={aiMessageObj.suggestedAction}
+            <Box sx={{ mb: 3 }}>
+              <AuditorCopilot
+                context={copilotContext}
+                onActionChipClick={handleCopilotAction}
+                initialMessage={aiMessageObj.text}
+                defaultExpanded={true}
               />
             </Box>
             <Stepper activeStep={activeStep} alternativeLabel sx={{ mb: 4 }}>
@@ -1986,11 +2057,13 @@ const RiskAssessmentWizard: React.FC = () => {
         <DialogContent>
           <Stack spacing={2} sx={{ mt: 1 }}>
             <Box sx={{ mb: 2 }}>
-              <ConversationalAuditor
-                message={aiMessageObj.text}
-                sentiment={aiMessageObj.sentiment}
-                isTyping={false}
-                suggestedAction={aiMessageObj.suggestedAction}
+              <AuditorCopilot
+                context={{
+                  ...copilotContext,
+                  stepTitle: 'Plan de Acción',
+                }}
+                onActionChipClick={handleCopilotAction}
+                defaultExpanded={false}
               />
             </Box>
             

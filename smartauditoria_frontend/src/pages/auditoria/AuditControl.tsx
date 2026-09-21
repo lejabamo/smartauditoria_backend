@@ -41,7 +41,8 @@ import {
   FactCheck as FactCheckIcon,
   Assessment as AssessmentIcon,
 } from '@mui/icons-material';
-import ConversationalAuditor from '../../components/common/ConversationalAuditor';
+import AuditorCopilot from '../../components/copilot/AuditorCopilot';
+import type { ActionChip } from '../../services/copilotService';
 import { auditoriasService } from '../../services/backend';
 import { toast } from 'react-hot-toast';
 
@@ -203,10 +204,18 @@ const AuditControl: React.FC = () => {
 
   return (
     <Box sx={{ p: 4, bgcolor: '#f8fafc', minHeight: '100vh' }}>
-      <ConversationalAuditor 
-        message="Bienvenido al Módulo de Control de Auditoría. Aquí podrá gestionar el cumplimiento normativo, registrar No Conformidades y realizar el seguimiento a los planes de acción correctiva."
-        isTyping={false}
-        sentiment="neutral"
+      <AuditorCopilot
+        context={{
+          stepTitle: "Control de Auditoría y Cumplimiento",
+          activeAuditTitle: auditorias.length > 0 ? auditorias[0].titulo : "Auditorías de Seguridad"
+        }}
+        initialMessage="Bienvenido al Módulo de Control de Auditoría. Como tu copiloto ISO/IEC 27001:2022, puedo ayudarte a analizar la causa raíz de No Conformidades (5 Porqués), sugerir controles mitigantes del Anexo A y estructurar planes de acción correctiva ejecutables."
+        onActionChipClick={(chip: ActionChip) => {
+          if (chip.action === 'APPLY_CONTROL' && chip.control_id) {
+            setNewHallazgoRequisito(`ISO 27001:2022 - ${chip.control_id}`);
+            setOpenHallazgoDialog(true);
+          }
+        }}
       />
 
       <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 4, mt: 2 }}>
