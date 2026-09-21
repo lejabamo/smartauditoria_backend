@@ -16,22 +16,23 @@ CATALOG_PATH = Path(__file__).resolve().parent.parent / "services" / "predictive
 
 @copilot_bp.route('/message', methods=['POST'])
 @require_auth
-def copilot_message(current_user):
+def copilot_message():
     """Envía consulta al Copilot y recibe respuesta estructurada."""
     data = request.get_json() or {}
     message = data.get('message', '')
     context = data.get('context', {})
     
     # Enriquecer contexto con usuario actual
-    context['username'] = getattr(current_user, 'username', 'Auditor')
-    context['user_role'] = getattr(current_user, 'rol_nombre', 'ADMIN')
+    current_user = getattr(request, 'current_user', None)
+    context['username'] = getattr(current_user, 'nombre_usuario', 'Auditor') if current_user else 'Auditor'
+    context['user_role'] = getattr(current_user.rol, 'nombre_rol', 'ADMIN') if current_user and current_user.rol else 'ADMIN'
 
     res = rag_client.copilot_chat(message, context)
     return jsonify(res), 200
 
 @copilot_bp.route('/stream', methods=['POST'])
 @require_auth
-def copilot_stream(current_user):
+def copilot_stream():
     """Streaming de respuesta Server-Sent Events (SSE) hacia el frontend."""
     data = request.get_json() or {}
     message = data.get('message', '')
@@ -53,7 +54,7 @@ def copilot_stream(current_user):
 
 @copilot_bp.route('/evaluate-risk', methods=['POST'])
 @require_auth
-def copilot_evaluate_risk(current_user):
+def copilot_evaluate_risk():
     """Evalúa activo y genera propuesta de vector de riesgo según ISO 27005:2022."""
     data = request.get_json() or {}
     asset_name = data.get('asset_name', 'Activo')
@@ -65,7 +66,7 @@ def copilot_evaluate_risk(current_user):
 
 @copilot_bp.route('/suggest-controls', methods=['POST'])
 @require_auth
-def copilot_suggest_controls(current_user):
+def copilot_suggest_controls():
     """Sugiere controles mitigantes del Anexo A ISO 27002:2022 con Action Chips."""
     data = request.get_json() or {}
     asset_name = data.get('asset_name', '')
@@ -85,7 +86,7 @@ def copilot_suggest_controls(current_user):
 
 @copilot_bp.route('/catalog', methods=['GET'])
 @require_auth
-def copilot_get_catalog(current_user):
+def copilot_get_catalog():
     """Retorna los 93 controles oficiales de ISO 27002:2022."""
     if CATALOG_PATH.exists():
         try:
