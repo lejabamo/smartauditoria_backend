@@ -487,12 +487,16 @@ class Auditoria(db.Model):
     __tablename__ = 'auditorias'
     
     id_auditoria = db.Column(db.Integer, primary_key=True)
-    titulo = db.Column(db.String(255), nullable=False)
-    descripcion = db.Column(db.Text)
-    fecha_inicio = db.Column(db.DateTime, default=datetime.utcnow)
-    fecha_fin = db.Column(db.DateTime)
-    estado = db.Column(db.String(50), default='Planificada') # Planificada, En Proceso, Finalizada
-    id_auditor_responsable = db.Column(db.Integer, db.ForeignKey('usuarios_sistema.id_usuario'))
+    titulo = db.Column('nombre_auditoria', db.String(255), nullable=False)
+    descripcion = db.Column('alcance_auditoria', db.Text, nullable=False)
+    fecha_inicio = db.Column('fecha_inicio_real', db.DateTime)
+    fecha_fin = db.Column('fecha_fin_real', db.DateTime)
+    estado = db.Column('estado_auditoria', db.String(50), default='Planificada') # Planificada, En Proceso, Finalizada
+    id_auditor_responsable = db.Column('id_auditor_lider', db.Integer, db.ForeignKey('usuarios_sistema.id_usuario'))
+    
+    # Columnas no nulas requeridas de la base de datos con valores por defecto
+    objetivos_auditoria = db.Column(db.Text, nullable=False, default='Objetivos generales de auditoría')
+    criterios_auditoria = db.Column(db.Text, nullable=False, default='Norma ISO/IEC 27001:2022')
     
     # Relaciones
     hallazgos = db.relationship('HallazgoAuditoria', backref='auditoria', lazy='dynamic')
@@ -514,16 +518,33 @@ class HallazgoAuditoria(db.Model):
     
     id_hallazgo = db.Column(db.Integer, primary_key=True)
     id_auditoria = db.Column(db.Integer, db.ForeignKey('auditorias.id_auditoria'), nullable=False)
-    descripcion = db.Column(db.Text, nullable=False)
-    tipo_hallazgo = db.Column(db.String(50)) # No Conformidad, Observación, Oportunidad de Mejora
-    severidad = db.Column(db.String(50)) # Crítica, Mayor, Menor
-    requisito_iso = db.Column(db.String(100)) # Referencia a la norma
-    analisis_causa_raiz = db.Column(db.Text)
-    fecha_deteccion = db.Column(db.DateTime, default=datetime.utcnow)
-    estado = db.Column(db.String(50), default='Pendiente') # Pendiente, En Análisis, Con Plan de Acción, Cerrado
+    descripcion = db.Column('descripcion_hallazgo', db.Text, nullable=False)
+    tipo_hallazgo = db.Column(db.String(50), nullable=False)
+    requisito_iso = db.Column('clausula_norma_referencia', db.String(255))
+    analisis_causa_raiz = db.Column('causa_raiz_analisis', db.Text)
+    fecha_deteccion = db.Column('fecha_creacion_registro', db.DateTime, default=datetime.utcnow)
+    estado = db.Column('estado_hallazgo', db.String(50), default='Abierto')
     
     # Relaciones
     planes_accion = db.relationship('PlanAccionCorreccion', backref='hallazgo', lazy='dynamic')
+    
+    @property
+    def severidad(self):
+        if self.tipo_hallazgo == 'No Conformidad Mayor':
+            return 'Mayor'
+        elif self.tipo_hallazgo == 'No Conformidad Menor':
+            return 'Menor'
+        elif self.tipo_hallazgo in ('Observacion', 'Observación'):
+            return 'Menor'
+        return 'Menor'
+
+    @severidad.setter
+    def severidad(self, value):
+        if self.tipo_hallazgo in ('No Conformidad', 'No Conformidad Mayor', 'No Conformidad Menor', None, ''):
+            if value in ('Mayor', 'Crítica', 'Critica'):
+                self.tipo_hallazgo = 'No Conformidad Mayor'
+            else:
+                self.tipo_hallazgo = 'No Conformidad Menor'
     
     def to_dict(self):
         return {
