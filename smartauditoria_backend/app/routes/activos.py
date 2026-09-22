@@ -534,3 +534,73 @@ def get_detalle_activo(activo_id):
     except Exception as e:
         logger.error("Error en get_detalle_activo (id=%s): %s", activo_id, str(e), exc_info=True)
         return jsonify({'error': str(e)}), 500
+
+
+@activos_bp.route('/bulk-upload', methods=['POST'])
+@write_required
+def bulk_upload_activos():
+    """
+    Carga masiva inteligente de activos con soporte para:
+    1. Archivos Excel (.xlsx/.xls) y CSV vía multipart/form-data
+    2. Payload JSON directo { "activos": [...], "enriquecer_con_ia": bool, "dry_run": bool }
+    3. Enriquecimiento autónomo con Auditor Copilot (TRD, CID, Ley 1712)
+    4. Previsualización y validación (dry_run=true) antes de confirmar en BD
+    """
+    try:
+        from ..services.bulk_activos_service import BulkActivosService
+
+        user_id = request.current_user.id_usuario_sistema if hasattr(request, 'current_user') and request.current_user else 1
+        enriquecer = False
+        dry_run = False
+        rows = []
+
+        # Caso 1: Archivo subido vía form-data
+        if 'file' in request.files:
+            file_obj = request.files['file']
+            filename = file_obj.filename or "upload.xlsx"
+            file_bytes = file_obj.read()
+            enriquecer = request.form.get('enriquecer_con_ia', 'false').lower() in ('true', '1', 'si')
+            dry_run = request.form.get('dry_run', 'false').lower() in ('true', '1', 'si')
+            rows = BulkActivosService.parse_file_content(file_bytes, filename)
+        # Caso 2: Payload JSON
+        elif request.is_json:
+            body = request.get_json() or {}
+            raw_activos = body.get('activos', [])
+            enriquecer = bool(body.get('enriquecer_con_ia', False))
+            dry_run = bool(body.get('dry_run', False))
+            rows = [BulkActivosService.normalize_row(r) for r in raw_activos if isinstance(r, dict) and (r.get('Nombre') or r.get('nombre'))]
+        else:
+            return jsonify({'error': 'Se requiere un archivo .xlsx/.csv o un cuerpo JSON con la lista de activos'}), 400
+
+        if not rows:
+            return jsonify({'error': 'No se encontraron registros de activos válidos para procesar'}), 400
+
+        # Enriquecimiento IA opcional
+        if enriquecer:
+            rows = BulkActivosService.enrich_rows_with_ai(rows)
+
+        # Si es modo simulación / previsualización, no persistir
+        if dry_run:
+            return jsonify({
+                'modo': 'preview',
+                'total_filas': len(rows),
+                'enriquecidos_por_ia': sum(1 for r in rows if r.get('enriquecido_por_ia')),
+                'activos_procesados': rows
+            }), 200
+
+        # Guardar en base de datos
+        total_creados, creados, errores = BulkActivosService.save_bulk_activos(rows, user_id)
+
+        return jsonify({
+            'message': f'Carga masiva completada: {total_creados} activos creados.',
+            'total_procesados': len(rows),
+            'total_creados': total_creados,
+            'total_errores': len(errores),
+            'activos_creados': creados,
+            'errores': errores
+        }), 201
+
+    except Exception as e:
+        logger.error("Error en bulk_upload_activos: %s", str(e), exc_info=True)
+        return jsonify({'error': str(e)}), 500
+

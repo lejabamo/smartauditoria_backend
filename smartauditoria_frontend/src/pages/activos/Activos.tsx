@@ -55,6 +55,7 @@ import {
   Gavel as LegalIcon,
   Description as DocIcon,
   CheckCircle as CheckCircleIcon,
+  CloudUpload as CloudUploadIcon,
 } from '@mui/icons-material';
 import { DataGrid } from '@mui/x-data-grid';
 import type { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
@@ -62,6 +63,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-hot-toast';
 import { activosService as activosServiceCorrecto, type Activo, type CreateActivoData } from '../../services/activos';
 import copilotService, { type AssetAssessmentResponse } from '../../services/copilotService';
+import BulkUploadActivosModal from '../../components/activos/BulkUploadActivosModal';
 import '../../styles/design-system.css';
 
 const initialFormData: CreateActivoData = {
@@ -117,6 +119,7 @@ const Activos: React.FC = () => {
   // Estados para AuditorCopilot
   const [assessingAsset, setAssessingAsset] = useState(false);
   const [copilotAssessment, setCopilotAssessment] = useState<AssetAssessmentResponse | null>(null);
+  const [openBulkModal, setOpenBulkModal] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -899,29 +902,53 @@ const Activos: React.FC = () => {
               Administra y monitorea todos los activos de informacion de la organizacion
             </Typography>
           </Box>
-          <Button
-            className="btn btn-primary"
-            startIcon={<AddIcon />}
-            onClick={() => handleOpenDialog()}
-            sx={{
-              background: 'linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%)',
-              color: '#FFFFFF',
-              px: 3,
-              py: 1.5,
-              borderRadius: '12px',
-              textTransform: 'none',
-              fontWeight: 500,
-              boxShadow: '0 4px 12px rgba(30, 58, 138, 0.3)',
-              '&:hover': {
-                background: 'linear-gradient(135deg, #1E40AF 0%, #2563EB 100%)',
-                transform: 'translateY(-2px)',
-                boxShadow: '0 6px 16px rgba(30, 58, 138, 0.4)',
-              },
-              transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
-            }}
-          >
-            Nuevo Activo
-          </Button>
+          <Stack direction="row" spacing={2}>
+            <Button
+              startIcon={<CloudUploadIcon />}
+              onClick={() => setOpenBulkModal(true)}
+              sx={{
+                background: 'linear-gradient(135deg, #7C3AED 0%, #3B82F6 100%)',
+                color: '#FFFFFF',
+                px: 2.5,
+                py: 1.5,
+                borderRadius: '12px',
+                textTransform: 'none',
+                fontWeight: 600,
+                boxShadow: '0 4px 12px rgba(124, 58, 237, 0.3)',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #6D28D9 0%, #2563EB 100%)',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 6px 16px rgba(124, 58, 237, 0.4)',
+                },
+                transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+              }}
+            >
+              ✨ Carga Masiva IA
+            </Button>
+            <Button
+              className="btn btn-primary"
+              startIcon={<AddIcon />}
+              onClick={() => handleOpenDialog()}
+              sx={{
+                background: 'linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%)',
+                color: '#FFFFFF',
+                px: 3,
+                py: 1.5,
+                borderRadius: '12px',
+                textTransform: 'none',
+                fontWeight: 500,
+                boxShadow: '0 4px 12px rgba(30, 58, 138, 0.3)',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #1E40AF 0%, #2563EB 100%)',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 6px 16px rgba(30, 58, 138, 0.4)',
+                },
+                transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
+              }}
+            >
+              Nuevo Activo
+            </Button>
+          </Stack>
         </Box>
 
         {/* Stats Cards */}
@@ -2383,6 +2410,15 @@ const Activos: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Modal de Carga Masiva Inteligente DAFP V7 */}
+      <BulkUploadActivosModal
+        open={openBulkModal}
+        onClose={() => setOpenBulkModal(false)}
+        onSuccess={() => {
+          queryClient.invalidateQueries({ queryKey: ['activos'] });
+        }}
+      />
     </Box>
   );
 };

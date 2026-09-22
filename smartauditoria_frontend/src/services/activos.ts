@@ -190,5 +190,149 @@ export const activosService = {
   async getDetalleActivo(activoId: number): Promise<any> {
     const response = await api.get(`/activos/${activoId}/detalle`);
     return response.data;
+  },
+
+  // Carga masiva inteligente (con soporte Excel, CSV, JSON y Enriquecimiento Copilot IA)
+  async bulkUploadActivos(params: {
+    file?: File | null;
+    activos?: any[];
+    enriquecerConIa?: boolean;
+    dryRun?: boolean;
+  }): Promise<any> {
+    if (params.file) {
+      const formData = new FormData();
+      formData.append('file', params.file);
+      formData.append('enriquecer_con_ia', params.enriquecerConIa ? 'true' : 'false');
+      formData.append('dry_run', params.dryRun ? 'true' : 'false');
+      const response = await api.post('/activos/bulk-upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      return response.data;
+    } else {
+      const response = await api.post('/activos/bulk-upload', {
+        activos: params.activos || [],
+        enriquecer_con_ia: !!params.enriquecerConIa,
+        dry_run: !!params.dryRun,
+      });
+      return response.data;
+    }
+  },
+
+  // Generador de plantilla oficial DAFP V7 en Excel (.xlsx)
+  downloadActivosTemplate(): void {
+    import('xlsx').then(XLSX => {
+      const headers = [
+        'Nombre',
+        'Descripcion',
+        'Tipo_Activo',
+        'Subtipo_Activo',
+        'Macroproceso',
+        'Proceso',
+        'Identificador_TRD',
+        'Oficina_Responsable',
+        'Serie_Documental',
+        'Subserie_Documental',
+        'Soporte_Registro',
+        'Medio_Conservacion',
+        'Formato',
+        'Idioma',
+        'Es_ICCN',
+        'Es_Clasificada_Reservada',
+        'Objeto_Legitimo_Excepcion',
+        'Fundamento_Legal',
+        'Confidencialidad',
+        'Integridad',
+        'Disponibilidad',
+        'Criticidad_Negocio'
+      ];
+
+      const sampleRows = [
+        [
+          'Expediente de Contratación Auditoría Externa 2026',
+          'Documentación precontractual, propuestas y contratos de auditoría bajo reserva legal.',
+          'Documental',
+          'Expediente Contractual',
+          'Misional',
+          'Gestión Contractual',
+          'TRD-120-004',
+          'Subdirección Jurídica',
+          'Contratos',
+          'Contratos de Consultoría',
+          'Digital',
+          'SGDEA Institucional / Servidor Seguro',
+          'PDF/A',
+          'Español',
+          'SI',
+          'SI',
+          'Protección del secreto comercial y financiero de contratistas',
+          'Ley 1712 de 2014 Art. 18 lit. b',
+          'Alto',
+          'Alto',
+          'Medio',
+          'Alto'
+        ],
+        [
+          'Base de Datos del Sistema de Nómina y Prestaciones',
+          'Repositorio MariaDB con salarios, cuentas bancarias y datos personales de funcionarios.',
+          'Software',
+          'Base de Datos Relacional',
+          'Apoyo',
+          'Gestión del Talento Humano',
+          'TRD-210-002',
+          'Subdirección de Gestión Humana',
+          'Historias Laborales',
+          'Planillas de Nómina',
+          'Digital',
+          'Servidor en Nube Privada',
+          'SQL / MariaDB',
+          'Español',
+          'SI',
+          'SI',
+          'Datos sensibles y financieros amparados por Habeas Data',
+          'Ley 1581 de 2012; Ley 1712 de 2014 Art. 18',
+          'Crítico',
+          'Alto',
+          'Alto',
+          'Crítico'
+        ],
+        [
+          'Servidor Físico Principal de Virtualización',
+          'Clúster VMware para hosting de sistemas misionales y portal web.',
+          'Hardware',
+          'Servidor Rackeable',
+          'Apoyo',
+          'Tecnología e Infraestructura',
+          'TRD-500-01',
+          'Área de TIC',
+          'Inventario TI',
+          'Servidores y Clústers',
+          'Digital',
+          'Data Center Institucional',
+          'Físico',
+          'Español',
+          'SI',
+          'NO',
+          '',
+          '',
+          'Medio',
+          'Alto',
+          'Crítico',
+          'Alto'
+        ]
+      ];
+
+      const wsData = [headers, ...sampleRows];
+      const ws = XLSX.utils.aoa_to_sheet(wsData);
+      
+      // Auto-anchos de columnas
+      ws['!cols'] = headers.map(h => ({ wch: Math.max(h.length + 4, 18) }));
+
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Activos DAFP V7');
+      XLSX.writeFile(wb, 'Plantilla_Carga_Masiva_Activos_DAFP_V7.xlsx');
+    }).catch(err => {
+      console.error('Error cargando módulo xlsx para plantilla:', err);
+    });
   }
 };
+

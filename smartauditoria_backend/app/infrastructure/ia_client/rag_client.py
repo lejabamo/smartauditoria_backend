@@ -247,3 +247,5 @@ class RAGClientV2:
                 "action_chips": chips
             }
 
+rag_client = RAGClientV2()
+RAGClient = RAGClientV2
