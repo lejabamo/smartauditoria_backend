@@ -31,3 +31,4 @@ build/
 tmp/
 scratch/
 .gemini/
+*.tar.gz
