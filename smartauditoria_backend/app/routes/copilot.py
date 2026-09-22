@@ -84,6 +84,22 @@ def copilot_suggest_controls():
     )
     return jsonify(res), 200
 
+@copilot_bp.route('/assess-asset', methods=['POST'])
+@require_auth
+def copilot_assess_asset():
+    """Inferencia de activo, TRD, valoración CID, Ley 1712 y controles ISO 27002:2022."""
+    data = request.get_json() or {}
+    asset_name = data.get('asset_name', '')
+    asset_type = data.get('asset_type', '')
+    description = data.get('description', '')
+
+    res = rag_client.copilot_assess_asset(
+        asset_name=asset_name,
+        asset_type=asset_type,
+        description=description
+    )
+    return jsonify(res), 200
+
 @copilot_bp.route('/catalog', methods=['GET'])
 @require_auth
 def copilot_get_catalog():

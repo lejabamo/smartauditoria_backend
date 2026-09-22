@@ -33,6 +33,27 @@ export interface Activo {
   procedimiento_eliminacion_segura_ref?: string;
   fecha_creacion_registro: string;
   fecha_ultima_actualizacion_sgsi?: string;
+
+  // Atributos Guía Integral de Riesgos Función Pública V7 (2025)
+  macroproceso?: string;
+  proceso?: string;
+  identificador_trd?: string;
+  oficina_responsable?: string;
+  serie_documental?: string;
+  subserie_documental?: string;
+  fecha_generacion?: string;
+  fecha_ingreso_archivo?: string;
+  soporte_registro?: string;
+  medio_conservacion?: string;
+  formato?: string;
+  idioma?: string;
+  es_iccn?: boolean;
+  estado_publicacion?: string;
+  ubicacion_consulta?: string;
+  es_clasificada_reservada?: boolean;
+  objeto_legitimo_excepcion?: string;
+  fundamento_legal?: string;
+  excepcion_alcance?: string;
 }
 
 export interface CreateActivoData {
@@ -58,6 +79,27 @@ export interface CreateActivoData {
   tiempo_retencion_general?: string;
   fecha_proxima_revision_sgsi?: string;
   procedimiento_eliminacion_segura_ref?: string;
+
+  // Atributos Función Pública V7
+  macroproceso?: string;
+  proceso?: string;
+  identificador_trd?: string;
+  oficina_responsable?: string;
+  serie_documental?: string;
+  subserie_documental?: string;
+  fecha_generacion?: string;
+  fecha_ingreso_archivo?: string;
+  soporte_registro?: string;
+  medio_conservacion?: string;
+  formato?: string;
+  idioma?: string;
+  es_iccn?: boolean;
+  estado_publicacion?: string;
+  ubicacion_consulta?: string;
+  es_clasificada_reservada?: boolean;
+  objeto_legitimo_excepcion?: string;
+  fundamento_legal?: string;
+  excepcion_alcance?: string;
 }
 
 export interface UpdateActivoData extends Partial<CreateActivoData> {}

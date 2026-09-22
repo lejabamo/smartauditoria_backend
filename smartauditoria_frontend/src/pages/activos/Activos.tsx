@@ -26,6 +26,12 @@ import {
   Tooltip,
   Autocomplete,
   Avatar,
+  Tabs,
+  Tab,
+  Switch,
+  FormControlLabel,
+  CircularProgress,
+  Badge,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -41,13 +47,57 @@ import {
   Download as DownloadIcon,
   PictureAsPdf as PdfIcon,
   TableChart as ExcelIcon,
+  AutoAwesome as SparklesIcon,
+  Bolt as LightningIcon,
+  Folder as FolderIcon,
+  Settings as TechIcon,
+  Shield as ShieldIcon,
+  Gavel as LegalIcon,
+  Description as DocIcon,
+  CheckCircle as CheckCircleIcon,
 } from '@mui/icons-material';
 import { DataGrid } from '@mui/x-data-grid';
 import type { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-hot-toast';
 import { activosService as activosServiceCorrecto, type Activo, type CreateActivoData } from '../../services/activos';
+import copilotService, { type AssetAssessmentResponse } from '../../services/copilotService';
 import '../../styles/design-system.css';
+
+const initialFormData: CreateActivoData = {
+  Nombre: '',
+  Descripcion: '',
+  Tipo_Activo: 'Información y datos',
+  subtipo_activo: '',
+  estado_activo: 'En produccion',
+  nivel_criticidad_negocio: 'Medio',
+  Nivel_Clasificacion_Confidencialidad: 'Medio',
+  Nivel_Clasificacion_Integridad: 'Alto',
+  Nivel_Clasificacion_Disponibilidad: 'Medio',
+  justificacion_clasificacion_cia: '',
+  macroproceso: 'Misional',
+  proceso: '',
+  identificador_trd: '',
+  oficina_responsable: '',
+  serie_documental: '',
+  subserie_documental: '',
+  fecha_generacion: '',
+  fecha_ingreso_archivo: '',
+  soporte_registro: 'Digital',
+  medio_conservacion: '',
+  formato: '',
+  idioma: 'Español',
+  es_iccn: false,
+  estado_publicacion: 'No Publicada',
+  ubicacion_consulta: '',
+  es_clasificada_reservada: false,
+  objeto_legitimo_excepcion: '',
+  fundamento_legal: '',
+  excepcion_alcance: 'Total',
+  requiere_backup: true,
+  frecuencia_backup_general: '',
+  tiempo_retencion_general: '',
+};
 
 const Activos: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -55,19 +105,18 @@ const Activos: React.FC = () => {
   const [estadoFilter, setEstadoFilter] = useState('');
   const [criticidadFilter, setCriticidadFilter] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
+  const [tabValue, setTabValue] = useState(0);
   const [openDetalleDialog, setOpenDetalleDialog] = useState(false);
   const [selectedActivo, setSelectedActivo] = useState<Activo | null>(null);
   const [detalleActivo, setDetalleActivo] = useState<any>(null);
   const [loadingDetalle, setLoadingDetalle] = useState(false);
   const [exportando, setExportando] = useState(false);
   const [editingActivo, setEditingActivo] = useState<Activo | null>(null);
-  const [formData, setFormData] = useState<CreateActivoData>({
-    Nombre: '',
-    Descripcion: '',
-    Tipo_Activo: '',
-    estado_activo: 'Planificado',
-    nivel_criticidad_negocio: 'Medio',
-  });
+  const [formData, setFormData] = useState<CreateActivoData>(initialFormData);
+
+  // Estados para AuditorCopilot
+  const [assessingAsset, setAssessingAsset] = useState(false);
+  const [copilotAssessment, setCopilotAssessment] = useState<AssetAssessmentResponse | null>(null);
 
   const queryClient = useQueryClient();
 
@@ -117,18 +166,11 @@ const Activos: React.FC = () => {
   const createMutation = useMutation({
     mutationFn: async (data: CreateActivoData) => {
       return await activosServiceCorrecto.createActivo(data);
-    },
-    onSuccess: () => {
+    },    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['activos'] });
-      toast.success('âœ… Activo creado exitosamente');
+      toast.success('Activo creado exitosamente');
       handleCloseDialog();
-      setFormData({
-        Nombre: '',
-        Descripcion: '',
-        Tipo_Activo: '',
-        estado_activo: 'Planificado',
-        nivel_criticidad_negocio: 'Medio',
-      });
+      setFormData(initialFormData);
     },
     onError: (error: any) => {
       console.error('Error creating activo:', error);
@@ -145,7 +187,7 @@ const Activos: React.FC = () => {
         errorMessage = error.message || 'Error desconocido';
       }
       
-      toast.error(`âŒ Error al crear activo: ${errorMessage}`);
+      toast.error(`Error al crear activo: ${errorMessage}`);
     },
   });
 
@@ -155,12 +197,12 @@ const Activos: React.FC = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['activos'] });
-      toast.success('âœ… Activo actualizado exitosamente');
+      toast.success('Activo actualizado exitosamente');
       handleCloseDialog();
     },
     onError: (error: any) => {
       const errorMessage = error.response?.data?.error || error.message || 'Error desconocido';
-      toast.error(`âŒ Error al actualizar activo: ${errorMessage}`);
+      toast.error(`Error al actualizar activo: ${errorMessage}`);
       console.error('Error updating activo:', error);
     },
   });
@@ -171,11 +213,11 @@ const Activos: React.FC = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['activos'] });
-      toast.success('âœ… Activo eliminado exitosamente');
+      toast.success('Activo eliminado exitosamente');
     },
     onError: (error: any) => {
       const errorMessage = error.response?.data?.error || error.message || 'Error desconocido';
-      toast.error(`âŒ Error al eliminar activo: ${errorMessage}`);
+      toast.error(`Error al eliminar activo: ${errorMessage}`);
       console.error('Error deleting activo:', error);
     },
   });
@@ -199,31 +241,104 @@ const Activos: React.FC = () => {
       setFormData({
         Nombre: activo.Nombre || '',
         Descripcion: activo.Descripcion || '',
-        Tipo_Activo: activo.Tipo_Activo || '',
-        estado_activo: activo.estado_activo || 'Planificado',
+        Tipo_Activo: activo.Tipo_Activo || 'Información y datos',
+        subtipo_activo: activo.subtipo_activo || '',
+        estado_activo: activo.estado_activo || 'En produccion',
         nivel_criticidad_negocio: activo.nivel_criticidad_negocio || 'Medio',
-        subtipo_activo: activo.subtipo_activo,
-        ID_Propietario: activo.ID_Propietario,
-        ID_Custodio: activo.ID_Custodio,
-        version_general_activo: activo.version_general_activo,
-        requiere_backup: activo.requiere_backup,
+        Nivel_Clasificacion_Confidencialidad: activo.Nivel_Clasificacion_Confidencialidad || 'Medio',
+        Nivel_Clasificacion_Integridad: activo.Nivel_Clasificacion_Integridad || 'Alto',
+        Nivel_Clasificacion_Disponibilidad: activo.Nivel_Clasificacion_Disponibilidad || 'Medio',
+        justificacion_clasificacion_cia: activo.justificacion_clasificacion_cia || '',
+        macroproceso: activo.macroproceso || 'Misional',
+        proceso: activo.proceso || '',
+        identificador_trd: activo.identificador_trd || '',
+        oficina_responsable: activo.oficina_responsable || '',
+        serie_documental: activo.serie_documental || '',
+        subserie_documental: activo.subserie_documental || '',
+        fecha_generacion: activo.fecha_generacion ? activo.fecha_generacion.substring(0, 10) : '',
+        fecha_ingreso_archivo: activo.fecha_ingreso_archivo ? activo.fecha_ingreso_archivo.substring(0, 10) : '',
+        soporte_registro: activo.soporte_registro || 'Digital',
+        medio_conservacion: activo.medio_conservacion || '',
+        formato: activo.formato || '',
+        idioma: activo.idioma || 'Español',
+        es_iccn: Boolean(activo.es_iccn),
+        estado_publicacion: activo.estado_publicacion || 'No Publicada',
+        ubicacion_consulta: activo.ubicacion_consulta || '',
+        es_clasificada_reservada: Boolean(activo.es_clasificada_reservada),
+        objeto_legitimo_excepcion: activo.objeto_legitimo_excepcion || '',
+        fundamento_legal: activo.fundamento_legal || '',
+        excepcion_alcance: activo.excepcion_alcance || 'Total',
+        requiere_backup: activo.requiere_backup ?? true,
+        frecuencia_backup_general: activo.frecuencia_backup_general || '',
+        tiempo_retencion_general: activo.tiempo_retencion_general || '',
       });
     } else {
       setEditingActivo(null);
-      setFormData({
-        Nombre: '',
-        Descripcion: '',
-        Tipo_Activo: '',
-        estado_activo: 'Planificado',
-        nivel_criticidad_negocio: 'Medio',
-      });
+      setFormData(initialFormData);
     }
+    setCopilotAssessment(null);
+    setTabValue(0);
     setOpenDialog(true);
   };
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setEditingActivo(null);
+    setCopilotAssessment(null);
+  };
+
+  // Acciones de Asistente IA Copilot
+  const handleAssessWithCopilot = async () => {
+    if (!formData.Nombre || formData.Nombre.trim().length < 3) {
+      toast.error('Ingrese al menos el nombre del activo para consultar al Asistente IA');
+      return;
+    }
+    try {
+      setAssessingAsset(true);
+      const res = await copilotService.assessAsset(
+        formData.Nombre,
+        formData.Tipo_Activo,
+        formData.Descripcion
+      );
+      setCopilotAssessment(res);
+      toast.success('✨ Asistente IA completó el análisis DAFP V7 e ISO 27002:2022');
+    } catch (err: any) {
+      console.error('Error al evaluar con Copilot:', err);
+      toast.error('No se pudo completar la evaluación con IA en este momento');
+    } finally {
+      setAssessingAsset(false);
+    }
+  };
+
+  const handleApplyActionChip = (chip: any) => {
+    if (chip.action === 'APPLY_ASSET_METADATA' && chip.metadata) {
+      setFormData(prev => ({
+        ...prev,
+        ...chip.metadata
+      }));
+      toast.success('Clasificación TRD y características técnicas aplicadas');
+    } else if (chip.action === 'SET_CID_VALUES') {
+      setFormData(prev => ({
+        ...prev,
+        Nivel_Clasificacion_Confidencialidad: chip.confidencialidad,
+        Nivel_Clasificacion_Integridad: chip.integridad,
+        Nivel_Clasificacion_Disponibilidad: chip.disponibilidad,
+        nivel_criticidad_negocio: chip.criticidad_general,
+        justificacion_clasificacion_cia: chip.justificacion || prev.justificacion_clasificacion_cia
+      }));
+      toast.success(`Valores CID aplicados: C(${chip.confidencialidad}) I(${chip.integridad}) D(${chip.disponibilidad})`);
+    } else if (chip.action === 'APPLY_LEY_1712') {
+      setFormData(prev => ({
+        ...prev,
+        es_clasificada_reservada: true,
+        objeto_legitimo_excepcion: chip.objeto_legitimo_excepcion || prev.objeto_legitimo_excepcion,
+        fundamento_legal: chip.fundamento_legal || prev.fundamento_legal,
+        excepcion_alcance: chip.excepcion_alcance || 'Total'
+      }));
+      toast.success('Reserva legal Ley 1712 de 2014 configurada');
+    } else if (chip.action === 'APPLY_CONTROL') {
+      toast.success(`Control sugerido adoptado: ${chip.control_id} - ${chip.control_nombre}`);
+    }
   };
 
   const handleConsultarActivo = async (activo: Activo) => {
@@ -639,10 +754,10 @@ const Activos: React.FC = () => {
             label={params.value}
             size="small"
             sx={{
-              backgroundColor: params.value === 'Critico' ? '#FEE2E2' :
+              backgroundColor: params.value === 'Critico' || params.value === 'Muy Alto' ? '#FEE2E2' :
                              params.value === 'Alto' ? '#FEF3C7' :
                              params.value === 'Medio' ? '#DBEAFE' : '#F3F4F6',
-              color: params.value === 'Critico' ? '#DC2626' :
+              color: params.value === 'Critico' || params.value === 'Muy Alto' ? '#DC2626' :
                      params.value === 'Alto' ? '#D97706' :
                      params.value === 'Medio' ? '#2563EB' : '#6B7280',
               fontWeight: 500,
@@ -650,6 +765,37 @@ const Activos: React.FC = () => {
             }}
           />
         </Box>
+      ),
+    },
+    {
+      field: 'identificador_trd',
+      headerName: 'TRD / Proceso',
+      width: 150,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params: GridRenderCellParams) => (
+        <Typography variant="body2" sx={{ fontSize: '0.8rem', color: '#4B5563' }}>
+          {params.row.identificador_trd || params.row.proceso || '-'}
+        </Typography>
+      ),
+    },
+    {
+      field: 'es_clasificada_reservada',
+      headerName: 'Ley 1712',
+      width: 130,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params: GridRenderCellParams) => (
+        <Chip
+          label={params.value ? 'Reservado' : 'Público'}
+          size="small"
+          sx={{
+            backgroundColor: params.value ? '#FEE2E2' : '#D1FAE5',
+            color: params.value ? '#DC2626' : '#065F46',
+            fontWeight: 600,
+            fontSize: '0.75rem',
+          }}
+        />
       ),
     },
     { 
@@ -1142,270 +1288,632 @@ const Activos: React.FC = () => {
             </Box>
           </DialogTitle>
           
-          <DialogContent sx={{ pt: 6, px: 4, pb: 3, mt: 3 }}>
-            <Grid container spacing={4}>
-              <Grid  size={{ xs: 12, sm: 6 }}>
-                <TextField
-                  fullWidth
-                  label="Nombre del Activo *"
-                  value={formData.Nombre}
-                  onChange={(e) => setFormData({ ...formData, Nombre: e.target.value })}
-                  required
-                  className="input"
-                  InputProps={{
-                    sx: { borderRadius: '12px' }
+          <DialogContent sx={{ pt: 3, px: 4, pb: 4 }}>
+            {/* ── Auditor Copilot AI Assistant Card ── */}
+            <Paper 
+              elevation={0} 
+              sx={{ 
+                p: 2.5, 
+                mb: 3, 
+                borderRadius: '16px', 
+                border: '1px solid #BFDBFE', 
+                background: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)',
+                boxShadow: '0 4px 12px rgba(37, 99, 235, 0.08)'
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                  <Avatar sx={{ bgcolor: '#2563EB', width: 40, height: 40, boxShadow: '0 2px 8px rgba(37,99,235,0.4)' }}>
+                    <SparklesIcon sx={{ color: '#FFFFFF', fontSize: 22 }} />
+                  </Avatar>
+                  <Box>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 700, color: '#1E3A8A', display: 'flex', alignItems: 'center', gap: 1 }}>
+                      Auditor Copilot (Función Pública V7 & ISO 27002:2022)
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: '#3B82F6', fontWeight: 500 }}>
+                      Inferencia automática de TRD, criticidad CID, excepciones Ley 1712 y controles mitigantes
+                    </Typography>
+                  </Box>
+                </Box>
+                <Button
+                  variant="contained"
+                  size="medium"
+                  startIcon={assessingAsset ? <CircularProgress size={18} color="inherit" /> : <SparklesIcon />}
+                  disabled={assessingAsset || !formData.Nombre || formData.Nombre.trim().length < 3}
+                  onClick={handleAssessWithCopilot}
+                  sx={{
+                    background: 'linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)',
+                    color: '#FFFFFF',
+                    textTransform: 'none',
+                    fontWeight: 600,
+                    borderRadius: '10px',
+                    px: 2.5,
+                    boxShadow: '0 4px 10px rgba(37,99,235,0.3)',
+                    '&:hover': {
+                      background: 'linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%)',
+                    }
                   }}
-                />
-              </Grid>
-              <Grid  size={{ xs: 12, sm: 6 }}>
-                <FormControl fullWidth required>
-                  <InputLabel id="tipo-activo-label" sx={{ mt: 0.5 }}>Tipo de Activo *</InputLabel>
-                  <Select
-                    labelId="tipo-activo-label"
-                    value={formData.Tipo_Activo}
-                    onChange={(e) => setFormData({ ...formData, Tipo_Activo: e.target.value })}
-                    label="Tipo de Activo *"
-                    sx={{ borderRadius: '12px', minWidth: '200px' }}
-                    MenuProps={{
-                      PaperProps: {
-                        style: {
-                          maxHeight: 300,
-                        },
-                      },
-                    }}
-                  >
-                    <MenuItem value="Hardware">Hardware</MenuItem>
-                    <MenuItem value="Sistema de Informacion">Sistema de Informacion</MenuItem>
-                    <MenuItem value="Software">Software</MenuItem>
-                    <MenuItem value="Datos">Datos</MenuItem>
-                    <MenuItem value="Servicios">Servicios</MenuItem>
-                    <MenuItem value="Documentos">Documentos</MenuItem>
-                    <MenuItem value="Recurso Humano">Recurso Humano</MenuItem>
-                    <MenuItem value="Intangible">Intangible</MenuItem>
-                    <MenuItem value="Infraestructura Fisica">Infraestructura Fisica</MenuItem>
-                    <MenuItem value="Plataforma">Plataforma</MenuItem>
-                    <MenuItem value="Aplicacion/Sistema">Aplicacion/Sistema</MenuItem>
-                    <MenuItem value="Otro">Otro</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              
-              <Grid  size={{ xs: 12 }}>
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={3}
-                  label="Descripcion del Activo"
-                  value={formData.Descripcion}
-                  onChange={(e) => setFormData({ ...formData, Descripcion: e.target.value })}
-                  className="input"
-                  InputProps={{
-                    sx: { borderRadius: '12px' }
-                  }}
-                />
-              </Grid>
-              
-              <Grid  size={{ xs: 12, sm: 6 }}>
-                <FormControl fullWidth>
-                  <InputLabel id="estado-activo-label" sx={{ mt: 0.5 }}>Estado del Activo</InputLabel>
-                  <Select
-                    labelId="estado-activo-label"
-                    value={formData.estado_activo}
-                    onChange={(e) => setFormData({ ...formData, estado_activo: e.target.value })}
-                    label="Estado del Activo"
-                    sx={{ borderRadius: '12px', minWidth: '200px' }}
-                    MenuProps={{
-                      PaperProps: {
-                        style: {
-                          maxHeight: 300,
-                        },
-                      },
-                    }}
-                  >
-                    <MenuItem value="En produccion">En produccion</MenuItem>
-                    <MenuItem value="En desarrollo">En desarrollo</MenuItem>
-                    <MenuItem value="Obsoleto">Obsoleto</MenuItem>
-                    <MenuItem value="Retirado">Retirado</MenuItem>
-                    <MenuItem value="En mantenimiento">En mantenimiento</MenuItem>
-                    <MenuItem value="Planificado">Planificado</MenuItem>
-                    <MenuItem value="En stock">En stock</MenuItem>
-                    <MenuItem value="Danado">Danado</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid  size={{ xs: 12, sm: 6 }}>
-                <FormControl fullWidth>
-                  <InputLabel id="criticidad-label" sx={{ mt: 0.5 }}>Nivel de Criticidad</InputLabel>
-                  <Select
-                    labelId="criticidad-label"
-                    value={formData.nivel_criticidad_negocio}
-                    onChange={(e) => setFormData({ ...formData, nivel_criticidad_negocio: e.target.value })}
-                    label="Nivel de Criticidad"
-                    sx={{ borderRadius: '12px', minWidth: '200px' }}
-                    MenuProps={{
-                      PaperProps: {
-                        style: {
-                          maxHeight: 300,
-                        },
-                      },
-                    }}
-                  >
-                    <MenuItem value="Muy Alto">Muy Alto</MenuItem>
-                    <MenuItem value="Alto">Alto</MenuItem>
-                    <MenuItem value="Medio">Medio</MenuItem>
-                    <MenuItem value="Bajo">Bajo</MenuItem>
-                    <MenuItem value="Muy Bajo">Muy Bajo</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              
-              {/* Campos dinamicos segun el tipo de activo */}
-              {formData.Tipo_Activo === 'Hardware' && (
-                <>
-                  <Grid  size={{ xs: 12, sm: 6 }}>
-                    <TextField
-                      fullWidth
-                      label="Subtipo de Hardware"
-                      value={formData.subtipo_activo || ''}
-                      onChange={(e) => setFormData({ ...formData, subtipo_activo: e.target.value })}
-                      placeholder="Ej: Servidor, Computadora, Router, etc."
-                      className="input"
-                      InputProps={{
-                        sx: { borderRadius: '12px' }
-                      }}
-                    />
+                >
+                  {assessingAsset ? 'Analizando activo con IA...' : 'Evaluar con Copilot'}
+                </Button>
+              </Box>
+
+              {copilotAssessment && (
+                <Box sx={{ mt: 2.5, pt: 2, borderTop: '1px dashed #93C5FD' }}>
+                  <Alert severity="info" sx={{ mb: 2, borderRadius: '10px', bgcolor: 'rgba(255,255,255,0.85)', color: '#1E3A8A' }}>
+                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                      <strong>Dictamen Copilot:</strong> {copilotAssessment.analisis_copilot}
+                    </Typography>
+                  </Alert>
+
+                  {/* Resumen de inferencias */}
+                  <Grid container spacing={2} sx={{ mb: 2 }}>
+                    <Grid size={{ xs: 12, md: 4 }}>
+                      <Box sx={{ p: 1.5, borderRadius: '10px', bgcolor: '#FFFFFF', border: '1px solid #E2E8F0' }}>
+                        <Typography variant="caption" sx={{ color: '#64748B', fontWeight: 600, display: 'block' }}>
+                          TRD SUGERIDA
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontWeight: 600, color: '#1E293B' }}>
+                          {copilotAssessment.trd_sugerida?.proceso || 'Misional'} ({copilotAssessment.trd_sugerida?.identificador_sugerido || 'TRD-AUTO'})
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: '#475569' }}>
+                          Serie: {copilotAssessment.trd_sugerida?.serie_documental || 'Gestión'}
+                        </Typography>
+                      </Box>
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 4 }}>
+                      <Box sx={{ p: 1.5, borderRadius: '10px', bgcolor: '#FFFFFF', border: '1px solid #E2E8F0' }}>
+                        <Typography variant="caption" sx={{ color: '#64748B', fontWeight: 600, display: 'block' }}>
+                          VALORACIÓN CID
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontWeight: 600, color: '#1E293B' }}>
+                          C({copilotAssessment.valoracion_cid?.confidencialidad}) I({copilotAssessment.valoracion_cid?.integridad}) D({copilotAssessment.valoracion_cid?.disponibilidad})
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: '#DC2626', fontWeight: 600 }}>
+                          Criticidad: {copilotAssessment.valoracion_cid?.criticidad_general}
+                        </Typography>
+                      </Box>
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 4 }}>
+                      <Box sx={{ p: 1.5, borderRadius: '10px', bgcolor: '#FFFFFF', border: '1px solid #E2E8F0' }}>
+                        <Typography variant="caption" sx={{ color: '#64748B', fontWeight: 600, display: 'block' }}>
+                          LEY 1712 DE 2014
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontWeight: 600, color: copilotAssessment.analisis_ley_1712?.es_clasificada_reservada ? '#DC2626' : '#16A34A' }}>
+                          {copilotAssessment.analisis_ley_1712?.es_clasificada_reservada ? `Reservada (${copilotAssessment.analisis_ley_1712?.excepcion_alcance || 'Total'})` : 'Información Pública'}
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: '#475569', display: 'block', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                          {copilotAssessment.analisis_ley_1712?.fundamento_legal || 'Ley 1712 de 2014'}
+                        </Typography>
+                      </Box>
+                    </Grid>
                   </Grid>
-                  <Grid  size={{ xs: 12, sm: 6 }}>
-                    <TextField
-                      fullWidth
-                      label="Version/Modelo"
-                      value={formData.version_general_activo || ''}
-                      onChange={(e) => setFormData({ ...formData, version_general_activo: e.target.value })}
-                      placeholder="Ej: Dell PowerEdge R740, Cisco ASR 1000"
-                      className="input"
-                      InputProps={{
-                        sx: { borderRadius: '12px' }
-                      }}
-                    />
-                  </Grid>
-                  <Grid  size={{ xs: 12, sm: 6 }}>
-                    <TextField
-                      fullWidth
-                      type="date"
-                      label="Fecha de Adquisicion"
-                      value={formData.fecha_adquisicion || ''}
-                      onChange={(e) => setFormData({ ...formData, fecha_adquisicion: e.target.value })}
-                      InputLabelProps={{ shrink: true }}
-                      className="input"
-                      InputProps={{
-                        sx: { borderRadius: '12px' }
-                      }}
-                    />
-                  </Grid>
-                  <Grid  size={{ xs: 12, sm: 6 }}>
-                    <FormControl fullWidth>
-                      <InputLabel id="requiere-backup-label" sx={{ mt: 0.5 }}>Requiere Backup</InputLabel>
-                      <Select
-                        labelId="requiere-backup-label"
-                        value={formData.requiere_backup !== undefined ? formData.requiere_backup.toString() : 'true'}
-                        onChange={(e) => setFormData({ ...formData, requiere_backup: e.target.value === 'true' })}
-                        label="Requiere Backup"
-                        sx={{ borderRadius: '12px' }}
-                      >
-                        <MenuItem value="true">Si</MenuItem>
-                        <MenuItem value="false">No</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                </>
+
+                  {/* Action Chips de 1 Clic */}
+                  <Typography variant="caption" sx={{ display: 'block', fontWeight: 700, color: '#1E3A8A', mb: 1 }}>
+                    ⚡ ACCIONES RÁPIDAS DE 1-CLIC (AUDITOR COPILOT):
+                  </Typography>
+                  <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                    {copilotAssessment.action_chips?.map((chip, idx) => (
+                      <Chip
+                        key={idx}
+                        icon={<LightningIcon sx={{ fontSize: '1rem !important', color: '#FBBF24 !important' }} />}
+                        label={chip.label}
+                        onClick={() => handleApplyActionChip(chip)}
+                        clickable
+                        variant="filled"
+                        size="medium"
+                        sx={{
+                          fontWeight: 600,
+                          fontSize: '0.8rem',
+                          backgroundColor: '#1E40AF',
+                          color: '#FFFFFF',
+                          borderRadius: '8px',
+                          boxShadow: '0 2px 6px rgba(30, 64, 175, 0.3)',
+                          '&:hover': { backgroundColor: '#1D4ED8', transform: 'translateY(-1px)' },
+                          transition: 'all 0.15s ease'
+                        }}
+                      />
+                    ))}
+                  </Stack>
+                </Box>
               )}
-              
-              {formData.Tipo_Activo === 'Sistema de Informacion' && (
-                <>
-                  <Grid  size={{ xs: 12, sm: 6 }}>
-                    <TextField
-                      fullWidth
-                      label="Subtipo de Sistema"
-                      value={formData.subtipo_activo || ''}
-                      onChange={(e) => setFormData({ ...formData, subtipo_activo: e.target.value })}
-                      placeholder="Ej: ERP, CRM, Sistema de Gestion, etc."
-                      className="input"
-                      InputProps={{
-                        sx: { borderRadius: '12px' }
-                      }}
+            </Paper>
+
+            {/* ── Tabs de Navegación Función Pública V7 ── */}
+            <Tabs 
+              value={tabValue} 
+              onChange={(_, val) => setTabValue(val)} 
+              variant="scrollable"
+              scrollButtons="auto"
+              sx={{ 
+                borderBottom: '1px solid #E2E8F0', 
+                mb: 3,
+                '& .MuiTab-root': {
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  fontSize: '0.9rem',
+                  minHeight: 48,
+                }
+              }}
+            >
+              <Tab icon={<FolderIcon sx={{ fontSize: 20 }} />} iconPosition="start" label="1. Identificación y TRD" />
+              <Tab icon={<TechIcon sx={{ fontSize: 20 }} />} iconPosition="start" label="2. Naturaleza y Técnica" />
+              <Tab icon={<ShieldIcon sx={{ fontSize: 20 }} />} iconPosition="start" label="3. Valoración CID e ICCN" />
+              <Tab icon={<LegalIcon sx={{ fontSize: 20 }} />} iconPosition="start" label="4. Ley 1712 de 2014" />
+            </Tabs>
+
+            {/* ── PANEL 0: Identificación y TRD ── */}
+            {tabValue === 0 && (
+              <Grid container spacing={3}>
+                <Grid size={{ xs: 12, sm: 8 }}>
+                  <TextField
+                    fullWidth
+                    label="Nombre del Activo *"
+                    value={formData.Nombre}
+                    onChange={(e) => setFormData({ ...formData, Nombre: e.target.value })}
+                    required
+                    placeholder="Ej: Historias Laborales de Servidores Públicos"
+                    InputProps={{ sx: { borderRadius: '12px' } }}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 4 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="macroproceso-label">Macroproceso</InputLabel>
+                    <Select
+                      labelId="macroproceso-label"
+                      value={formData.macroproceso || 'Misional'}
+                      onChange={(e) => setFormData({ ...formData, macroproceso: e.target.value })}
+                      label="Macroproceso"
+                      sx={{ borderRadius: '12px' }}
+                    >
+                      <MenuItem value="Estratégico">Estratégico</MenuItem>
+                      <MenuItem value="Misional">Misional</MenuItem>
+                      <MenuItem value="Apoyo">Apoyo</MenuItem>
+                      <MenuItem value="Evaluación y Control">Evaluación y Control</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+                <Grid size={{ xs: 12 }}>
+                  <TextField
+                    fullWidth
+                    multiline
+                    rows={3}
+                    label="Descripción del Activo"
+                    value={formData.Descripcion || ''}
+                    onChange={(e) => setFormData({ ...formData, Descripcion: e.target.value })}
+                    placeholder="Propósito, contenido y alcance del activo de información..."
+                    InputProps={{ sx: { borderRadius: '12px' } }}
+                  />
+                </Grid>
+
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <TextField
+                    fullWidth
+                    label="Proceso"
+                    value={formData.proceso || ''}
+                    onChange={(e) => setFormData({ ...formData, proceso: e.target.value })}
+                    placeholder="Ej: Gestión de Talento Humano / Gestión Documental"
+                    InputProps={{ sx: { borderRadius: '12px' } }}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <TextField
+                    fullWidth
+                    label="Identificador TRD (Tabla de Retención Documental)"
+                    value={formData.identificador_trd || ''}
+                    onChange={(e) => setFormData({ ...formData, identificador_trd: e.target.value })}
+                    placeholder="Ej: TRD-110-001"
+                    InputProps={{ sx: { borderRadius: '12px' } }}
+                  />
+                </Grid>
+
+                <Grid size={{ xs: 12, sm: 4 }}>
+                  <TextField
+                    fullWidth
+                    label="Oficina Responsable"
+                    value={formData.oficina_responsable || ''}
+                    onChange={(e) => setFormData({ ...formData, oficina_responsable: e.target.value })}
+                    placeholder="Ej: Dirección de Talento Humano"
+                    InputProps={{ sx: { borderRadius: '12px' } }}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 4 }}>
+                  <TextField
+                    fullWidth
+                    label="Serie Documental"
+                    value={formData.serie_documental || ''}
+                    onChange={(e) => setFormData({ ...formData, serie_documental: e.target.value })}
+                    placeholder="Ej: Historias Laborales"
+                    InputProps={{ sx: { borderRadius: '12px' } }}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 4 }}>
+                  <TextField
+                    fullWidth
+                    label="Subserie Documental"
+                    value={formData.subserie_documental || ''}
+                    onChange={(e) => setFormData({ ...formData, subserie_documental: e.target.value })}
+                    placeholder="Ej: Expedientes de Carrera Administrativa"
+                    InputProps={{ sx: { borderRadius: '12px' } }}
+                  />
+                </Grid>
+              </Grid>
+            )}
+
+            {/* ── PANEL 1: Naturaleza y Características Técnicas ── */}
+            {tabValue === 1 && (
+              <Grid container spacing={3}>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <FormControl fullWidth required>
+                    <InputLabel id="tipo-activo-v7-label">Naturaleza / Tipo de Activo *</InputLabel>
+                    <Select
+                      labelId="tipo-activo-v7-label"
+                      value={formData.Tipo_Activo}
+                      onChange={(e) => setFormData({ ...formData, Tipo_Activo: e.target.value })}
+                      label="Naturaleza / Tipo de Activo *"
+                      sx={{ borderRadius: '12px' }}
+                    >
+                      <MenuItem value="Información y datos">Información y datos (Documental / Registros)</MenuItem>
+                      <MenuItem value="Software">Software (Aplicaciones / Bases de Datos)</MenuItem>
+                      <MenuItem value="Hardware">Hardware (Servidores / Dispositivos)</MenuItem>
+                      <MenuItem value="Soporte de almacenamiento">Soporte de almacenamiento (Medios / Discos / Cintas)</MenuItem>
+                      <MenuItem value="Servicios">Servicios (Cloud / Comunicaciones)</MenuItem>
+                      <MenuItem value="Otros">Otros</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <TextField
+                    fullWidth
+                    label="Subtipo de Activo"
+                    value={formData.subtipo_activo || ''}
+                    onChange={(e) => setFormData({ ...formData, subtipo_activo: e.target.value })}
+                    placeholder="Ej: Expediente médico, Base de datos, API REST"
+                    InputProps={{ sx: { borderRadius: '12px' } }}
+                  />
+                </Grid>
+
+                <Grid size={{ xs: 12, sm: 4 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="soporte-label">Soporte de Registro</InputLabel>
+                    <Select
+                      labelId="soporte-label"
+                      value={formData.soporte_registro || 'Digital'}
+                      onChange={(e) => setFormData({ ...formData, soporte_registro: e.target.value })}
+                      label="Soporte de Registro"
+                      sx={{ borderRadius: '12px' }}
+                    >
+                      <MenuItem value="Digital">Digital (Electrónico)</MenuItem>
+                      <MenuItem value="Físico">Físico (Papel)</MenuItem>
+                      <MenuItem value="Híbrido">Híbrido (Mixto)</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 4 }}>
+                  <TextField
+                    fullWidth
+                    label="Medio de Conservación"
+                    value={formData.medio_conservacion || ''}
+                    onChange={(e) => setFormData({ ...formData, medio_conservacion: e.target.value })}
+                    placeholder="Ej: Servidor Institucional, Repositorio SGDEA, Archivo Rodante"
+                    InputProps={{ sx: { borderRadius: '12px' } }}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 4 }}>
+                  <TextField
+                    fullWidth
+                    label="Formato"
+                    value={formData.formato || ''}
+                    onChange={(e) => setFormData({ ...formData, formato: e.target.value })}
+                    placeholder="Ej: PDF/A, SQL, DOCX, XLSX, Físico A4"
+                    InputProps={{ sx: { borderRadius: '12px' } }}
+                  />
+                </Grid>
+
+                <Grid size={{ xs: 12, sm: 4 }}>
+                  <TextField
+                    fullWidth
+                    label="Idioma"
+                    value={formData.idioma || 'Español'}
+                    onChange={(e) => setFormData({ ...formData, idioma: e.target.value })}
+                    InputProps={{ sx: { borderRadius: '12px' } }}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 4 }}>
+                  <TextField
+                    fullWidth
+                    type="date"
+                    label="Fecha de Generación / Adquisición"
+                    value={formData.fecha_generacion || formData.fecha_adquisicion || ''}
+                    onChange={(e) => setFormData({ ...formData, fecha_generacion: e.target.value, fecha_adquisicion: e.target.value })}
+                    InputLabelProps={{ shrink: true }}
+                    InputProps={{ sx: { borderRadius: '12px' } }}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 4 }}>
+                  <TextField
+                    fullWidth
+                    type="date"
+                    label="Fecha de Ingreso al Archivo"
+                    value={formData.fecha_ingreso_archivo || ''}
+                    onChange={(e) => setFormData({ ...formData, fecha_ingreso_archivo: e.target.value })}
+                    InputLabelProps={{ shrink: true }}
+                    InputProps={{ sx: { borderRadius: '12px' } }}
+                  />
+                </Grid>
+
+                <Grid size={{ xs: 12, sm: 4 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="estado-label">Estado del Activo</InputLabel>
+                    <Select
+                      labelId="estado-label"
+                      value={formData.estado_activo || 'En produccion'}
+                      onChange={(e) => setFormData({ ...formData, estado_activo: e.target.value })}
+                      label="Estado del Activo"
+                      sx={{ borderRadius: '12px' }}
+                    >
+                      <MenuItem value="En produccion">En producción</MenuItem>
+                      <MenuItem value="Planificado">Planificado</MenuItem>
+                      <MenuItem value="En desarrollo">En desarrollo</MenuItem>
+                      <MenuItem value="Obsoleto">Obsoleto</MenuItem>
+                      <MenuItem value="Retirado">Retirado</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 4 }}>
+                  <TextField
+                    fullWidth
+                    label="Frecuencia de Backup"
+                    value={formData.frecuencia_backup_general || ''}
+                    onChange={(e) => setFormData({ ...formData, frecuencia_backup_general: e.target.value })}
+                    placeholder="Ej: Diario incremental, Semanal completo"
+                    InputProps={{ sx: { borderRadius: '12px' } }}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 4 }}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={formData.requiere_backup ?? true}
+                        onChange={(e) => setFormData({ ...formData, requiere_backup: e.target.checked })}
+                        color="primary"
+                      />
+                    }
+                    label="Requiere Copia de Seguridad"
+                    sx={{ mt: 1 }}
+                  />
+                </Grid>
+              </Grid>
+            )}
+
+            {/* ── PANEL 2: Valoración CID e Infraestructura (ICCN) ── */}
+            {tabValue === 2 && (
+              <Grid container spacing={3}>
+                <Grid size={{ xs: 12, sm: 4 }}>
+                  <FormControl fullWidth required>
+                    <InputLabel id="conf-label">Confidencialidad (C) *</InputLabel>
+                    <Select
+                      labelId="conf-label"
+                      value={formData.Nivel_Clasificacion_Confidencialidad || 'Medio'}
+                      onChange={(e) => setFormData({ ...formData, Nivel_Clasificacion_Confidencialidad: e.target.value })}
+                      label="Confidencialidad (C) *"
+                      sx={{ borderRadius: '12px' }}
+                    >
+                      <MenuItem value="Alto">Alto (Reservada / Secreto)</MenuItem>
+                      <MenuItem value="Medio">Medio (Uso Interno / Restringido)</MenuItem>
+                      <MenuItem value="Bajo">Bajo (Pública / Abierta)</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 4 }}>
+                  <FormControl fullWidth required>
+                    <InputLabel id="int-label">Integridad (I) *</InputLabel>
+                    <Select
+                      labelId="int-label"
+                      value={formData.Nivel_Clasificacion_Integridad || 'Alto'}
+                      onChange={(e) => setFormData({ ...formData, Nivel_Clasificacion_Integridad: e.target.value })}
+                      label="Integridad (I) *"
+                      sx={{ borderRadius: '12px' }}
+                    >
+                      <MenuItem value="Alto">Alto (Crítico para toma de decisiones)</MenuItem>
+                      <MenuItem value="Medio">Medio (Tolerancia a corrección)</MenuItem>
+                      <MenuItem value="Bajo">Bajo (Informativo general)</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 4 }}>
+                  <FormControl fullWidth required>
+                    <InputLabel id="disp-label">Disponibilidad (D) *</InputLabel>
+                    <Select
+                      labelId="disp-label"
+                      value={formData.Nivel_Clasificacion_Disponibilidad || 'Medio'}
+                      onChange={(e) => setFormData({ ...formData, Nivel_Clasificacion_Disponibilidad: e.target.value })}
+                      label="Disponibilidad (D) *"
+                      sx={{ borderRadius: '12px' }}
+                    >
+                      <MenuItem value="Alto">Alto (Servicio 24/7 o impacto inmediato)</MenuItem>
+                      <MenuItem value="Medio">Medio (Horario laboral / RTO menor a 24h)</MenuItem>
+                      <MenuItem value="Bajo">Bajo (Baja rotación / RTO flexible)</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="criticidad-gen-label">Criticidad General del Negocio</InputLabel>
+                    <Select
+                      labelId="criticidad-gen-label"
+                      value={formData.nivel_criticidad_negocio || 'Medio'}
+                      onChange={(e) => setFormData({ ...formData, nivel_criticidad_negocio: e.target.value })}
+                      label="Criticidad General del Negocio"
+                      sx={{ borderRadius: '12px' }}
+                    >
+                      <MenuItem value="Crítico">Crítico (Impacto severo institucional)</MenuItem>
+                      <MenuItem value="Alto">Alto (Impacto significativo)</MenuItem>
+                      <MenuItem value="Medio">Medio (Impacto operativo moderado)</MenuItem>
+                      <MenuItem value="Bajo">Bajo (Impacto mínimo)</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="pub-label">Estado de Publicación</InputLabel>
+                    <Select
+                      labelId="pub-label"
+                      value={formData.estado_publicacion || 'No Publicada'}
+                      onChange={(e) => setFormData({ ...formData, estado_publicacion: e.target.value })}
+                      label="Estado de Publicación"
+                      sx={{ borderRadius: '12px' }}
+                    >
+                      <MenuItem value="No Publicada">No Publicada (Acceso Restringido / Reservado)</MenuItem>
+                      <MenuItem value="Intranet">Intranet (Consulta de Funcionarios)</MenuItem>
+                      <MenuItem value="Internet">Internet (Portal Web Abierto / Transparencia)</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+                <Grid size={{ xs: 12 }}>
+                  <TextField
+                    fullWidth
+                    multiline
+                    rows={2}
+                    label="Justificación de la Calificación CID"
+                    value={formData.justificacion_clasificacion_cia || ''}
+                    onChange={(e) => setFormData({ ...formData, justificacion_clasificacion_cia: e.target.value })}
+                    placeholder="Motivo por el cual se asignaron los niveles de confidencialidad, integridad y disponibilidad..."
+                    InputProps={{ sx: { borderRadius: '12px' } }}
+                  />
+                </Grid>
+
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <TextField
+                    fullWidth
+                    label="Ubicación de Consulta Física o Digital"
+                    value={formData.ubicacion_consulta || ''}
+                    onChange={(e) => setFormData({ ...formData, ubicacion_consulta: e.target.value })}
+                    placeholder="URL del sistema, repositorio documental o sala de archivo"
+                    InputProps={{ sx: { borderRadius: '12px' } }}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <Box sx={{ p: 1.5, border: '1px solid #E2E8F0', borderRadius: '12px' }}>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={Boolean(formData.es_iccn)}
+                          onChange={(e) => setFormData({ ...formData, es_iccn: e.target.checked })}
+                          color="error"
+                        />
+                      }
+                      label={
+                        <Box>
+                          <Typography variant="body2" sx={{ fontWeight: 600, color: formData.es_iccn ? '#DC2626' : '#1E293B' }}>
+                            ¿Es Infraestructura Crítica Cibernética Nacional (ICCN)?
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: '#64748B' }}>
+                            Conforme al Decreto 1078 y directrices del ColCERT / Función Pública
+                          </Typography>
+                        </Box>
+                      }
                     />
-                  </Grid>
-                  <Grid  size={{ xs: 12, sm: 6 }}>
-                    <TextField
-                      fullWidth
-                      label="Version del Sistema"
-                      value={formData.version_general_activo || ''}
-                      onChange={(e) => setFormData({ ...formData, version_general_activo: e.target.value })}
-                      placeholder="Ej: v2.1.0, 2024.1"
-                      className="input"
-                      InputProps={{
-                        sx: { borderRadius: '12px' }
-                      }}
+                  </Box>
+                </Grid>
+              </Grid>
+            )}
+
+            {/* ── PANEL 3: Ley 1712 de 2014 (Información Clasificada y Reservada) ── */}
+            {tabValue === 3 && (
+              <Grid container spacing={3}>
+                <Grid size={{ xs: 12 }}>
+                  <Alert severity={formData.es_clasificada_reservada ? "warning" : "success"} sx={{ borderRadius: '12px' }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                      Régimen de Excepciones al Acceso a la Información Pública (Ley 1712 de 2014)
+                    </Typography>
+                    <Typography variant="caption">
+                      Todo activo clasificado o reservado debe registrar el objeto legítimo constitucional de la excepción, el fundamento legal expreso y el alcance de la restricción.
+                    </Typography>
+                  </Alert>
+                </Grid>
+
+                <Grid size={{ xs: 12 }}>
+                  <Box sx={{ p: 2, border: '1px solid #E2E8F0', borderRadius: '12px', bgcolor: '#F8FAFC' }}>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={Boolean(formData.es_clasificada_reservada)}
+                          onChange={(e) => setFormData({ ...formData, es_clasificada_reservada: e.target.checked })}
+                          color="warning"
+                        />
+                      }
+                      label={
+                        <Box>
+                          <Typography variant="body1" sx={{ fontWeight: 700, color: '#1E293B' }}>
+                            ¿Activo clasificado o reservado por Ley?
+                          </Typography>
+                          <Typography variant="body2" sx={{ color: '#64748B' }}>
+                            Active esta opción si el activo contiene datos personales sensibles (Art. 18) o información de seguridad/defensa (Art. 19).
+                          </Typography>
+                        </Box>
+                      }
                     />
-                  </Grid>
-                  <Grid  size={{ xs: 12, sm: 6 }}>
-                    <TextField
-                      fullWidth
-                      type="date"
-                      label="Fecha de Implementacion"
-                      value={formData.fecha_adquisicion || ''}
-                      onChange={(e) => setFormData({ ...formData, fecha_adquisicion: e.target.value })}
-                      InputLabelProps={{ shrink: true }}
-                      className="input"
-                      InputProps={{
-                        sx: { borderRadius: '12px' }
-                      }}
-                    />
-                  </Grid>
-                  <Grid  size={{ xs: 12, sm: 6 }}>
-                    <FormControl fullWidth>
-                      <InputLabel id="requiere-backup-si-label" sx={{ mt: 0.5 }}>Requiere Backup</InputLabel>
-                      <Select
-                        labelId="requiere-backup-si-label"
-                        value={formData.requiere_backup !== undefined ? formData.requiere_backup.toString() : 'true'}
-                        onChange={(e) => setFormData({ ...formData, requiere_backup: e.target.value === 'true' })}
-                        label="Requiere Backup"
-                        sx={{ borderRadius: '12px' }}
-                      >
-                        <MenuItem value="true">Si</MenuItem>
-                        <MenuItem value="false">No</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                  <Grid  size={{ xs: 12, sm: 6 }}>
-                    <TextField
-                      fullWidth
-                      label="Frecuencia de Backup"
-                      value={formData.frecuencia_backup_general || ''}
-                      onChange={(e) => setFormData({ ...formData, frecuencia_backup_general: e.target.value })}
-                      placeholder="Ej: Diario, Semanal, Mensual"
-                      className="input"
-                      InputProps={{
-                        sx: { borderRadius: '12px' }
-                      }}
-                    />
-                  </Grid>
-                  <Grid  size={{ xs: 12, sm: 6 }}>
-                    <TextField
-                      fullWidth
-                      label="Tiempo de Retencion"
-                      value={formData.tiempo_retencion_general || ''}
-                      onChange={(e) => setFormData({ ...formData, tiempo_retencion_general: e.target.value })}
-                      placeholder="Ej: 30 dias, 1 ano"
-                      className="input"
-                      InputProps={{
-                        sx: { borderRadius: '12px' }
-                      }}
-                    />
-                  </Grid>
-                </>
-              )}
-            </Grid>
+                  </Box>
+                </Grid>
+
+                {formData.es_clasificada_reservada && (
+                  <>
+                    <Grid size={{ xs: 12, sm: 8 }}>
+                      <TextField
+                        fullWidth
+                        label="Objeto Legítimo de la Excepción *"
+                        value={formData.objeto_legitimo_excepcion || ''}
+                        onChange={(e) => setFormData({ ...formData, objeto_legitimo_excepcion: e.target.value })}
+                        placeholder="Ej: Protección del derecho a la intimidad y datos personales sensibles (Art. 18 lit. a)"
+                        InputProps={{ sx: { borderRadius: '12px' } }}
+                      />
+                    </Grid>
+                    <Grid size={{ xs: 12, sm: 4 }}>
+                      <FormControl fullWidth>
+                        <InputLabel id="alcance-label">Alcance de la Excepción</InputLabel>
+                        <Select
+                          labelId="alcance-label"
+                          value={formData.excepcion_alcance || 'Total'}
+                          onChange={(e) => setFormData({ ...formData, excepcion_alcance: e.target.value })}
+                          label="Alcance de la Excepción"
+                          sx={{ borderRadius: '12px' }}
+                        >
+                          <MenuItem value="Total">Total (Todo el documento / activo está reservado)</MenuItem>
+                          <MenuItem value="Parcial">Parcial (Permite versión pública tachando datos sensibles)</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Grid>
+
+                    <Grid size={{ xs: 12 }}>
+                      <TextField
+                        fullWidth
+                        label="Fundamento Legal Constitucional / Estatutario *"
+                        value={formData.fundamento_legal || ''}
+                        onChange={(e) => setFormData({ ...formData, fundamento_legal: e.target.value })}
+                        placeholder="Ej: Ley 1712 de 2014 Arts. 18 y 19, Ley 1581 de 2012 Art. 5, Decreto 1081 de 2015"
+                        InputProps={{ sx: { borderRadius: '12px' } }}
+                      />
+                    </Grid>
+
+                    <Grid size={{ xs: 12 }}>
+                      <TextField
+                        fullWidth
+                        label="Procedimiento de Eliminación Segura / Disposición Final"
+                        value={formData.procedimiento_eliminacion_segura_ref || ''}
+                        onChange={(e) => setFormData({ ...formData, procedimiento_eliminacion_segura_ref: e.target.value })}
+                        placeholder="Ej: Tabla de Retención Documental TRD-110, borrado seguro NIST SP 800-88"
+                        InputProps={{ sx: { borderRadius: '12px' } }}
+                      />
+                    </Grid>
+                  </>
+                )}
+              </Grid>
+            )}
           </DialogContent>
           
           <DialogActions sx={{ p: 3, pt: 2, borderTop: '1px solid #E5E7EB' }}>
@@ -1560,6 +2068,74 @@ const Activos: React.FC = () => {
                         </Typography>
                       </Grid>
                     )}
+                  </Grid>
+                </CardContent>
+              </Card>
+
+              {/* Atributos Guía Integral de Riesgos Función Pública V7 */}
+              <Card sx={{ mb: 3, border: '1px solid #E2E8F0', borderRadius: '12px' }}>
+                <CardContent sx={{ p: 3 }}>
+                  <Typography variant="h6" className="font-poppins" sx={{ color: '#1E3A8A', fontWeight: 600, mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <ShieldIcon sx={{ color: '#2563EB', fontSize: 22 }} />
+                    Clasificación Función Pública V7 & Ley 1712 de 2014
+                  </Typography>
+                  <Grid container spacing={2}>
+                    <Grid size={{ xs: 12, md: 4 }}>
+                      <Typography variant="caption" sx={{ color: '#64748B', fontWeight: 600, display: 'block' }}>MACROPROCESO / PROCESO</Typography>
+                      <Typography variant="body2" sx={{ fontWeight: 500, color: '#1E293B' }}>
+                        {detalleActivo.activo?.macroproceso || 'Misional'} / {detalleActivo.activo?.proceso || 'N/A'}
+                      </Typography>
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 4 }}>
+                      <Typography variant="caption" sx={{ color: '#64748B', fontWeight: 600, display: 'block' }}>TRD / OFICINA</Typography>
+                      <Typography variant="body2" sx={{ fontWeight: 500, color: '#1E293B' }}>
+                        {detalleActivo.activo?.identificador_trd || 'N/A'} - {detalleActivo.activo?.oficina_responsable || 'N/A'}
+                      </Typography>
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 4 }}>
+                      <Typography variant="caption" sx={{ color: '#64748B', fontWeight: 600, display: 'block' }}>SERIE / SUBSERIE</Typography>
+                      <Typography variant="body2" sx={{ fontWeight: 500, color: '#1E293B' }}>
+                        {detalleActivo.activo?.serie_documental || 'N/A'} {detalleActivo.activo?.subserie_documental ? `(${detalleActivo.activo.subserie_documental})` : ''}
+                      </Typography>
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 4 }}>
+                      <Typography variant="caption" sx={{ color: '#64748B', fontWeight: 600, display: 'block' }}>SOPORTE / MEDIO CONSERVACIÓN</Typography>
+                      <Typography variant="body2" sx={{ fontWeight: 500, color: '#1E293B' }}>
+                        {detalleActivo.activo?.soporte_registro || 'Digital'} ({detalleActivo.activo?.medio_conservacion || 'Servidor Institucional'})
+                      </Typography>
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 4 }}>
+                      <Typography variant="caption" sx={{ color: '#64748B', fontWeight: 600, display: 'block' }}>VALORACIÓN CID</Typography>
+                      <Typography variant="body2" sx={{ fontWeight: 600, color: '#1E293B' }}>
+                        C({detalleActivo.activo?.Nivel_Clasificacion_Confidencialidad || 'Medio'}) I({detalleActivo.activo?.Nivel_Clasificacion_Integridad || 'Alto'}) D({detalleActivo.activo?.Nivel_Clasificacion_Disponibilidad || 'Medio'})
+                      </Typography>
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 4 }}>
+                      <Typography variant="caption" sx={{ color: '#64748B', fontWeight: 600, display: 'block' }}>INFRAESTRUCTURA CRÍTICA (ICCN)</Typography>
+                      <Chip 
+                        label={detalleActivo.activo?.es_iccn ? "ICCN Crítica" : "No ICCN"} 
+                        size="small" 
+                        color={detalleActivo.activo?.es_iccn ? "error" : "default"} 
+                      />
+                    </Grid>
+                    <Grid size={{ xs: 12 }}>
+                      <Divider sx={{ my: 1 }} />
+                      <Box sx={{ p: 1.5, borderRadius: '8px', bgcolor: detalleActivo.activo?.es_clasificada_reservada ? '#FEF2F2' : '#F0FDF4', border: '1px solid', borderColor: detalleActivo.activo?.es_clasificada_reservada ? '#FECACA' : '#BBF7D0' }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: detalleActivo.activo?.es_clasificada_reservada ? '#991B1B' : '#166534', mb: 0.5 }}>
+                          {detalleActivo.activo?.es_clasificada_reservada ? `Información Clasificada / Reservada (Ley 1712 de 2014 - Alcance ${detalleActivo.activo?.excepcion_alcance || 'Total'})` : "Información Pública (Sin Reserva Legal)"}
+                        </Typography>
+                        {detalleActivo.activo?.es_clasificada_reservada && (
+                          <>
+                            <Typography variant="body2" sx={{ color: '#7F1D1D', mb: 0.5 }}>
+                              <strong>Objeto Legítimo:</strong> {detalleActivo.activo?.objeto_legitimo_excepcion || 'Protección de datos o seguridad'}
+                            </Typography>
+                            <Typography variant="caption" sx={{ color: '#991B1B', display: 'block' }}>
+                              <strong>Fundamento Legal:</strong> {detalleActivo.activo?.fundamento_legal || 'Ley 1712 de 2014 Arts. 18 y 19'}
+                            </Typography>
+                          </>
+                        )}
+                      </Box>
+                    </Grid>
                   </Grid>
                 </CardContent>
               </Card>

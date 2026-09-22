@@ -15,6 +15,7 @@ data/
 *.sqlite3
 *.db
 *.sql
+!**/migrations/*.sql
 *.dump
 
 # Node y Frontend

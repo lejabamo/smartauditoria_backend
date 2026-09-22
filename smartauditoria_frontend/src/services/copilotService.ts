@@ -59,7 +59,72 @@ export interface ControlsSuggestionResponse {
   version_norma: string;
 }
 
+export interface AssetAssessmentResponse {
+  tipo_activo_sugerido: string;
+  analisis_copilot: string;
+  trd_sugerida: {
+    macroproceso?: string;
+    proceso?: string;
+    identificador_sugerido?: string;
+    oficina_responsable?: string;
+    serie_documental?: string;
+    subserie_documental?: string;
+  };
+  caracteristicas_documentales: {
+    soporte_registro?: string;
+    formato?: string;
+    medio_conservacion?: string;
+    idioma?: string;
+  };
+  valoracion_cid: {
+    confidencialidad: string;
+    integridad: string;
+    disponibilidad: string;
+    criticidad_general: string;
+    justificacion?: string;
+  };
+  analisis_ley_1712: {
+    es_clasificada_reservada: boolean;
+    objeto_legitimo?: string;
+    fundamento_legal?: string;
+    excepcion_alcance?: string;
+  };
+  controles_documentales_sugeridos: Array<{
+    id: string;
+    nombre: string;
+    justificacion?: string;
+  }>;
+  action_chips: Array<{
+    action: string;
+    label: string;
+    metadata?: any;
+    confidencialidad?: string;
+    integridad?: string;
+    disponibilidad?: string;
+    criticidad_general?: string;
+    justificacion?: string;
+    es_clasificada_reservada?: boolean;
+    objeto_legitimo_excepcion?: string;
+    fundamento_legal?: string;
+    excepcion_alcance?: string;
+    control_id?: string;
+    control_nombre?: string;
+  }>;
+}
+
 export const copilotService = {
+  /** Asistente IA para levantamiento de activos bajo Guía Integral de Riesgos DAFP V7 y controles ISO 27002:2022 */
+  async assessAsset(assetName: string, assetType?: string, description?: string): Promise<AssetAssessmentResponse> {
+    return await apiRequest<AssetAssessmentResponse>('/copilot/assess-asset', {
+      method: 'POST',
+      body: JSON.stringify({
+        asset_name: assetName,
+        asset_type: assetType || '',
+        description: description || ''
+      }),
+    });
+  },
+
   /** Envía un mensaje normal y recibe respuesta estructurada */
   async sendMessage(message: string, context: Record<string, any> = {}): Promise<CopilotChatResponse> {
     return await apiRequest<CopilotChatResponse>('/copilot/message', {

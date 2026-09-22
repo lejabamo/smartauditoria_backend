@@ -159,6 +159,16 @@ def create_activo():
             if not custodio:
                 return jsonify({'error': 'El custodio especificado no existe'}), 400
         
+        def parse_date(val):
+            if not val:
+                return None
+            if isinstance(val, (datetime,)):
+                return val.date()
+            try:
+                return datetime.strptime(str(val)[:10], '%Y-%m-%d').date()
+            except Exception:
+                return None
+
         activo = Activo(
             Nombre=data.get('Nombre'),
             Descripcion=data.get('Descripcion'),
@@ -175,13 +185,33 @@ def create_activo():
             fuente_datos_principal=data.get('fuente_datos_principal', 'SGSI_Manual'),
             id_externo_glpi=data.get('id_externo_glpi'),
             id_externo_inventario_si=data.get('id_externo_inventario_si'),
-            fecha_adquisicion=datetime.strptime(data['fecha_adquisicion'], '%Y-%m-%d').date() if data.get('fecha_adquisicion') else None,
+            fecha_adquisicion=parse_date(data.get('fecha_adquisicion')),
             version_general_activo=data.get('version_general_activo'),
             requiere_backup=data.get('requiere_backup', True),
             frecuencia_backup_general=data.get('frecuencia_backup_general'),
             tiempo_retencion_general=data.get('tiempo_retencion_general'),
-            fecha_proxima_revision_sgsi=datetime.strptime(data['fecha_proxima_revision_sgsi'], '%Y-%m-%d').date() if data.get('fecha_proxima_revision_sgsi') else None,
-            procedimiento_eliminacion_segura_ref=data.get('procedimiento_eliminacion_segura_ref')
+            fecha_proxima_revision_sgsi=parse_date(data.get('fecha_proxima_revision_sgsi')),
+            procedimiento_eliminacion_segura_ref=data.get('procedimiento_eliminacion_segura_ref'),
+            # Función Pública V7 (Capítulo V)
+            macroproceso=data.get('macroproceso'),
+            proceso=data.get('proceso'),
+            identificador_trd=data.get('identificador_trd'),
+            oficina_responsable=data.get('oficina_responsable'),
+            serie_documental=data.get('serie_documental'),
+            subserie_documental=data.get('subserie_documental'),
+            soporte_registro=data.get('soporte_registro', 'Digital'),
+            medio_conservacion=data.get('medio_conservacion'),
+            formato=data.get('formato'),
+            idioma=data.get('idioma', 'Español'),
+            fecha_generacion=parse_date(data.get('fecha_generacion')),
+            fecha_ingreso_archivo=parse_date(data.get('fecha_ingreso_archivo')),
+            es_iccn=bool(data.get('es_iccn', False)),
+            estado_publicacion=data.get('estado_publicacion', 'No Publicada'),
+            ubicacion_consulta=data.get('ubicacion_consulta'),
+            es_clasificada_reservada=bool(data.get('es_clasificada_reservada', False)),
+            objeto_legitimo_excepcion=data.get('objeto_legitimo_excepcion'),
+            fundamento_legal=data.get('fundamento_legal'),
+            excepcion_alcance=data.get('excepcion_alcance'),
         )
         
         db.session.add(activo)
@@ -207,13 +237,23 @@ def create_activo():
 def update_activo(activo_id):
     """Actualizar un activo existente"""
     try:
+        def parse_date(val):
+            if not val:
+                return None
+            if isinstance(val, (datetime,)):
+                return val.date()
+            try:
+                return datetime.strptime(str(val)[:10], '%Y-%m-%d').date()
+            except Exception:
+                return None
+
         activo = Activo.query.get_or_404(activo_id)
         data = request.json
         
         if not data:
             return jsonify({'error': 'No se proporcionaron datos'}), 400
         
-        # Actualizar campos
+        # Actualizar campos básicos
         if 'Nombre' in data:
             activo.Nombre = data['Nombre']
         if 'Descripcion' in data:
@@ -247,15 +287,55 @@ def update_activo(activo_id):
         if 'estado_activo' in data:
             activo.estado_activo = data['estado_activo']
         if 'fecha_adquisicion' in data:
-            activo.fecha_adquisicion = datetime.strptime(data['fecha_adquisicion'], '%Y-%m-%d').date() if data['fecha_adquisicion'] else None
+            activo.fecha_adquisicion = parse_date(data['fecha_adquisicion'])
         if 'fecha_proxima_revision_sgsi' in data:
-            activo.fecha_proxima_revision_sgsi = datetime.strptime(data['fecha_proxima_revision_sgsi'], '%Y-%m-%d').date() if data['fecha_proxima_revision_sgsi'] else None
+            activo.fecha_proxima_revision_sgsi = parse_date(data['fecha_proxima_revision_sgsi'])
         if 'requiere_backup' in data:
             activo.requiere_backup = data['requiere_backup']
         if 'frecuencia_backup_general' in data:
             activo.frecuencia_backup_general = data['frecuencia_backup_general']
         if 'tiempo_retencion_general' in data:
             activo.tiempo_retencion_general = data['tiempo_retencion_general']
+
+        # Actualizar campos Función Pública V7
+        if 'macroproceso' in data:
+            activo.macroproceso = data['macroproceso']
+        if 'proceso' in data:
+            activo.proceso = data['proceso']
+        if 'identificador_trd' in data:
+            activo.identificador_trd = data['identificador_trd']
+        if 'oficina_responsable' in data:
+            activo.oficina_responsable = data['oficina_responsable']
+        if 'serie_documental' in data:
+            activo.serie_documental = data['serie_documental']
+        if 'subserie_documental' in data:
+            activo.subserie_documental = data['subserie_documental']
+        if 'soporte_registro' in data:
+            activo.soporte_registro = data['soporte_registro']
+        if 'medio_conservacion' in data:
+            activo.medio_conservacion = data['medio_conservacion']
+        if 'formato' in data:
+            activo.formato = data['formato']
+        if 'idioma' in data:
+            activo.idioma = data['idioma']
+        if 'fecha_generacion' in data:
+            activo.fecha_generacion = parse_date(data['fecha_generacion'])
+        if 'fecha_ingreso_archivo' in data:
+            activo.fecha_ingreso_archivo = parse_date(data['fecha_ingreso_archivo'])
+        if 'es_iccn' in data:
+            activo.es_iccn = bool(data['es_iccn'])
+        if 'estado_publicacion' in data:
+            activo.estado_publicacion = data['estado_publicacion']
+        if 'ubicacion_consulta' in data:
+            activo.ubicacion_consulta = data['ubicacion_consulta']
+        if 'es_clasificada_reservada' in data:
+            activo.es_clasificada_reservada = bool(data['es_clasificada_reservada'])
+        if 'objeto_legitimo_excepcion' in data:
+            activo.objeto_legitimo_excepcion = data['objeto_legitimo_excepcion']
+        if 'fundamento_legal' in data:
+            activo.fundamento_legal = data['fundamento_legal']
+        if 'excepcion_alcance' in data:
+            activo.excepcion_alcance = data['excepcion_alcance']
         
         db.session.commit()
         logger.info("Activo actualizado: id=%s", activo_id)

@@ -27,6 +27,21 @@ class SuggestControlsRequest(BaseModel):
     vulnerability: Optional[str] = ""
     risk_level: Optional[str] = "HIGH"
 
+class AssetAssessmentRequest(BaseModel):
+    asset_name: str
+    asset_type: Optional[str] = ""
+    description: Optional[str] = ""
+
+@router.post("/assess-asset")
+async def copilot_assess_asset(req: AssetAssessmentRequest):
+    """Evaluación y recomendación inteligente de activos según Guía DAFP V7 e ISO 27002:2022."""
+    result = cag_service.assess_asset(
+        asset_name=req.asset_name,
+        asset_type=req.asset_type or "",
+        description=req.description or ""
+    )
+    return result
+
 @router.post("/chat")
 async def copilot_chat(req: ChatRequest):
     """Chat interactivo con SmartAuditor Copilot."""

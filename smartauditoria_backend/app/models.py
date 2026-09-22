@@ -202,7 +202,27 @@ class Activo(db.Model):
     procedimiento_eliminacion_segura_ref = db.Column(db.Text)
     fecha_creacion_registro = db.Column(db.DateTime, default=datetime.utcnow)
     fecha_ultima_actualizacion_sgsi = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
+    # Atributos Función Pública V7 (Capítulo V) - Activos Documentales e Información
+    macroproceso = db.Column(db.String(150))
+    proceso = db.Column(db.String(150))
+    identificador_trd = db.Column(db.String(100))
+    oficina_responsable = db.Column(db.String(150))
+    serie_documental = db.Column(db.String(150))
+    subserie_documental = db.Column(db.String(150))
+    soporte_registro = db.Column(db.String(50), default='Digital')
+    medio_conservacion = db.Column(db.String(150))
+    formato = db.Column(db.String(100))
+    idioma = db.Column(db.String(50), default='Español')
+    fecha_generacion = db.Column(db.Date)
+    fecha_ingreso_archivo = db.Column(db.Date)
+    es_iccn = db.Column(db.Boolean, default=False)
+    estado_publicacion = db.Column(db.String(50), default='No Publicada')
+    ubicacion_consulta = db.Column(db.Text)
+    es_clasificada_reservada = db.Column(db.Boolean, default=False)
+    objeto_legitimo_excepcion = db.Column(db.Text)
+    fundamento_legal = db.Column(db.Text)
+    excepcion_alcance = db.Column(db.String(50))
+
     # Relaciones
     riesgos = db.relationship('RiesgoActivo', backref='activo', lazy='dynamic')
     evaluaciones_riesgo = db.relationship('evaluacion_riesgo_activo', backref='activo', lazy='dynamic')
@@ -211,9 +231,13 @@ class Activo(db.Model):
     def to_dict(self):
         return {
             'ID_Activo': self.ID_Activo,
+            'id': self.ID_Activo,
             'Nombre': self.Nombre,
+            'nombre': self.Nombre,
             'Descripcion': self.Descripcion,
+            'descripcion': self.Descripcion,
             'Tipo_Activo': self.Tipo_Activo,
+            'tipo': self.Tipo_Activo,
             'subtipo_activo': self.subtipo_activo,
             'ID_Propietario': self.ID_Propietario,
             'ID_Custodio': self.ID_Custodio,
@@ -234,7 +258,27 @@ class Activo(db.Model):
             'fecha_proxima_revision_sgsi': self.fecha_proxima_revision_sgsi.isoformat() if self.fecha_proxima_revision_sgsi else None,
             'procedimiento_eliminacion_segura_ref': self.procedimiento_eliminacion_segura_ref,
             'fecha_creacion_registro': self.fecha_creacion_registro.isoformat() if self.fecha_creacion_registro else None,
-            'fecha_ultima_actualizacion_sgsi': self.fecha_ultima_actualizacion_sgsi.isoformat() if self.fecha_ultima_actualizacion_sgsi else None
+            'fecha_ultima_actualizacion_sgsi': self.fecha_ultima_actualizacion_sgsi.isoformat() if self.fecha_ultima_actualizacion_sgsi else None,
+            # Campos Función Pública V7
+            'macroproceso': self.macroproceso,
+            'proceso': self.proceso,
+            'identificador_trd': self.identificador_trd,
+            'oficina_responsable': self.oficina_responsable,
+            'serie_documental': self.serie_documental,
+            'subserie_documental': self.subserie_documental,
+            'soporte_registro': self.soporte_registro,
+            'medio_conservacion': self.medio_conservacion,
+            'formato': self.formato,
+            'idioma': self.idioma,
+            'fecha_generacion': self.fecha_generacion.isoformat() if self.fecha_generacion else None,
+            'fecha_ingreso_archivo': self.fecha_ingreso_archivo.isoformat() if self.fecha_ingreso_archivo else None,
+            'es_iccn': self.es_iccn,
+            'estado_publicacion': self.estado_publicacion,
+            'ubicacion_consulta': self.ubicacion_consulta,
+            'es_clasificada_reservada': self.es_clasificada_reservada,
+            'objeto_legitimo_excepcion': self.objeto_legitimo_excepcion,
+            'fundamento_legal': self.fundamento_legal,
+            'excepcion_alcance': self.excepcion_alcance,
         }
 
 class Riesgo(db.Model):

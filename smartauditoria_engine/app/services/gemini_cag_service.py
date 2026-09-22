@@ -252,5 +252,224 @@ class GeminiCAGService:
             yield w + " "
             time.sleep(0.02) # Efecto de streaming fluido
 
-# Instancia singleton
+    def assess_asset(self, asset_name: str, asset_type: str = "", description: str = "") -> Dict[str, Any]:
+        """Evalúa un activo de información según la Guía Integral de Riesgos Función Pública V7 (Capítulo V),
+        Ley 1712 de 2014 y Controles Documentales ISO 27002:2022."""
+        text_corpus = f"{asset_name} {asset_type} {description}".lower()
+
+        if self.has_gemini and self.model:
+            try:
+                prompt = (
+                    f"Actúa como SmartAuditor Copilot experto en la Guía de Riesgos de la Función Pública V7 (2025), "
+                    f"Ley 1712 de 2014 e ISO/IEC 27002:2022. Evalúa este activo de información:\n"
+                    f"- Nombre: {asset_name}\n"
+                    f"- Tipo/Naturaleza: {asset_type or 'No especificado'}\n"
+                    f"- Descripción: {description or 'No especificada'}\n\n"
+                    f"Responde estrictamente en JSON con la siguiente estructura:\n"
+                    f'{{\n'
+                    f'  "analisis_copilot": "Breve diagnóstico",\n'
+                    f'  "tipo_activo_sugerido": "Información y datos",\n'
+                    f'  "trd_sugerida": {{"macroproceso": "...", "proceso": "...", "serie_documental": "...", "subserie_documental": "...", "identificador_sugerido": "TRD-..."}},\n'
+                    f'  "caracteristicas_documentales": {{"soporte_registro": "Digital", "formato": "PDF", "medio_conservacion": "...", "idioma": "Español"}},\n'
+                    f'  "valoracion_cid": {{"confidencialidad": "Alto", "integridad": "Alto", "disponibilidad": "Medio", "criticidad_general": "Alto", "justificacion": "..."}},\n'
+                    f'  "analisis_ley_1712": {{"es_clasificada_reservada": true, "objeto_legitimo": "...", "fundamento_legal": "...", "excepcion_alcance": "Total"}},\n'
+                    f'  "es_iccn": false,\n'
+                    f'  "controles_documentales_sugeridos": [{{"id": "A.5.12", "nombre": "Clasificación de la información", "justificacion": "..."}}]\n'
+                    f'}}'
+                )
+                resp = self.model.generate_content(prompt, generation_config={"response_mime_type": "application/json"})
+                data = json.loads(resp.text)
+                return self._enrich_asset_assessment_with_chips(data)
+            except Exception as e:
+                logger.warning(f"Error en assess_asset con Gemini, usando motor autónomo: {e}")
+
+        return self._autonomous_assess_asset(asset_name, asset_type, description, text_corpus)
+
+    def _autonomous_assess_asset(self, asset_name: str, asset_type: str, description: str, text: str) -> Dict[str, Any]:
+        """Motor autónomo local para evaluación de activos conforme a Función Pública V7."""
+        # 1. Detectar tipo de activo según naturaleza Función Pública V7
+        if any(k in text for k in ["expediente", "historia", "contrato", "informe", "acta", "archivo", "manual", "documento", "politica", "base de datos", "nomina"]):
+            tipo_sugerido = "Información y datos"
+        elif any(k in text for k in ["sistema", "aplicaci", "software", "portal", "modulo", "api", "erp", "plataforma"]):
+            tipo_sugerido = "Software"
+        elif any(k in text for k in ["servidor", "switch", "router", "firewall", "equipo", "computador", "portatil", "disco"]):
+            tipo_sugerido = "Hardware"
+        elif any(k in text for k in ["usb", "san", "nas", "cinta", "almacenamiento"]):
+            tipo_sugerido = "Soporte de almacenamiento"
+        elif any(k in text for k in ["internet", "enlace", "vpn", "correo", "directorio"]):
+            tipo_sugerido = "Servicios"
+        else:
+            tipo_sugerido = asset_type or "Información y datos"
+
+        # 2. Inferencia TRD y Macroproceso
+        if any(k in text for k in ["salud", "medic", "historia", "ocupacional", "talento", "personal", "empleado"]):
+            macroproceso = "Gestión del Talento Humano"
+            proceso = "Seguridad y Salud en el Trabajo"
+            serie = "Historias Laborales"
+            subserie = "Historias Clínicas Ocupacionales"
+            id_trd = "TRD-130-015"
+            oficina = "Dirección de Talento Humano"
+        elif any(k in text for k in ["contrat", "licitaci", "pliego", "adquisic", "proveedor"]):
+            macroproceso = "Gestión Jurídica y Contractual"
+            proceso = "Contratación Pública"
+            serie = "Contratos"
+            subserie = "Contratos de Obra y Servicios"
+            id_trd = "TRD-210-040"
+            oficina = "Oficina de Contratación"
+        elif any(k in text for k in ["financ", "presupuest", "contab", "pago", "tesoreria", "factur"]):
+            macroproceso = "Gestión Financiera"
+            proceso = "Presupuesto y Tesorería"
+            serie = "Comprobantes y Libros Contables"
+            subserie = "Órdenes de Pago"
+            id_trd = "TRD-140-020"
+            oficina = "Secretaría de Hacienda / Tesorería"
+        elif any(k in text for k in ["disciplin", "juridic", "demanda", "fallo", "tutela"]):
+            macroproceso = "Gestión Jurídica"
+            proceso = "Defensa Judicial"
+            serie = "Procesos Judiciales y Disciplinarios"
+            subserie = "Acciones Constitucionales"
+            id_trd = "TRD-120-008"
+            oficina = "Oficina Asesora Jurídica"
+        else:
+            macroproceso = "Gestión de Tecnologías de la Información"
+            proceso = "Seguridad de la Información"
+            serie = "Inventario y Gestión de Activos"
+            subserie = "Activos de Información y Software"
+            id_trd = "TRD-110-001"
+            oficina = "Oficina de Tecnologías y Sistemas"
+
+        # 3. Características Documentales
+        es_papel = "papel" in text or "fisico" in text or "físico" in text
+        es_digital = "digital" in text or "pdf" in text or "electronico" in text or "electrónico" in text or not es_papel
+        soporte = "Híbrido" if (es_papel and es_digital) else ("Físico" if es_papel else "Digital")
+        formato = "Papel y PDF/A" if soporte == "Híbrido" else ("Papel / Físico" if soporte == "Físico" else "PDF / Archivos Electrónicos")
+        medio_conservacion = "Archivo Central / SGDEA Institucional" if tipo_sugerido == "Información y datos" else "Infraestructura Tecnológica Segura"
+
+        # 4. Valoración CID
+        es_sensible = any(k in text for k in ["salud", "medic", "historia", "salario", "disciplin", "penal", "contraseña", "secreto", "personal"])
+        es_financiero = any(k in text for k in ["financ", "presupuest", "pago", "banco"])
+        
+        conf = "Alto" if es_sensible else ("Medio" if not any(k in text for k in ["public", "boletin", "portal"]) else "Bajo")
+        integ = "Alto" if (es_sensible or es_financiero or tipo_sugerido in ["Software", "Información y datos"]) else "Medio"
+        disp = "Alto" if any(k in text for k in ["transaccional", "operacion", "produccion", "nomina", "portal"]) else "Medio"
+        crit_gral = "Alto" if (conf == "Alto" or integ == "Alto") else "Medio"
+
+        # 5. Ley 1712 de 2014
+        if es_sensible:
+            es_reserva = True
+            obj_legitimo = "Protección de los derechos a la intimidad, privacidad y datos sensibles de las personas naturales (Art. 18 lit. a Ley 1712 de 2014)."
+            fundamento = "Ley 1712 de 2014 Art. 18 lit. a; Ley 1581 de 2012 Art. 5; Constitución Política de Colombia Art. 15."
+            alcance = "Total" if any(k in text for k in ["salud", "medic", "disciplin"]) else "Parcial"
+        else:
+            es_reserva = False
+            obj_legitimo = None
+            fundamento = None
+            alcance = None
+
+        # 6. Controles Documentales ISO 27002:2022
+        controles_doc = [
+            {"id": "A.5.12", "codigo": "5.12", "nombre": "Clasificación de la información", "tema": "Organizacional", "justificacion": "Obligatorio para inventariar y etiquetar según la escala de confidencialidad CID y Ley 1712."},
+            {"id": "A.5.13", "codigo": "5.13", "nombre": "Etiquetado de la información", "tema": "Organizacional", "justificacion": "Identificación visible de la reserva en soportes físicos y metadatos digitales."},
+            {"id": "A.5.33", "codigo": "5.33", "nombre": "Protección de registros", "tema": "Organizacional", "justificacion": "Garantiza retención, custodia y disposición final conforme a la TRD aprobada."},
+            {"id": "A.8.11", "codigo": "8.11", "nombre": "Enmascaramiento de datos", "tema": "Tecnológico", "justificacion": "Pseudonimización de datos personales para personal no autorizado o auditorías."},
+            {"id": "A.8.12", "codigo": "8.12", "nombre": "Prevención de fuga de datos (DLP)", "tema": "Tecnológico", "justificacion": "Bloquea extracción no autorizada de expedientes y bases de datos institucionales."}
+        ]
+
+        if not es_sensible:
+            controles_doc = controles_doc[:3]
+
+        data = {
+            "analisis_copilot": f"Activo evaluado bajo el marco Función Pública V7 (Capítulo V). Identificado como '{tipo_sugerido}' perteneciente al macroproceso '{macroproceso}'. "
+                                f"Criticidad General valorada en {crit_gral} con sujeción a {'reserva legal por Ley 1712' if es_reserva else 'régimen de máxima publicidad'}.",
+            "tipo_activo_sugerido": tipo_sugerido,
+            "trd_sugerida": {
+                "macroproceso": macroproceso,
+                "proceso": proceso,
+                "serie_documental": serie,
+                "subserie_documental": subserie,
+                "identificador_sugerido": id_trd,
+                "oficina_responsable": oficina
+            },
+            "caracteristicas_documentales": {
+                "soporte_registro": soporte,
+                "formato": formato,
+                "medio_conservacion": medio_conservacion,
+                "idioma": "Español"
+            },
+            "valoracion_cid": {
+                "confidencialidad": conf,
+                "integridad": integ,
+                "disponibilidad": disp,
+                "criticidad_general": crit_gral,
+                "justificacion": f"Confidencialidad {conf} fundamentada en el grado de reserva. Integridad {integ} requerida para garantizar fidelidad y valor probatorio institucional."
+            },
+            "analisis_ley_1712": {
+                "es_clasificada_reservada": es_reserva,
+                "objeto_legitimo": obj_legitimo,
+                "fundamento_legal": fundamento,
+                "excepcion_alcance": alcance
+            },
+            "es_iccn": bool(es_financiero or any(k in text for k in ["critico", "seguridad", "infraestructura", "nacional"])),
+            "controles_documentales_sugeridos": controles_doc,
+            "norma_referencia": "Guía Función Pública V7 (2025) Cap. V & ISO/IEC 27002:2022"
+        }
+        return self._enrich_asset_assessment_with_chips(data)
+
+    def _enrich_asset_assessment_with_chips(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Añade los botones de acción rápida de 1-Clic para inyección inmediata en el formulario."""
+        trd = data.get("trd_sugerida", {})
+        doc = data.get("caracteristicas_documentales", {})
+        cid = data.get("valoracion_cid", {})
+        ley = data.get("analisis_ley_1712", {})
+        tipo = data.get("tipo_activo_sugerido", "Información y datos")
+
+        chips = [
+            {
+                "action": "APPLY_ASSET_METADATA",
+                "label": f"Adoptar TRD: {trd.get('serie_documental', 'Serie')[:20]}",
+                "macroproceso": trd.get("macroproceso"),
+                "proceso": trd.get("proceso"),
+                "identificador_trd": trd.get("identificador_sugerido"),
+                "oficina_responsable": trd.get("oficina_responsable"),
+                "serie_documental": trd.get("serie_documental"),
+                "subserie_documental": trd.get("subserie_documental"),
+                "tipo_activo": tipo,
+                "soporte_registro": doc.get("soporte_registro"),
+                "formato": doc.get("formato"),
+                "medio_conservacion": doc.get("medio_conservacion"),
+                "idioma": doc.get("idioma", "Español")
+            },
+            {
+                "action": "SET_CID_VALUES",
+                "label": f"Calificar CID: C({cid.get('confidencialidad')}) I({cid.get('integridad')}) D({cid.get('disponibilidad')})",
+                "confidencialidad": cid.get("confidencialidad"),
+                "integridad": cid.get("integridad"),
+                "disponibilidad": cid.get("disponibilidad"),
+                "criticidad_general": cid.get("criticidad_general"),
+                "justificacion": cid.get("justificacion")
+            }
+        ]
+
+        if ley.get("es_clasificada_reservada"):
+            chips.append({
+                "action": "APPLY_LEY_1712",
+                "label": f"Aplicar Reserva Ley 1712 ({ley.get('excepcion_alcance', 'Total')})",
+                "es_clasificada_reservada": True,
+                "objeto_legitimo_excepcion": ley.get("objeto_legitimo"),
+                "fundamento_legal": ley.get("fundamento_legal"),
+                "excepcion_alcance": ley.get("excepcion_alcance")
+            })
+
+        for ctrl in data.get("controles_documentales_sugeridos", []):
+            chips.append({
+                "action": "APPLY_CONTROL",
+                "label": f"Control {ctrl['id']} ({ctrl['nombre'][:18]}...)",
+                "control_id": ctrl["id"],
+                "control_nombre": ctrl["nombre"]
+            })
+
+        data["action_chips"] = chips
+        return data
+
+# Instancia singleton del servicio CAG
 cag_service = GeminiCAGService()

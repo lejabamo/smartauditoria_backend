@@ -20,10 +20,37 @@ from typing import Optional
 class TipoActivo(str, Enum):
     HARDWARE = "Hardware"
     SOFTWARE = "Software"
-    DATOS = "Datos"
+    DATOS = "Información y datos"
+    INFORMACION_DATOS = "Información y datos"
+    ALMACENAMIENTO = "Soporte de almacenamiento"
+    SERVICIOS = "Servicios"
     USUARIOS = "Usuarios"
     RED = "Red"
     INFRAESTRUCTURA = "Infraestructura"
+    OTROS = "Otros"
+
+    @classmethod
+    def from_string(cls, val: str) -> TipoActivo:
+        if not val:
+            return cls.OTROS
+        norm = val.strip().lower()
+        if "informaci" in norm or "dato" in norm:
+            return cls.INFORMACION_DATOS
+        elif "soft" in norm or "aplicaci" in norm or "sistema" in norm:
+            return cls.SOFTWARE
+        elif "hard" in norm or "equip" in norm or "comput" in norm:
+            return cls.HARDWARE
+        elif "almacen" in norm or "disco" in norm or "usb" in norm or "san" in norm:
+            return cls.ALMACENAMIENTO
+        elif "servic" in norm or "inter" in norm or "intra" in norm:
+            return cls.SERVICIOS
+        elif "red" in norm or "comunicac" in norm:
+            return cls.RED
+        elif "infra" in norm:
+            return cls.INFRAESTRUCTURA
+        elif "usuar" in norm or "person" in norm or "humano" in norm:
+            return cls.USUARIOS
+        return cls.OTROS
 
 
 class NivelCIA(str, Enum):
@@ -67,7 +94,7 @@ class EstadoIncidente(str, Enum):
 
 @dataclass
 class Activo:
-    """Activo de información (entidad de dominio pura)."""
+    """Activo de información (entidad de dominio pura conforme a Función Pública V7)."""
     nombre: str
     tipo_activo: TipoActivo
     id: Optional[int] = None
@@ -83,6 +110,33 @@ class Activo:
     fecha_creacion: datetime = field(default_factory=datetime.utcnow)
     fecha_actualizacion: datetime = field(default_factory=datetime.utcnow)
 
+    # Atributos de Identificación y TRD (Cap. V DAFP V7)
+    macroproceso: Optional[str] = None
+    proceso: Optional[str] = None
+    identificador_trd: Optional[str] = None
+    oficina_responsable: Optional[str] = None
+    serie_documental: Optional[str] = None
+    subserie_documental: Optional[str] = None
+
+    # Características Técnicas y Conservación (Activos Documentales)
+    soporte_registro: Optional[str] = "Digital"
+    medio_conservacion: Optional[str] = None
+    formato: Optional[str] = None
+    idioma: Optional[str] = "Español"
+    fecha_generacion: Optional[date] = None
+    fecha_ingreso_archivo: Optional[date] = None
+
+    # Publicación e Infraestructura Crítica
+    es_iccn: bool = False
+    estado_publicacion: Optional[str] = "No Publicada"
+    ubicacion_consulta: Optional[str] = None
+
+    # Índice de Información Clasificada y Reservada (Ley 1712 de 2014)
+    es_clasificada_reservada: bool = False
+    objeto_legitimo_excepcion: Optional[str] = None
+    fundamento_legal: Optional[str] = None
+    excepcion_alcance: Optional[str] = None
+
     def calcular_score_cia(self) -> float:
         """Score CIA promedio (normalizado 0–1)."""
         mapping = {NivelCIA.BAJO: 1, NivelCIA.MEDIO: 2, NivelCIA.ALTO: 3, NivelCIA.MUY_ALTO: 4}
@@ -96,6 +150,25 @@ class Activo:
     def es_critico(self) -> bool:
         """True si el activo es de criticidad Alta o Muy Alta."""
         return self.nivel_criticidad in (NivelCriticidad.ALTO, NivelCriticidad.MUY_ALTO)
+
+    def calcular_criticidad_general(self) -> NivelCriticidad:
+        """Calcula la criticidad general (CID) conforme a la Guía Función Pública V7."""
+        altos = sum(1 for c in (self.confidencialidad, self.integridad, self.disponibilidad) if c in (NivelCIA.ALTO, NivelCIA.MUY_ALTO))
+        if altos >= 2:
+            return NivelCriticidad.MUY_ALTO
+        elif altos == 1:
+            return NivelCriticidad.ALTO
+        medios = sum(1 for c in (self.confidencialidad, self.integridad, self.disponibilidad) if c == NivelCIA.MEDIO)
+        if medios >= 2:
+            return NivelCriticidad.MEDIO
+        return NivelCriticidad.BAJO
+
+    def validar_cumplimiento_ley_1712(self) -> bool:
+        """Valida que si es clasificada o reservada, tenga fundamento legal y objeto legítimo."""
+        if not self.es_clasificada_reservada:
+            return True
+        return bool(self.fundamento_legal and self.objeto_legitimo_excepcion)
+
 
 
 # ──────────────────────────────────────────────────────────
