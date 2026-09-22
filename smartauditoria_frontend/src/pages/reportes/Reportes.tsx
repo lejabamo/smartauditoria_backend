@@ -8,6 +8,7 @@ import {
   Card,
   CardContent,
   CardActionArea,
+  Chip,
 } from "@mui/material";
 import {
   Assessment,
@@ -71,9 +72,12 @@ const Reportes: React.FC = () => {
                 height: '100%',
                 cursor: reporte.ruta ? 'pointer' : 'default',
                 transition: 'all 0.2s ease',
+                position: 'relative',
+                border: reporte.destacado ? '2px solid #1E3A8A' : '1px solid #E2E8F0',
+                background: reporte.destacado ? 'linear-gradient(180deg, #FFFFFF 0%, #EFF6FF 100%)' : '#FFFFFF',
                 '&:hover': reporte.ruta ? {
                   transform: 'translateY(-4px)',
-                  boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
+                  boxShadow: reporte.destacado ? '0 12px 28px rgba(30, 58, 138, 0.25)' : '0 8px 24px rgba(0, 0, 0, 0.12)',
                 } : {}
               }}
             >
@@ -82,7 +86,16 @@ const Reportes: React.FC = () => {
                 disabled={!reporte.ruta}
                 sx={{ height: '100%' }}
               >
-                <CardContent sx={{ textAlign: 'center', p: 3 }}>
+                <CardContent sx={{ textAlign: 'center', p: 3, pt: reporte.destacado ? 4 : 3 }}>
+                  {reporte.destacado && (
+                    <Box sx={{ position: 'absolute', top: 10, right: 10 }}>
+                      <Chip
+                        label="OFICIAL DAFP V7"
+                        size="small"
+                        sx={{ bgcolor: '#1E3A8A', color: '#FFFFFF', fontWeight: 800, fontSize: '0.65rem' }}
+                      />
+                    </Box>
+                  )}
                   <Box sx={{ mb: 2 }}>
                     {reporte.icono}
                   </Box>
