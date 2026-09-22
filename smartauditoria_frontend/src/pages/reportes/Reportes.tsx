@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -14,12 +14,20 @@ import {
   TrendingUp,
   Security,
   People,
+  TableChart,
 } from "@mui/icons-material";
 
 const Reportes: React.FC = () => {
   const navigate = useNavigate();
   
   const reportes = [
+    {
+      titulo: "Mapa Oficial de Riesgos (DAFP V7 / MIPG)",
+      descripcion: "Matriz institucional oficial según Guía DAFP V7 (2025), ISO 27005:2022 y controles ISO 27002:2022",
+      icono: <TableChart sx={{ fontSize: 40, color: "#1E3A8A" }} />,
+      ruta: "/reportes/mapa-riesgos-dafp",
+      destacado: true,
+    },
     {
       titulo: "Informe de Riesgos",
       descripcion: "Analisis completo de riesgos identificados y su estado",

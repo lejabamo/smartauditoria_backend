@@ -21,6 +21,7 @@ const TendenciasSeguridad = lazy(() => import("./pages/reportes/TendenciasSeguri
 const ReportesUsuarios = lazy(() => import("./pages/reportes/ReportesUsuarios"));
 const RiskAssessmentWizard = lazy(() => import("./pages/wizard/RiskAssessmentWizard"));
 const AuditControl = lazy(() => import("./pages/auditoria/AuditControl"));
+const MapaRiesgosDAFPView = lazy(() => import("./components/reportes/MapaRiesgosDAFPView").then(m => ({ default: m.MapaRiesgosDAFPView })));
 
 const theme = createTheme({
   palette: {
@@ -244,6 +245,14 @@ const App: React.FC = () => {
                   element={
                     <ProtectedRoute>
                       <Reportes />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/reportes/mapa-riesgos-dafp"
+                  element={
+                    <ProtectedRoute>
+                      <MapaRiesgosDAFPView />
                     </ProtectedRoute>
                   }
                 />

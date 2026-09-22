@@ -126,6 +126,10 @@ def create_app(config=None):
     from .routes.copilot import copilot_bp
     app.register_blueprint(copilot_bp, url_prefix='/api/copilot')
 
+    # REGISTRO GENERADOR OFICIAL MAPA DE RIESGOS DAFP / MIPG
+    from .routes.reportes import reportes_bp
+    app.register_blueprint(reportes_bp, url_prefix='/api/reportes')
+
 
     # Ruta de prueba para verificar que el servidor está funcionando
     @app.route('/api/health', methods=['GET'])
