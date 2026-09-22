@@ -102,3 +102,107 @@ class RAGClientV2:
                 "version_norma": "ISO/IEC 27002:2022"
             }
 
+    def copilot_assess_asset(self, asset_name: str, asset_type: str = "", description: str = "") -> dict:
+        """Solicita inferencia inteligente para levantamiento de activos bajo Guía DAFP V7 y controles ISO 27002:2022."""
+        endpoint = f"{self.base_url}/copilot/assess-asset"
+        payload = {
+            "asset_name": asset_name,
+            "asset_type": asset_type,
+            "description": description
+        }
+        headers = {"X-API-KEY": self.api_key, "Content-Type": "application/json"}
+        try:
+            r = requests.post(endpoint, json=payload, headers=headers, timeout=15)
+            r.raise_for_status()
+            return r.json()
+        except Exception as e:
+            logger.warning(f"RAGClient copilot_assess_asset fallback: {e}")
+            es_doc = any(w in (asset_name or "").lower() or w in (description or "").lower() for w in ["historia", "expediente", "contrato", "informe", "acta", "hoja de vida", "archivo", "documento"])
+            tipo = "Información y datos" if es_doc else (asset_type or "Información y datos")
+            c_val = "Alto" if es_doc else "Medio"
+            i_val = "Alto"
+            d_val = "Medio" if es_doc else "Alto"
+            crit = "Alto"
+            
+            macro = "Misional" if es_doc else "Estratégico"
+            proc = "Gestión Documental" if es_doc else "Tecnología de la Información"
+            trd_id = "TRD-DOC-001" if es_doc else "TRD-TI-001"
+            oficina = "Archivo Central / Gestión Documental" if es_doc else "Oficina de Tecnología"
+
+            chips = [
+                {
+                    "action": "APPLY_ASSET_METADATA",
+                    "label": f"Adoptar Clasificación TRD: {proc} ({trd_id})",
+                    "metadata": {
+                        "macroproceso": macro,
+                        "proceso": proc,
+                        "identificador_trd": trd_id,
+                        "oficina_responsable": oficina,
+                        "serie_documental": "Expedientes y Registros" if es_doc else "Sistemas de Información",
+                        "subserie_documental": "Comunicaciones Oficiales" if es_doc else "Plataformas Misionales",
+                        "tipo_activo": tipo,
+                        "soporte_registro": "Digital" if "digital" in (description or "").lower() else "Híbrido",
+                        "formato": "PDF/A / Documento Electrónico",
+                        "medio_conservacion": "Servidor Institucional / Repositorio Documental",
+                        "idioma": "Español"
+                    }
+                },
+                {
+                    "action": "SET_CID_VALUES",
+                    "label": f"Calificar CID: C({c_val}) I({i_val}) D({d_val})",
+                    "confidencialidad": c_val,
+                    "integridad": i_val,
+                    "disponibilidad": d_val,
+                    "criticidad_general": crit,
+                    "justificacion": "Valoración inferida bajo lineamientos DAFP V7 y criticidad de la información pública."
+                }
+            ]
+
+            if es_doc:
+                chips.append({
+                    "action": "APPLY_LEY_1712",
+                    "label": "Aplicar Reserva Ley 1712 (Art. 18/19)",
+                    "es_clasificada_reservada": True,
+                    "objeto_legitimo_excepcion": "Protección de datos personales sensibles y secreto profesional/laboral",
+                    "fundamento_legal": "Ley 1712 de 2014, Artículos 18 y 19 literal b",
+                    "excepcion_alcance": "Total"
+                })
+
+            return {
+                "tipo_activo_sugerido": tipo,
+                "analisis_copilot": f"Evaluación de contingencia para '{asset_name}'. Se aplican directrices DAFP V7 e ISO 27002:2022.",
+                "trd_sugerida": {
+                    "macroproceso": macro,
+                    "proceso": proc,
+                    "identificador_sugerido": trd_id,
+                    "oficina_responsable": oficina,
+                    "serie_documental": "Expedientes y Registros" if es_doc else "Sistemas de Información",
+                    "subserie_documental": "Comunicaciones Oficiales" if es_doc else "Plataformas Misionales"
+                },
+                "caracteristicas_documentales": {
+                    "soporte_registro": "Digital" if "digital" in (description or "").lower() else "Híbrido",
+                    "formato": "PDF/A / Documento Electrónico",
+                    "medio_conservacion": "Servidor Institucional / Repositorio Documental",
+                    "idioma": "Español"
+                },
+                "valoracion_cid": {
+                    "confidencialidad": c_val,
+                    "integridad": i_val,
+                    "disponibilidad": d_val,
+                    "criticidad_general": crit,
+                    "justificacion": "Evaluación preliminar de criticidad según guía Función Pública V7."
+                },
+                "analisis_ley_1712": {
+                    "es_clasificada_reservada": es_doc,
+                    "objeto_legitimo": "Protección de datos personales sensibles y reserva legal" if es_doc else None,
+                    "fundamento_legal": "Ley 1712 de 2014, Arts. 18 y 19" if es_doc else None,
+                    "excepcion_alcance": "Total" if es_doc else None
+                },
+                "controles_documentales_sugeridos": [
+                    {"id": "A.5.12", "nombre": "Clasificación de la información", "justificacion": "Obligatorio para inventario y clasificación de activos según DAFP V7."},
+                    {"id": "A.5.13", "nombre": "Etiquetado de la información", "justificacion": "Señalización y clasificación conforme a Ley 1712."},
+                    {"id": "A.8.11", "nombre": "Enmascaramiento de datos", "justificacion": "Protección y privacidad de datos sensibles."}
+                ],
+                "action_chips": chips
+            }
+
