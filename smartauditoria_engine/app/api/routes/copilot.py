@@ -19,6 +19,10 @@ class RiskEvalRequest(BaseModel):
     asset_name: str
     asset_type: str
     cia_levels: Optional[Dict[str, str]] = None
+    trd: Optional[Dict[str, Any]] = None
+    criticidad: Optional[str] = None
+    ley_1712: Optional[Dict[str, Any]] = None
+    descripcion: Optional[str] = None
 
 class SuggestControlsRequest(BaseModel):
     asset_name: str
@@ -26,6 +30,8 @@ class SuggestControlsRequest(BaseModel):
     threat: Optional[str] = ""
     vulnerability: Optional[str] = ""
     risk_level: Optional[str] = "HIGH"
+    trd: Optional[Dict[str, Any]] = None
+    ley_1712: Optional[Dict[str, Any]] = None
 
 class AssetAssessmentRequest(BaseModel):
     asset_name: str
@@ -76,8 +82,16 @@ async def copilot_stream(req: ChatRequest):
 
 @router.post("/evaluate-risk")
 async def copilot_evaluate_risk(req: RiskEvalRequest):
-    """Evaluación de superficie de exposición y propuesta de vector de riesgo."""
-    result = cag_service.evaluate_risk(req.asset_name, req.asset_type, req.cia_levels)
+    """Evaluación de superficie de exposición y propuesta de vector de riesgo según ISO 27005:2022 y DAFP V7."""
+    result = cag_service.evaluate_risk(
+        asset_name=req.asset_name,
+        asset_type=req.asset_type,
+        cia_levels=req.cia_levels,
+        trd=req.trd,
+        criticidad=req.criticidad,
+        ley_1712=req.ley_1712,
+        descripcion=req.descripcion
+    )
     return result
 
 @router.post("/suggest-controls")
@@ -88,7 +102,9 @@ async def copilot_suggest_controls(req: SuggestControlsRequest):
         asset_type=req.asset_type,
         threat=req.threat,
         vulnerability=req.vulnerability,
-        risk_level=req.risk_level
+        risk_level=req.risk_level,
+        trd=req.trd,
+        ley_1712=req.ley_1712
     )
     return result
 

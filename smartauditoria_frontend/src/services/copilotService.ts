@@ -7,7 +7,14 @@ import { apiRequest } from './api';
 import { API_BASE_URL } from '../config/api';
 
 export interface ActionChip {
-  action: 'APPLY_CONTROL' | 'APPLY_VECTOR' | 'SET_PROBABILITY_IMPACT' | 'FILL_JUSTIFICATION' | 'ANALYZE_ASSET';
+  action:
+    | 'APPLY_CONTROL'
+    | 'APPLY_VECTOR'
+    | 'SET_PROBABILITY_IMPACT'
+    | 'FILL_JUSTIFICATION'
+    | 'ANALYZE_ASSET'
+    | 'APPLY_TREATMENT_STRATEGY'
+    | 'SET_RESIDUAL';
   label: string;
   control_id?: string;
   control_nombre?: string;
@@ -15,6 +22,12 @@ export interface ActionChip {
   vulnerability?: string;
   probabilidad?: string;
   impacto?: string;
+  nivel?: string;
+  tipoRiesgo?: string;
+  descripcion?: string;
+  opcion?: string;
+  responsable?: string;
+  estrategia?: string;
   text?: string;
   asset_name?: string;
 }
@@ -43,9 +56,12 @@ export interface RiskEvaluationResponse {
   analisis_inherente: string;
   amenaza_sugerida: string;
   vulnerabilidad_sugerida: string;
+  descripcion_sugerida?: string;
+  tipo_riesgo_sugerido?: string;
   probabilidad_estimada: string;
   impacto_estimado: string;
   nivel_riesgo_sugerido: string;
+  justificacion_sugerida?: string;
   action_chips: ActionChip[];
   norma_referencia?: string;
 }
@@ -53,6 +69,8 @@ export interface RiskEvaluationResponse {
 export interface ControlsSuggestionResponse {
   analisis_copilot: string;
   controles_sugeridos: SuggestedControl[];
+  eficacia_sugerida?: string;
+  justificacion_eficacia?: string;
   action_chips: ActionChip[];
   confidence: number;
   is_cag_grounded: boolean;
@@ -189,11 +207,29 @@ export const copilotService = {
     }
   },
 
-  /** Evaluación de riesgo contextual de un activo bajo ISO 27005:2022 */
-  async evaluateRisk(assetName: string, assetType: string, ciaLevels?: Record<string, string>): Promise<RiskEvaluationResponse> {
+  /** Evaluación de riesgo contextual de un activo bajo ISO 27005:2022 y DAFP V7 */
+  async evaluateRisk(
+    assetName: string,
+    assetType: string,
+    options?: {
+      ciaLevels?: Record<string, string>;
+      trd?: Record<string, any>;
+      criticidad?: string;
+      ley1712?: Record<string, any>;
+      descripcion?: string;
+    }
+  ): Promise<RiskEvaluationResponse> {
     return await apiRequest<RiskEvaluationResponse>('/copilot/evaluate-risk', {
       method: 'POST',
-      body: JSON.stringify({ asset_name: assetName, asset_type: assetType, cia_levels: ciaLevels }),
+      body: JSON.stringify({
+        asset_name: assetName,
+        asset_type: assetType,
+        cia_levels: options?.ciaLevels,
+        trd: options?.trd,
+        criticidad: options?.criticidad,
+        ley_1712: options?.ley1712,
+        descripcion: options?.descripcion,
+      }),
     });
   },
 
@@ -203,7 +239,11 @@ export const copilotService = {
     assetType: string,
     threat: string = '',
     vulnerability: string = '',
-    riskLevel: string = 'HIGH'
+    riskLevel: string = 'HIGH',
+    options?: {
+      trd?: Record<string, any>;
+      ley1712?: Record<string, any>;
+    }
   ): Promise<ControlsSuggestionResponse> {
     return await apiRequest<ControlsSuggestionResponse>('/copilot/suggest-controls', {
       method: 'POST',
@@ -213,6 +253,8 @@ export const copilotService = {
         threat,
         vulnerability,
         risk_level: riskLevel,
+        trd: options?.trd,
+        ley_1712: options?.ley1712,
       }),
     });
   },

@@ -45,10 +45,27 @@ class RAGClientV2:
             yield f"data: SmartAuditor Copilot: Procesando consulta '{message}'. Recuerde verificar los controles mitigantes aplicables según ISO/IEC 27002:2022.\n\n".encode("utf-8")
             yield b"data: [DONE]\n\n"
 
-    def copilot_evaluate_risk(self, asset_name: str, asset_type: str, cia_levels: dict = None) -> dict:
-        """Solicita evaluación de vector de riesgo para un activo."""
+    def copilot_evaluate_risk(
+        self,
+        asset_name: str,
+        asset_type: str,
+        cia_levels: dict = None,
+        trd: dict = None,
+        criticidad: str = None,
+        ley_1712: dict = None,
+        descripcion: str = ""
+    ) -> dict:
+        """Solicita evaluación de vector de riesgo para un activo según ISO 27005:2022 y DAFP V7."""
         endpoint = f"{self.base_url}/copilot/evaluate-risk"
-        payload = {"asset_name": asset_name, "asset_type": asset_type, "cia_levels": cia_levels}
+        payload = {
+            "asset_name": asset_name,
+            "asset_type": asset_type,
+            "cia_levels": cia_levels or {},
+            "trd": trd or {},
+            "criticidad": criticidad,
+            "ley_1712": ley_1712 or {},
+            "descripcion": descripcion or ""
+        }
         headers = {"X-API-KEY": self.api_key, "Content-Type": "application/json"}
         try:
             r = requests.post(endpoint, json=payload, headers=headers, timeout=12)
@@ -56,22 +73,40 @@ class RAGClientV2:
             return r.json()
         except Exception as e:
             logger.warning(f"RAGClient evaluate_risk fallback: {e}")
+            prob = "Probable"
+            imp = "Mayor"
+            nivel = "ALTO"
             return {
                 "activo_nombre": asset_name,
                 "activo_tipo": asset_type,
-                "analisis_inherente": f"Evaluación de superficie de exposición para '{asset_name}' bajo ISO 27005:2022.",
-                "amenaza_sugerida": "Pérdida o alteración no autorizada de datos",
-                "vulnerabilidad_sugerida": "Ausencia de controles criptográficos y de acceso robusto",
-                "probabilidad_estimada": "Probable",
-                "impacto_estimado": "Alto",
-                "nivel_riesgo_sugerido": "ALTO",
+                "analisis_inherente": f"Evaluación de contingencia para '{asset_name}' bajo ISO 27005:2022 y DAFP V7.",
+                "amenaza_sugerida": "Fuga o alteración no autorizada de información clasificada",
+                "vulnerabilidad_sugerida": "Controles de acceso deficientes y falta de cifrado en reposo",
+                "descripcion_sugerida": "Causa: Controles de acceso insuficientes. Consecuencia: Posible materialización de fuga de información confidencial.",
+                "tipo_riesgo_sugerido": "Legal",
+                "probabilidad_estimada": prob,
+                "impacto_estimado": imp,
+                "nivel_riesgo_sugerido": nivel,
+                "justificacion_sugerida": f"Evaluación fundamentada en ISO 27005:2022 y Guía DAFP V7 para el activo {asset_type}.",
                 "action_chips": [
-                    {"action": "APPLY_VECTOR", "label": "Adoptar Vector Sugerido", "threat": "Pérdida o alteración de datos", "vulnerability": "Ausencia de controles criptográficos"}
+                    {"action": "APPLY_VECTOR", "label": "Adoptar Vector Sugerido", "threat": "Fuga o alteración no autorizada de información", "vulnerability": "Controles de acceso deficientes", "tipoRiesgo": "Legal"},
+                    {"action": "SET_PROBABILITY_IMPACT", "label": f"Calificar {prob} × {imp}", "probabilidad": prob, "impacto": imp},
+                    {"action": "FILL_JUSTIFICATION", "label": "Cargar Justificación Técnica ISO 27005", "text": f"Evaluación de criticidad fundamentada en ISO 27005:2022 para {asset_name}."},
+                    {"action": "APPLY_TREATMENT_STRATEGY", "label": "Sugerir Estrategia Mitigar", "opcion": "Mitigar", "responsable": "Líder de Seguridad de la Información", "estrategia": "Implementar controles ISO 27002:2022 preventivos."}
                 ],
-                "norma_referencia": "ISO/IEC 27005:2022"
+                "norma_referencia": "ISO/IEC 27005:2022 & DAFP Guía V7"
             }
 
-    def copilot_suggest_controls(self, asset_name: str, asset_type: str, threat: str = "", vulnerability: str = "", risk_level: str = "HIGH") -> dict:
+    def copilot_suggest_controls(
+        self,
+        asset_name: str,
+        asset_type: str,
+        threat: str = "",
+        vulnerability: str = "",
+        risk_level: str = "HIGH",
+        trd: dict = None,
+        ley_1712: dict = None
+    ) -> dict:
         """Solicita sugerencia de controles del Anexo A ISO 27002:2022 con Action Chips."""
         endpoint = f"{self.base_url}/copilot/suggest-controls"
         payload = {
@@ -79,7 +114,9 @@ class RAGClientV2:
             "asset_type": asset_type,
             "threat": threat,
             "vulnerability": vulnerability,
-            "risk_level": risk_level
+            "risk_level": risk_level,
+            "trd": trd or {},
+            "ley_1712": ley_1712 or {}
         }
         headers = {"X-API-KEY": self.api_key, "Content-Type": "application/json"}
         try:
@@ -91,12 +128,16 @@ class RAGClientV2:
             return {
                 "analisis_copilot": f"Para '{asset_name}', se sugieren controles esenciales de ISO 27002:2022.",
                 "controles_sugeridos": [
-                    {"id": "A.8.24", "nombre": "Uso de criptografía", "tema": "Tecnológico", "eficacia": 85, "justificacion": "Mitiga exposición de datos sensibles."},
-                    {"id": "A.5.15", "nombre": "Control de acceso", "tema": "Organizacional", "eficacia": 80, "justificacion": "Limita accesos no autorizados a la información."}
+                    {"id": "A.5.15", "nombre": "Control de acceso", "tema": "Organizacional", "eficacia": 85, "justificacion": "Limita accesos no autorizados a la información."},
+                    {"id": "A.8.24", "nombre": "Uso de criptografía", "tema": "Tecnológico", "eficacia": 80, "justificacion": "Mitiga exposición de datos sensibles."},
+                    {"id": "A.5.12", "nombre": "Clasificación de la información", "tema": "Organizacional", "eficacia": 80, "justificacion": "Categorización conforme a Ley 1712 y DAFP V7."}
                 ],
+                "eficacia_sugerida": "Alta",
+                "justificacion_eficacia": "Los controles seleccionados mitigan el impacto y probabilidad según metodología DAFP V7.",
                 "action_chips": [
+                    {"action": "APPLY_CONTROL", "label": "Aplicar A.5.15 Control de acceso", "control_id": "A.5.15", "control_nombre": "Control de acceso"},
                     {"action": "APPLY_CONTROL", "label": "Aplicar A.8.24 Criptografía", "control_id": "A.8.24", "control_nombre": "Uso de criptografía"},
-                    {"action": "APPLY_CONTROL", "label": "Aplicar A.5.15 Control de acceso", "control_id": "A.5.15", "control_nombre": "Control de acceso"}
+                    {"action": "APPLY_TREATMENT_STRATEGY", "label": "Estrategia Mitigar DAFP V7", "opcion": "Mitigar", "responsable": "Oficial de Seguridad / Administrador de Sistemas", "estrategia": "Implementar controles ISO 27002:2022 para mitigar el riesgo."}
                 ],
                 "confidence": 0.95,
                 "version_norma": "ISO/IEC 27002:2022"

@@ -149,9 +149,20 @@ class GeminiCAGService:
                 "control_nombre": c["nombre"]
             })
 
+        # Añadir chip de estrategia de tratamiento DAFP V7
+        chips.append({
+            "action": "APPLY_TREATMENT_STRATEGY",
+            "label": "Estrategia Mitigar DAFP V7",
+            "opcion": "Mitigar",
+            "responsable": "Oficial de Seguridad de la Información / Administrador de Sistemas",
+            "estrategia": f"Mitigar mediante controles ISO 27002:2022 ({', '.join([c['id'] for c in top_controls[:3]])}) para reducir la exposición del activo '{asset_name}'."
+        })
+
         return {
             "analisis_copilot": f"Para el activo '{asset_name}' ({asset_type}) evaluado en nivel {risk_level}, la arquitectura ISO 27002:2022 recomienda enfocar los controles en las dimensiones {', '.join(top_controls[0]['propiedades_cia'] if top_controls else ['C', 'I', 'A'])}.",
             "controles_sugeridos": sugerencias,
+            "eficacia_sugerida": "Alta",
+            "justificacion_eficacia": "La implementación de controles organizacionales y técnicos ISO 27002:2022 mitiga la severidad del impacto y reduce la probabilidad de ocurrencia según la metodología DAFP V7.",
             "action_chips": chips,
             "confidence": 0.96,
             "is_cag_grounded": True,
@@ -175,44 +186,153 @@ class GeminiCAGService:
         data["version_norma"] = "ISO/IEC 27002:2022"
         return data
 
-    def evaluate_risk(self, asset_name: str, asset_type: str, cia_levels: Dict[str, str] = None) -> Dict[str, Any]:
-        """Evalúa el activo y propone amenazas y vulnerabilidades plausibles con justificación."""
+    def evaluate_risk(
+        self,
+        asset_name: str,
+        asset_type: str,
+        cia_levels: Dict[str, str] = None,
+        trd: Dict[str, Any] = None,
+        criticidad: str = None,
+        ley_1712: Dict[str, Any] = None,
+        descripcion: str = ""
+    ) -> Dict[str, Any]:
+        """Evalúa el activo y propone amenazas y vulnerabilidades plausibles con justificación según ISO 27005:2022 y DAFP V7."""
+        cia_levels = cia_levels or {}
+        trd = trd or {}
+        ley_1712 = ley_1712 or {}
+
+        # Catálogo enriquecido de vectores alineado a la Guía DAFP V7
         threat_catalog = {
-            "Hardware": [
-                {"amenaza": "Fallo físico del servidor o almacenamiento", "vuln": "Ausencia de redundancia de hardware (RAID/Fuente)", "cia": "Disponibilidad"},
-                {"amenaza": "Acceso físico no autorizado a consolas", "vuln": "Puertos USB habilitados y sin candados físicos", "cia": "Confidencialidad"}
+            "Información y datos": [
+                {"amenaza": "Fuga, exfiltración o divulgación no autorizada de información clasificada/reservada", "vuln": "Controles de acceso lógico deficientes y falta de cifrado en reposo", "cia": "Confidencialidad", "tipo": "Legal"},
+                {"amenaza": "Pérdida o destrucción de expedientes e integridad documental", "vuln": "Falta de copias de seguridad inmutables y controles de trazabilidad", "cia": "Integridad", "tipo": "Operacional"}
+            ],
+            "Documental": [
+                {"amenaza": "Alteración o pérdida física/digital de documentos oficiales de la entidad", "vuln": "Ausencia de tablas de retención documental aplicadas y custodia insegura", "cia": "Integridad", "tipo": "Legal"},
+                {"amenaza": "Acceso indebido a documentos con reserva legal (Ley 1712 de 2014)", "vuln": "Clasificación de seguridad documental no implementada en repositorios", "cia": "Confidencialidad", "tipo": "Legal"}
             ],
             "Software": [
-                {"amenaza": "Ejecución de código malicioso o Ransomware", "vuln": "Software base o dependencias sin parchear", "cia": "Integridad"},
-                {"amenaza": "Inyección SQL o evasión de autenticación", "vuln": "Falta de validación de entradas en APIs", "cia": "Confidencialidad"}
-            ],
-            "Datos": [
-                {"amenaza": "Fuga o exfiltración de información confidencial", "vuln": "Transmisión y almacenamiento en texto plano sin cifrado", "cia": "Confidencialidad"},
-                {"amenaza": "Destrucción o pérdida irrecuperable de datos", "vuln": "Copias de seguridad desactualizadas o sin prueba de restauración", "cia": "Disponibilidad"}
+                {"amenaza": "Ejecución de código malicioso o Ransomware que secuestra el aplicativo", "vuln": "Software base o dependencias sin parchear y ausencia de MFA en accesos administrativos", "cia": "Integridad", "tipo": "Tecnológico"},
+                {"amenaza": "Inyección SQL o evasión de autenticación en APIs", "vuln": "Falta de validación y sanitización estricta de entradas en servicios web", "cia": "Confidencialidad", "tipo": "Tecnológico"}
             ],
             "Sistemas de Información": [
-                {"amenaza": "Denegación de servicio (DoS) que inhabilita operaciones", "vuln": "Falta de balanceo de carga y rate-limiting", "cia": "Disponibilidad"},
-                {"amenaza": "Secuestro de sesiones de usuario o escalada de privilegios", "vuln": "Tokens JWT sin expiración adecuada o almacenamiento inseguro", "cia": "Integridad"}
+                {"amenaza": "Denegación de servicio (DoS/DDoS) que inhabilita las operaciones de la entidad", "vuln": "Falta de arquitectura de alta disponibilidad, balanceo de carga y rate-limiting", "cia": "Disponibilidad", "tipo": "Tecnológico"},
+                {"amenaza": "Secuestro de sesiones de usuario o escalada de privilegios", "vuln": "Tokens JWT sin expiración adecuada o almacenamiento inseguro", "cia": "Integridad", "tipo": "Tecnológico"}
+            ],
+            "Hardware": [
+                {"amenaza": "Fallo físico catastrófico del servidor o almacenamiento", "vuln": "Ausencia de redundancia de hardware (RAID/Fuente) y garantía vencida", "cia": "Disponibilidad", "tipo": "Operacional"},
+                {"amenaza": "Acceso físico no autorizado a consolas y servidores", "vuln": "Puertos USB habilitados y sin candados físicos en centros de datos", "cia": "Confidencialidad", "tipo": "Físico"}
+            ],
+            "Redes y comunicaciones": [
+                {"amenaza": "Intercepción o espionaje de comunicaciones en tránsito", "vuln": "Transmisión en protocolos sin cifrado TLS y falta de segmentación VLAN", "cia": "Confidencialidad", "tipo": "Tecnológico"},
+                {"amenaza": "Intrusión perimetral y movimiento lateral", "vuln": "Reglas de firewall permisivas y falta de monitoreo continuo de tráfico", "cia": "Integridad", "tipo": "Tecnológico"}
+            ],
+            "Servicios y personas": [
+                {"amenaza": "Ingeniería social (Phishing) y suplantación de identidad", "vuln": "Falta de capacitación continua en ciberseguridad y concienciación", "cia": "Confidencialidad", "tipo": "Operacional"},
+                {"amenaza": "Divulgación accidental de información sensible por error operativo", "vuln": "Ausencia de acuerdos de confidencialidad y procedimientos de mesa limpia", "cia": "Confidencialidad", "tipo": "Operacional"}
             ]
         }
 
-        selected_vectors = threat_catalog.get(asset_type, threat_catalog["Sistemas de Información"])
+        # Detección inteligente del tipo normalizado
+        tipo_normalizado = "Sistemas de Información"
+        asset_type_lower = (asset_type or "").lower()
+        if any(w in asset_type_lower for w in ["dato", "informaci", "archivo", "registro"]):
+            tipo_normalizado = "Información y datos"
+        elif any(w in asset_type_lower for w in ["document", "expediente", "trd", "ley"]):
+            tipo_normalizado = "Documental"
+        elif any(w in asset_type_lower for w in ["soft", "app", "aplicaci", "código"]):
+            tipo_normalizado = "Software"
+        elif any(w in asset_type_lower for w in ["hard", "servidor", "equipo", "infraestructura"]):
+            tipo_normalizado = "Hardware"
+        elif any(w in asset_type_lower for w in ["red", "comunicaci", "enlace", "firewall"]):
+            tipo_normalizado = "Redes y comunicaciones"
+        elif any(w in asset_type_lower for w in ["persona", "servicio", "proveedor", "humano"]):
+            tipo_normalizado = "Servicios y personas"
+
+        selected_vectors = threat_catalog.get(tipo_normalizado, threat_catalog["Sistemas de Información"])
         primary = selected_vectors[0]
+
+        # Calificación 5x5 DAFP V7 según ICCN y CID
+        crit = (criticidad or cia_levels.get("criticidad") or "Medio").lower()
+        if "crític" in crit or "critic" in crit:
+            prob = "Probable"
+            imp = "Catastrófico"
+            nivel = "EXTREMO"
+        elif "alto" in crit:
+            prob = "Probable"
+            imp = "Mayor"
+            nivel = "ALTO"
+        elif "bajo" in crit:
+            prob = "Remoto"
+            imp = "Menor"
+            nivel = "BAJO"
+        else:
+            prob = "Ocasional"
+            imp = "Moderado"
+            nivel = "MEDIO"
+
+        trd_proceso = trd.get("proceso") or trd.get("Proceso")
+        trd_serie = trd.get("serie_documental") or trd.get("Serie")
+        trd_info = f" (Proceso: {trd_proceso}, Serie: {trd_serie})" if trd_proceso else ""
+        ley_info = " [Reserva Legal Ley 1712]" if ley_1712.get("es_clasificada_reservada") else ""
+
+        analisis = (
+            f"El activo '{asset_name}'{trd_info}{ley_info} ({asset_type}) presenta criticidad {crit.upper()} "
+            f"con principal sensibilidad en {primary['cia']}. Conforme a ISO/IEC 27005:2022 y Guía DAFP V7, "
+            f"el vector de riesgo recomendado es: [{primary['amenaza']} / {primary['vuln']}]."
+        )
+
+        justificacion = (
+            f"Evaluación fundamentada en ISO/IEC 27005:2022 (Cláusula 8.2) y Guía Integral de Riesgos DAFP V7. "
+            f"La probabilidad se determina como '{prob}' debido a la exposición del activo {asset_type} y la frecuencia "
+            f"de vectores de ataque similares. El impacto se califica como '{imp}' dada la criticidad operativa y confidencialidad "
+            f"de la información en los procesos de la entidad."
+        )
+
+        chips = [
+            {
+                "action": "APPLY_VECTOR",
+                "label": f"Adoptar Vector: {primary['amenaza'][:28]}...",
+                "threat": primary["amenaza"],
+                "vulnerability": primary["vuln"],
+                "tipoRiesgo": primary.get("tipo", "Operacional"),
+                "descripcion": f"Causa: {primary['vuln']}. Consecuencia: Posible {primary['amenaza'].lower()} afectando {primary['cia']}."
+            },
+            {
+                "action": "SET_PROBABILITY_IMPACT",
+                "label": f"Calificar {prob} × {imp} ({nivel})",
+                "probabilidad": prob,
+                "impacto": imp,
+                "nivel": nivel
+            },
+            {
+                "action": "FILL_JUSTIFICATION",
+                "label": "Cargar Justificación Técnica ISO 27005 / DAFP",
+                "text": justificacion
+            },
+            {
+                "action": "APPLY_TREATMENT_STRATEGY",
+                "label": "Sugerir Estrategia de Mitigación",
+                "opcion": "Mitigar" if nivel in ["EXTREMO", "ALTO", "MEDIO"] else "Aceptar",
+                "responsable": "Líder de Seguridad de la Información / Oficial de Privacidad",
+                "estrategia": f"Implementar controles ISO 27002:2022 preventivos y de monitoreo continuo para reducir la exposición a {primary['amenaza']}."
+            }
+        ]
 
         return {
             "activo_nombre": asset_name,
             "activo_tipo": asset_type,
-            "analisis_inherente": f"El activo '{asset_name}' presenta superficie de exposición crítica en {primary['cia']}. Siguiendo las directrices de ISO/IEC 27005:2022, el vector primario a documentar es [{primary['amenaza']} / {primary['vuln']}].",
+            "analisis_inherente": analisis,
             "amenaza_sugerida": primary["amenaza"],
             "vulnerabilidad_sugerida": primary["vuln"],
-            "probabilidad_estimada": "Probable",
-            "impacto_estimado": "Alto",
-            "nivel_riesgo_sugerido": "ALTO",
-            "action_chips": [
-                {"action": "APPLY_VECTOR", "label": f"Adoptar Vector: {primary['amenaza'][:25]}...", "threat": primary["amenaza"], "vulnerability": primary["vuln"]},
-                {"action": "SET_PROBABILITY_IMPACT", "label": "Calificar Probable × Alto", "probabilidad": "Probable", "impacto": "Alto"}
-            ],
-            "norma_referencia": "ISO/IEC 27005:2022 Cláusula 8.2"
+            "descripcion_sugerida": f"Causa: {primary['vuln']}. Consecuencia: Posible {primary['amenaza'].lower()}.",
+            "tipo_riesgo_sugerido": primary.get("tipo", "Operacional"),
+            "probabilidad_estimada": prob,
+            "impacto_estimado": imp,
+            "nivel_riesgo_sugerido": nivel,
+            "justificacion_sugerida": justificacion,
+            "action_chips": chips,
+            "norma_referencia": "ISO/IEC 27005:2022 & DAFP Guía de Riesgos V7 (2025)"
         }
 
     def chat_stream(self, message: str, context: Dict[str, Any] = None) -> Generator[str, None, None]:

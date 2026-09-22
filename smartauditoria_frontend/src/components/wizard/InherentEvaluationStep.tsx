@@ -18,6 +18,7 @@ import {
   Alert,
   Fade,
   Stack,
+  Button,
 } from '@mui/material';
 import {
   Info as InfoIcon,
@@ -25,8 +26,8 @@ import {
   Warning as WarningIcon,
   CheckCircle as CheckCircleIcon,
   Help as HelpIcon,
+  AutoAwesome as AutoAwesomeIcon,
 } from '@mui/icons-material';
-import JustificationSuggestions from '../predictive/JustificationSuggestions';
 import '../../styles/design-system.css';
 
 interface InherentEvaluationStepProps {
@@ -331,32 +332,55 @@ const InherentEvaluationStep: React.FC<InherentEvaluationStepProps> = ({
                     Justifica tu evaluación
                   </Typography>
                   
-                  {/* Sugerencias de normatividad ISO - Foco principal */}
-                  {(amenaza || controles.length > 0) && (
-                    <Box sx={{ mb: 2 }}>
-                      <JustificationSuggestions
-                        riskType={amenaza || 'Riesgo de seguridad'}
-                        controls={controles}
-                        onJustificationSelect={(justificationText) => {
-                          const newJustification = justification
-                            ? `${justification}\n\n${justificationText}`
-                            : justificationText;
-                          setJustification(newJustification);
-                          if (probabilityValue >= 0 && impactValue >= 0) {
-                            const selectedProb = probabilityLevels[probabilityValue];
-                            const selectedImp = impactLevels[impactValue];
-                            const riskLevel = calculateRiskLevel(selectedProb.value, selectedImp.value);
-                            onUpdate({
-                              probabilidad: selectedProb.value,
-                              impacto: selectedImp.value,
-                              nivelRiesgo: riskLevel,
-                              justificacion: newJustification
-                            });
-                          }
-                        }}
-                      />
+                  {/* Asistente de Justificación Técnica ISO 27005 / DAFP V7 */}
+                  <Box sx={{
+                    mb: 2.5,
+                    p: 2,
+                    borderRadius: 2,
+                    backgroundColor: '#F0F9FF',
+                    border: '1px solid #BAE6FD',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: 1.5
+                  }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                      <AutoAwesomeIcon sx={{ color: '#0284C7' }} />
+                      <Typography variant="body2" sx={{ color: '#0369A1', fontWeight: 500 }}>
+                        Asistente Normativo ISO 27005:2022 & DAFP V7 disponible para estructurar la justificación.
+                      </Typography>
                     </Box>
-                  )}
+                    <Button
+                      size="small"
+                      variant="contained"
+                      startIcon={<AutoAwesomeIcon />}
+                      onClick={() => {
+                        const selectedProb = probabilityLevels[probabilityValue]?.value || data.probabilidad || 'Probable';
+                        const selectedImp = impactLevels[impactValue]?.value || data.impacto || 'Mayor';
+                        const riskLevel = calculateRiskLevel(selectedProb, selectedImp);
+                        const autoJust = `Evaluación realizada conforme a la Guía Integral de Riesgos DAFP V7 y el estándar internacional ISO/IEC 27005:2022 (Cláusula 8.2). ` +
+                          `Para el vector de riesgo "${amenaza || 'Amenaza identificada'}", la probabilidad se califica como "${selectedProb}" considerando los vectores de exposición y controles preventivos actuales. ` +
+                          `El impacto se califica como "${selectedImp}" evaluando las consecuencias sobre la confidencialidad, integridad y disponibilidad de la información misional. ` +
+                          `El nivel de riesgo inherente resultante se ubica en zona "${riskLevel}".`;
+                        setJustification(autoJust);
+                        onUpdate({
+                          probabilidad: selectedProb,
+                          impacto: selectedImp,
+                          nivelRiesgo: riskLevel,
+                          justificacion: autoJust
+                        });
+                      }}
+                      sx={{
+                        textTransform: 'none',
+                        borderRadius: 2,
+                        backgroundColor: '#0284C7',
+                        '&:hover': { backgroundColor: '#0369A1' }
+                      }}
+                    >
+                      Autocompletar Justificación ISO 27005
+                    </Button>
+                  </Box>
                   
                   {/* Campo de texto para justificación */}
                   <TextField

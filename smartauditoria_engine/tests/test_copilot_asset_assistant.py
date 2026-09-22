@@ -84,3 +84,42 @@ def test_assess_asset_api_endpoint():
     assert "action_chips" in data
     assert len(data["action_chips"]) >= 2
     assert "valoracion_cid" in data
+
+def test_evaluate_risk_dafp_v7_documental():
+    """Valida evaluate_risk para activo documental clasificado con chips de 1-clic."""
+    res = cag_service.evaluate_risk(
+        asset_name="Expedientes de Contratación Pública",
+        asset_type="Información y datos",
+        trd={"proceso": "Gestión Contractual", "serie_documental": "Contratos"},
+        criticidad="Alto",
+        ley_1712={"es_clasificada_reservada": True}
+    )
+    assert res is not None
+    assert "amenaza_sugerida" in res
+    assert "vulnerabilidad_sugerida" in res
+    assert res["probabilidad_estimada"] == "Probable"
+    assert res["impacto_estimado"] == "Mayor"
+    assert res["nivel_riesgo_sugerido"] == "ALTO"
+    
+    actions = [ch["action"] for ch in res.get("action_chips", [])]
+    assert "APPLY_VECTOR" in actions
+    assert "SET_PROBABILITY_IMPACT" in actions
+    assert "FILL_JUSTIFICATION" in actions
+    assert "APPLY_TREATMENT_STRATEGY" in actions
+
+def test_suggest_controls_iso27002_with_treatment():
+    """Valida suggest_controls retornando controles ISO 27002:2022 y chip de tratamiento."""
+    res = cag_service.suggest_controls(
+        asset_name="Servidor de Base de Datos Principal",
+        asset_type="Hardware",
+        threat="Fallo físico catastrófico del servidor",
+        vulnerability="Ausencia de redundancia",
+        risk_level="ALTO"
+    )
+    assert res is not None
+    assert len(res.get("controles_sugeridos", [])) >= 2
+    assert "eficacia_sugerida" in res
+    actions = [ch["action"] for ch in res.get("action_chips", [])]
+    assert "APPLY_CONTROL" in actions
+    assert "APPLY_TREATMENT_STRATEGY" in actions
+

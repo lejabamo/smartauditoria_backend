@@ -7,6 +7,7 @@ import type { SimilarAsset } from '../../features/wizard-ai/domain/types';
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from 'react-router-dom';
 import AuditorCopilot from '../../components/copilot/AuditorCopilot';
+import copilotService from '../../services/copilotService';
 import type { ActionChip } from '../../services/copilotService';
 import ISOSuggestions from '../../components/common/ISOSuggestions';
 import {
@@ -75,6 +76,10 @@ import {
   TrendingUp as TrendingUpIcon,
   Visibility as VisibilityIcon,
   AttachFile as AttachFileIcon,
+  AutoAwesome as AutoAwesomeIcon,
+  Psychology as PsychologyIcon,
+  Shield as ShieldIcon,
+  Lightbulb as LightbulbIcon,
 } from '@mui/icons-material';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -90,11 +95,6 @@ import ActivoDetailCard from '../../components/activos/ActivoDetailCard';
 import DocumentManager from '../../components/common/DocumentManager';
 import type { DocumentoAdjunto, AccionPlan } from '../../services/documentos';
 import { documentosService } from '../../services/documentos';
-import InteractiveSuggestions from '../../components/predictive/InteractiveSuggestions';
-import ControlSuggestions from '../../components/predictive/ControlSuggestions';
-import JustificationSuggestions from '../../components/predictive/JustificationSuggestions';
-import ResidualRiskSuggestions from '../../components/predictive/ResidualRiskSuggestions';
-import ResidualJustificationSuggestions from '../../components/predictive/ResidualJustificationSuggestions';
 import CurrencyInput from '../../components/common/CurrencyInput';
 import DateRangeInput from '../../components/common/DateRangeInput';
 import CriticityCalculator from '../../components/common/CriticityCalculator';
@@ -496,7 +496,7 @@ const RiskAssessmentWizard: React.FC = () => {
             controles: {
               ...prev.controles,
               seleccionados: [...prev.controles.seleccionados, controlCode],
-              eficacia: prev.controles.eficacia || 'Media',
+              eficacia: prev.controles.eficacia || 'Alta',
             }
           }));
           toast.success(`Control ${controlCode} añadido a la evaluación`);
@@ -507,13 +507,16 @@ const RiskAssessmentWizard: React.FC = () => {
         if (chip.threat || chip.vulnerability) {
           setWizardData(prev => ({
             ...prev,
+            isCreatingNew: true,
             newRiesgo: {
               ...prev.newRiesgo,
               amenaza: chip.threat || prev.newRiesgo.amenaza,
               vulnerabilidad: chip.vulnerability || prev.newRiesgo.vulnerabilidad,
+              tipoRiesgo: chip.tipoRiesgo || prev.newRiesgo.tipoRiesgo || 'Operacional',
+              descripcion: chip.descripcion || prev.newRiesgo.descripcion,
             }
           }));
-          toast.success('Vector de amenaza y vulnerabilidad aplicado');
+          toast.success('Vector de amenaza y vulnerabilidad adoptado (1-Clic)');
         }
         break;
       }
@@ -525,6 +528,7 @@ const RiskAssessmentWizard: React.FC = () => {
               ...prev.evaluacionInherente,
               probabilidad: chip.probabilidad || prev.evaluacionInherente.probabilidad,
               impacto: chip.impacto || prev.evaluacionInherente.impacto,
+              nivelRiesgo: chip.nivel || prev.evaluacionInherente.nivelRiesgo,
             }
           }));
           toast.success(`Parámetros de probabilidad (${chip.probabilidad}) e impacto (${chip.impacto}) aplicados`);
@@ -540,8 +544,39 @@ const RiskAssessmentWizard: React.FC = () => {
               justificacion: chip.text || prev.evaluacionInherente.justificacion,
             }
           }));
-          toast.success('Justificación cargada desde Copilot');
+          toast.success('Justificación técnica cargada desde Copilot');
         }
+        break;
+      }
+      case 'SET_RESIDUAL': {
+        if (chip.probabilidad || chip.impacto) {
+          setWizardData(prev => ({
+            ...prev,
+            evaluacionResidual: {
+              ...prev.evaluacionResidual,
+              probabilidad: chip.probabilidad || prev.evaluacionResidual.probabilidad,
+              impacto: chip.impacto || prev.evaluacionResidual.impacto,
+              nivelRiesgo: chip.nivel || prev.evaluacionResidual.nivelRiesgo,
+              justificacion: chip.text || prev.evaluacionResidual.justificacion,
+            }
+          }));
+          toast.success('Riesgo residual y justificación aplicados');
+        }
+        break;
+      }
+      case 'APPLY_TREATMENT_STRATEGY': {
+        setWizardData(prev => ({
+          ...prev,
+          tratamiento: {
+            ...prev.tratamiento,
+            opcion: chip.opcion || prev.tratamiento.opcion || 'Mitigar',
+            responsable: chip.responsable || prev.tratamiento.responsable || 'Oficial de Seguridad de la Información',
+            estrategia: chip.estrategia || (prev.tratamiento as any).estrategia || '',
+            fechaInicio: prev.tratamiento.fechaInicio || new Date().toISOString().split('T')[0],
+            fechaFin: prev.tratamiento.fechaFin || new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          }
+        }));
+        toast.success('Estrategia de tratamiento DAFP V7 configurada (1-Clic)');
         break;
       }
       default:
@@ -549,20 +584,169 @@ const RiskAssessmentWizard: React.FC = () => {
     }
   };
 
+  const selectedActivoObj = wizardData.selectedActivo as any;
   const copilotContext = {
-    assetName:
-      (wizardData.selectedActivo as any)?.Nombre ||
-      (wizardData.selectedActivo as any)?.nombre ||
-      '',
-    assetType:
-      (wizardData.selectedActivo as any)?.Tipo_Activo ||
-      (wizardData.selectedActivo as any)?.tipo ||
-      '',
+    assetName: selectedActivoObj?.Nombre || selectedActivoObj?.nombre || '',
+    assetType: selectedActivoObj?.Tipo_Activo || selectedActivoObj?.tipo || '',
+    trd: {
+      macroproceso: selectedActivoObj?.macroproceso,
+      proceso: selectedActivoObj?.proceso,
+      serie: selectedActivoObj?.serie_documental,
+      subserie: selectedActivoObj?.subserie_documental,
+      identificador_trd: selectedActivoObj?.identificador_trd,
+    },
+    criticidad: selectedActivoObj?.nivel_criticidad_negocio || wizardData.evaluacionInherente.criticidad || 'Medio',
+    ley1712: {
+      es_clasificada_reservada: selectedActivoObj?.es_clasificada_reservada,
+      fundamento_legal: selectedActivoObj?.fundamento_legal_reserva,
+    },
     threatName: wizardData.newRiesgo.amenaza,
     vulnerabilityName: wizardData.newRiesgo.vulnerabilidad,
     riskLevel: wizardData.evaluacionInherente.nivelRiesgo || 'UNKNOWN',
     step: activeStep,
     stepTitle: steps[activeStep] || `Paso ${activeStep + 1}`,
+  };
+
+  // ── Estados y Métodos Autónomos del Copilot IA ────────────────────────
+  const [copilotVectorLoading, setCopilotVectorLoading] = useState(false);
+  const [copilotVectorSuggestion, setCopilotVectorSuggestion] = useState<any>(null);
+  const [copilotControlsLoading, setCopilotControlsLoading] = useState(false);
+  const [copilotControlsSuggestion, setCopilotControlsSuggestion] = useState<any>(null);
+
+  const sugerirVectorConCopilot = async () => {
+    const act = wizardData.selectedActivo as any;
+    if (!act) {
+      toast.error('Selecciona primero un activo en el Paso 0');
+      return;
+    }
+    setCopilotVectorLoading(true);
+    try {
+      const res = await copilotService.evaluateRisk(
+        act.Nombre || act.nombre || 'Activo',
+        act.Tipo_Activo || act.tipo || 'Sistemas de Información',
+        {
+          trd: {
+            proceso: act.proceso,
+            serie_documental: act.serie_documental,
+            macroproceso: act.macroproceso,
+          },
+          criticidad: act.nivel_criticidad_negocio || wizardData.evaluacionInherente.criticidad,
+          ley1712: {
+            es_clasificada_reservada: act.es_clasificada_reservada,
+          },
+          descripcion: act.Descripcion || act.descripcion || '',
+        }
+      );
+      setCopilotVectorSuggestion(res);
+      toast.success('Vector de riesgo sugerido por Copilot disponible');
+    } catch (err) {
+      console.error('Error sugiriendo vector con Copilot:', err);
+      toast.error('No fue posible obtener sugerencia del Copilot');
+    } finally {
+      setCopilotVectorLoading(false);
+    }
+  };
+
+  const sugerirControlesConCopilot = async () => {
+    const act = wizardData.selectedActivo as any;
+    setCopilotControlsLoading(true);
+    try {
+      const res = await copilotService.suggestControls(
+        act?.Nombre || act?.nombre || 'Activo',
+        act?.Tipo_Activo || act?.tipo || 'Sistemas de Información',
+        wizardData.newRiesgo.amenaza,
+        wizardData.newRiesgo.vulnerabilidad,
+        wizardData.evaluacionInherente.nivelRiesgo || 'HIGH',
+        {
+          trd: { proceso: act?.proceso, serie_documental: act?.serie_documental },
+          ley1712: { es_clasificada_reservada: act?.es_clasificada_reservada },
+        }
+      );
+      setCopilotControlsSuggestion(res);
+      toast.success('Controles ISO 27002:2022 sugeridos por Copilot');
+    } catch (err) {
+      console.error('Error sugiriendo controles con Copilot:', err);
+      toast.error('No fue posible obtener sugerencia de controles');
+    } finally {
+      setCopilotControlsLoading(false);
+    }
+  };
+
+  const calcularRiesgoResidualAutomatico = () => {
+    const pInh = wizardData.evaluacionInherente.probabilidad || 'Probable';
+    const iInh = wizardData.evaluacionInherente.impacto || 'Mayor';
+    const eficacia = wizardData.controles.eficacia || 'Alta';
+
+    const probScale = ['Improbable', 'Remoto', 'Ocasional', 'Probable', 'Frecuente'];
+    const impScale = ['Insignificante', 'Menor', 'Moderado', 'Mayor', 'Catastrófico'];
+
+    let pIdx = probScale.indexOf(pInh);
+    if (pIdx === -1) pIdx = 3;
+    let iIdx = impScale.indexOf(iInh);
+    if (iIdx === -1) iIdx = 3;
+
+    let pRed = 1;
+    let iRed = 1;
+    if (eficacia === 'Muy Alta') { pRed = 2; iRed = 2; }
+    else if (eficacia === 'Alta') { pRed = 2; iRed = 1; }
+    else if (eficacia === 'Media') { pRed = 1; iRed = 1; }
+    else if (eficacia === 'Baja') { pRed = 1; iRed = 0; }
+    else { pRed = 0; iRed = 0; }
+
+    const pResIdx = Math.max(0, pIdx - pRed);
+    const iResIdx = Math.max(0, iIdx - iRed);
+
+    const pRes = probScale[pResIdx];
+    const iRes = impScale[iResIdx];
+
+    const score = (pResIdx + 1) * (iResIdx + 1);
+    let nRes = 'Bajo';
+    if (score >= 16) nRes = 'Extremo';
+    else if (score >= 10) nRes = 'Alto';
+    else if (score >= 5) nRes = 'Moderado';
+
+    const justRes = `Riesgo residual calculado mediante aplicación de ${wizardData.controles.seleccionados.length} control(es) ISO 27002:2022 con eficacia calificada como "${eficacia}". ` +
+      `La probabilidad se mitiga de "${pInh}" a "${pRes}" y el impacto potencial se reduce de "${iInh}" a "${iRes}", ubicando el riesgo residual en zona "${nRes}".`;
+
+    setWizardData(prev => ({
+      ...prev,
+      evaluacionResidual: {
+        probabilidad: pRes,
+        impacto: iRes,
+        nivelRiesgo: nRes,
+        justificacion: justRes,
+      }
+    }));
+    toast.success(`Riesgo Residual calculado: ${pRes} × ${iRes} (${nRes})`);
+  };
+
+  const sugerirEstrategiaTratamiento = () => {
+    const nRes = wizardData.evaluacionResidual.nivelRiesgo || wizardData.evaluacionInherente.nivelRiesgo || 'MEDIO';
+    const opcionTratamiento = (nRes.toUpperCase() === 'BAJO') ? 'Aceptar' : 'Mitigar';
+    const controlesNombres = wizardData.controles.seleccionados.join(', ') || 'Controles ISO 27002:2022';
+
+    const fechaHoy = new Date().toISOString().split('T')[0];
+    const fechaTresMeses = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+    const estrategiaTexto = opcionTratamiento === 'Mitigar'
+      ? `Estrategia formulada según la Guía Integral de Riesgos DAFP V7 y el Anexo A de ISO/IEC 27002:2022. ` +
+        `Se procede a mitigar el riesgo residual mediante la implantación y verificación continua de los controles: ${controlesNombres}. ` +
+        `Se programan auditorías de control periódicas para verificar la eficacia operativa y monitorear indicadores de riesgo.`
+      : `El riesgo residual se califica en zona de tolerancia baja según las tablas de la Guía DAFP V7. ` +
+        `Se adopta la decisión de asumir/aceptar el riesgo residual remanente bajo supervisión del líder del proceso.`;
+
+    setWizardData(prev => ({
+      ...prev,
+      tratamiento: {
+        ...prev.tratamiento,
+        opcion: opcionTratamiento,
+        responsable: prev.tratamiento.responsable || 'Oficial de Seguridad de la Información / Líder del Proceso',
+        fechaInicio: prev.tratamiento.fechaInicio || fechaHoy,
+        fechaFin: prev.tratamiento.fechaFin || fechaTresMeses,
+        estrategia: estrategiaTexto,
+      }
+    }));
+    toast.success(`Estrategia ${opcionTratamiento} configurada con IA (1-Clic)`);
   };
 
 
@@ -1475,6 +1659,32 @@ const RiskAssessmentWizard: React.FC = () => {
               </Button>
             </Box>
 
+            {wizardData.selectedActivo && (
+              <Box sx={{ mb: 3, p: 2.5, borderRadius: 3, background: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)', border: '1px solid #93C5FD', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 2 }}>
+                <Box>
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <CheckCircleIcon sx={{ color: '#2563EB' }} />
+                    <Typography variant="subtitle1" sx={{ fontWeight: 700, color: '#1E3A8A' }}>
+                      Activo Seleccionado: {(wizardData.selectedActivo as any).Nombre || (wizardData.selectedActivo as any).nombre}
+                    </Typography>
+                  </Stack>
+                  <Typography variant="body2" sx={{ color: '#1E40AF', mt: 0.5 }}>
+                    Tipo: {(wizardData.selectedActivo as any).Tipo_Activo || (wizardData.selectedActivo as any).tipo || 'TI'} | 
+                    {(wizardData.selectedActivo as any).proceso ? ` Proceso TRD: ${(wizardData.selectedActivo as any).proceso} | ` : ''} 
+                    Criticidad: {(wizardData.selectedActivo as any).nivel_criticidad_negocio || (wizardData.selectedActivo as any).criticidad || 'Media'}
+                  </Typography>
+                </Box>
+                <Button
+                  variant="contained"
+                  onClick={() => setActiveStep(1)}
+                  endIcon={<ArrowForwardIcon />}
+                  sx={{ borderRadius: 2, textTransform: 'none', backgroundColor: '#1E3A8A' }}
+                >
+                  Continuar a Identificación de Riesgo
+                </Button>
+              </Box>
+            )}
+
             <Grid container spacing={2}>
               {filteredActivos.map((activo, activoIndex) => {
                 const evaluacionEstado = getEvaluacionEstado(activo);
@@ -1513,7 +1723,7 @@ const RiskAssessmentWizard: React.FC = () => {
                         {evaluacionEstado.estado === 'parcial' && <Typography sx={{ fontSize: 10, color: '#FFFFFF', fontWeight: 'bold' }}>{evaluacionEstado.porcentaje}%</Typography>}
                       </Box>
                       <CardContent sx={{ p: 3 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1.5 }}>
                           <Avatar sx={{ background: `linear-gradient(135deg, ${evaluacionEstado.color} 0%, ${evaluacionEstado.color}CC 100%)`, color: '#FFFFFF' }}>
                             <SecurityIcon />
                           </Avatar>
@@ -1522,6 +1732,20 @@ const RiskAssessmentWizard: React.FC = () => {
                               {(activo as any).Nombre || (activo as any).nombre || 'Sin nombre'}
                             </Typography>
                           </Box>
+                        </Box>
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 1 }}>
+                          {((activo as any).Tipo_Activo || (activo as any).tipo) && (
+                            <Chip label={(activo as any).Tipo_Activo || (activo as any).tipo} size="small" sx={{ fontSize: '0.7rem' }} />
+                          )}
+                          {(activo as any).proceso && (
+                            <Chip label={`TRD: ${(activo as any).proceso}`} size="small" variant="outlined" sx={{ fontSize: '0.7rem' }} />
+                          )}
+                          {((activo as any).nivel_criticidad_negocio || (activo as any).criticidad) && (
+                            <Chip label={`ICCN: ${(activo as any).nivel_criticidad_negocio || (activo as any).criticidad}`} size="small" sx={{ fontSize: '0.7rem', bgcolor: '#FEF3C7', color: '#92400E' }} />
+                          )}
+                          {(activo as any).es_clasificada_reservada && (
+                            <Chip label="Ley 1712 Reservada" size="small" sx={{ fontSize: '0.7rem', bgcolor: '#FEE2E2', color: '#B91C1C' }} />
+                          )}
                         </Box>
                       </CardContent>
                     </Card>
@@ -1535,58 +1759,94 @@ const RiskAssessmentWizard: React.FC = () => {
       case 1:
         return (
           <Box sx={{ p: 1 }}>
-            <Typography variant="h4" className="font-poppins" sx={{ color: '#1E3A8A', mb: 4, fontWeight: 700 }}>
+            <Typography variant="h4" className="font-poppins" sx={{ color: '#1E3A8A', mb: 3, fontWeight: 700 }}>
               Evaluación de Riesgos
             </Typography>
 
-            {/* SECCIÓN 1: INTELIGENCIA CONTEXTUAL (TWIN ASSETS) */}
-            <Box sx={{ mb: 4 }}>
-              <ContextualIntelligencePanel 
-                twinAssets={twinAssets}
-                loading={loadingContext}
-                error={errorContext}
-                onAdoptEvaluation={handleAdoptEvaluation}
-              />
-            </Box>
+            {/* SECCIÓN 1: COPILOT IA - VECTOR DE RIESGO ISO 27005 & DAFP V7 */}
+            <Card className="card" sx={{ mb: 4, border: '1px solid #C7D2FE', background: 'linear-gradient(135deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+              <CardContent sx={{ p: 3 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2, mb: 2 }}>
+                  <Stack direction="row" spacing={1.5} alignItems="center">
+                    <Avatar sx={{ bgcolor: '#4F46E5', width: 38, height: 38 }}>
+                      <PsychologyIcon sx={{ fontSize: 22, color: '#FFF' }} />
+                    </Avatar>
+                    <Box>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 700, color: '#1E1B4B' }}>
+                        Copilot IA: Vector de Riesgo ISO/IEC 27005:2022 & DAFP V7
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: '#4B5563' }}>
+                        Inferencia grounded para: <strong>{(wizardData.selectedActivo as any)?.Nombre || (wizardData.selectedActivo as any)?.nombre || 'Activo Seleccionado'}</strong>
+                      </Typography>
+                    </Box>
+                  </Stack>
+                  <Button
+                    variant="contained"
+                    startIcon={copilotVectorLoading ? <CircularProgress size={18} color="inherit" /> : <AutoAwesomeIcon />}
+                    onClick={sugerirVectorConCopilot}
+                    disabled={copilotVectorLoading}
+                    sx={{
+                      borderRadius: '20px',
+                      textTransform: 'none',
+                      fontWeight: 600,
+                      backgroundColor: '#4F46E5',
+                      '&:hover': { backgroundColor: '#4338CA' },
+                    }}
+                  >
+                    {copilotVectorLoading ? 'Analizando con IA...' : '💡 Sugerir Vector con IA (1-Clic)'}
+                  </Button>
+                </Box>
 
-            {/* SECCIÓN 2: RAG / SUGERENCIAS GENÉRICAS */}
-            <Box sx={{ mb: 4 }}>
-              <Typography variant="h6" className="font-poppins" sx={{ color: '#1E3A8A', mb: 2 }}>
-                🤖 Otras Propuestas para {wizardData.selectedActivo?.Nombre || wizardData.selectedActivo?.nombre || 'este activo'}
-              </Typography>
-              <InteractiveSuggestions
-                assetType={wizardData.selectedActivo}
-                showCategories={['amenazas', 'vulnerabilidades']}
-                context={`Activo: ${wizardData.selectedActivo?.Nombre || wizardData.selectedActivo?.nombre || 'Sin nombre'}`}
-                selectedThreat={wizardData.newRiesgo.amenaza}
-                selectedVulnerability={wizardData.newRiesgo.vulnerabilidad}
-                onSuggestionSelect={(suggestion) => {
-                  if (suggestion.type === 'amenazas') {
-                    setWizardData(prev => ({
-                      ...prev,
-                      isCreatingNew: true,
-                      newRiesgo: {
-                        ...prev.newRiesgo,
-                        amenaza: suggestion.data.nombre,
-                        descripcion: suggestion.data.descripcion || prev.newRiesgo.descripcion,
-                        tipoRiesgo: suggestion.data.categoria || prev.newRiesgo.tipoRiesgo
-                      }
-                    }));
-                    toast.success(`Amenaza detectada: ${suggestion.data.nombre}`);
-                  } else if (suggestion.type === 'vulnerabilidades') {
-                    setWizardData(prev => ({
-                      ...prev,
-                      isCreatingNew: true,
-                      newRiesgo: {
-                        ...prev.newRiesgo,
-                        vulnerabilidad: suggestion.data.nombre
-                      }
-                    }));
-                    toast.success(`Vulnerabilidad asociada: ${suggestion.data.nombre}`);
-                  }
-                }}
-              />
-            </Box>
+                {copilotVectorSuggestion && (
+                  <Box sx={{ mt: 2, p: 2.5, borderRadius: 2, bgcolor: '#FFFFFF', border: '1px solid #E0E7FF', boxShadow: '0 2px 8px rgba(79, 70, 229, 0.08)' }}>
+                    <Typography variant="body2" sx={{ color: '#374151', mb: 2, fontStyle: 'italic' }}>
+                      "{copilotVectorSuggestion.analisis_inherente}"
+                    </Typography>
+
+                    <Grid container spacing={2} sx={{ mb: 2 }}>
+                      <Grid size={{ xs: 12, md: 6 }}>
+                        <Paper variant="outlined" sx={{ p: 1.5, borderColor: '#E5E7EB', bgcolor: '#F9FAFB' }}>
+                          <Typography variant="caption" sx={{ color: '#DC2626', fontWeight: 700, display: 'block' }}>
+                            AMENAZA RECOMENDADA:
+                          </Typography>
+                          <Typography variant="body2" sx={{ fontWeight: 600, color: '#1F2937' }}>
+                            {copilotVectorSuggestion.amenaza_sugerida}
+                          </Typography>
+                        </Paper>
+                      </Grid>
+                      <Grid size={{ xs: 12, md: 6 }}>
+                        <Paper variant="outlined" sx={{ p: 1.5, borderColor: '#E5E7EB', bgcolor: '#F9FAFB' }}>
+                          <Typography variant="caption" sx={{ color: '#D97706', fontWeight: 700, display: 'block' }}>
+                            VULNERABILIDAD RECOMENDADA:
+                          </Typography>
+                          <Typography variant="body2" sx={{ fontWeight: 600, color: '#1F2937' }}>
+                            {copilotVectorSuggestion.vulnerabilidad_sugerida}
+                          </Typography>
+                        </Paper>
+                      </Grid>
+                    </Grid>
+
+                    <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ pt: 1, borderTop: '1px solid #F3F4F6' }}>
+                      <Typography variant="caption" sx={{ color: '#4B5563', alignSelf: 'center', mr: 1, fontWeight: 600 }}>
+                        Acciones de 1-Clic:
+                      </Typography>
+                      {copilotVectorSuggestion.action_chips?.map((chip: any, cIdx: number) => (
+                        <Button
+                          key={cIdx}
+                          size="small"
+                          variant="outlined"
+                          startIcon={<AutoAwesomeIcon sx={{ fontSize: 14 }} />}
+                          onClick={() => handleCopilotAction(chip)}
+                          sx={{ borderRadius: '20px', textTransform: 'none', fontSize: '0.75rem', fontWeight: 600 }}
+                        >
+                          {chip.label}
+                        </Button>
+                      ))}
+                    </Stack>
+                  </Box>
+                )}
+              </CardContent>
+            </Card>
 
             {/* SECCIÓN 2: OPCIONES DE CARGA (HISTORIAL O MANUAL) */}
             <Grid container spacing={3} sx={{ mb: 3 }}>
@@ -1772,26 +2032,174 @@ const RiskAssessmentWizard: React.FC = () => {
                   </CardContent>
                 </Card>
               </Grid>
-            <Grid  size={{ xs: 12 }}>
-                <InteractiveSuggestions
-                  assetType={wizardData.selectedActivo}
-                  selectedThreat={wizardData.newRiesgo.amenaza}
-                  selectedVulnerability={wizardData.newRiesgo.vulnerabilidad}
-                  showCategories={['controles']}
-                  onSuggestionSelect={(suggestion) => {
-                    const controlNombre = suggestion.data.nombre;
-                    if (!wizardData.controles.seleccionados.includes(controlNombre)) {
-                      setWizardData(prev => ({
-                        ...prev,
-                        controles: {
-                          ...prev.controles,
-                          seleccionados: [...prev.controles.seleccionados, controlNombre]
-                        }
-                      }));
-                      toast.success(`Control añadido: ${controlNombre}`);
-                    }
-                  }}
-                />
+              {/* SECCIÓN 2: COPILOT IA - CONTROLES MITIGANTES ISO 27002:2022 */}
+              <Grid size={{ xs: 12 }}>
+                <Card className="card" sx={{ border: '1px solid #BAE6FD', background: 'linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%)' }}>
+                  <CardContent sx={{ p: 3 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2, mb: 2 }}>
+                      <Stack direction="row" spacing={1.5} alignItems="center">
+                        <Avatar sx={{ bgcolor: '#0284C7', width: 38, height: 38 }}>
+                          <ShieldIcon sx={{ fontSize: 22, color: '#FFF' }} />
+                        </Avatar>
+                        <Box>
+                          <Typography variant="subtitle1" sx={{ fontWeight: 700, color: '#0369A1' }}>
+                            Copilot ISO/IEC 27002:2022: Controles Mitigantes
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: '#4B5563' }}>
+                            Inferencia grounded según el vector: <strong>[{wizardData.newRiesgo.amenaza || 'Amenaza no definida'}]</strong>
+                          </Typography>
+                        </Box>
+                      </Stack>
+                      <Button
+                        variant="contained"
+                        startIcon={copilotControlsLoading ? <CircularProgress size={18} color="inherit" /> : <ShieldIcon />}
+                        onClick={sugerirControlesConCopilot}
+                        disabled={copilotControlsLoading}
+                        sx={{
+                          borderRadius: '20px',
+                          textTransform: 'none',
+                          fontWeight: 600,
+                          backgroundColor: '#0284C7',
+                          '&:hover': { backgroundColor: '#0369A1' },
+                        }}
+                      >
+                        {copilotControlsLoading ? 'Consultando...' : '🛡️ Sugerir Controles con Copilot (1-Clic)'}
+                      </Button>
+                    </Box>
+
+                    {copilotControlsSuggestion && (
+                      <Box sx={{ mt: 2 }}>
+                        <Typography variant="body2" sx={{ color: '#075985', mb: 2, fontStyle: 'italic' }}>
+                          "{copilotControlsSuggestion.analisis_copilot}"
+                        </Typography>
+
+                        <Grid container spacing={2}>
+                          {copilotControlsSuggestion.controles_sugeridos?.map((ctrl: any) => {
+                            const isSelected = wizardData.controles.seleccionados.includes(ctrl.id) || wizardData.controles.seleccionados.includes(ctrl.nombre);
+                            return (
+                              <Grid key={ctrl.id} size={{ xs: 12, md: 6 }}>
+                                <Paper
+                                  elevation={0}
+                                  sx={{
+                                    p: 2,
+                                    borderRadius: 2,
+                                    border: isSelected ? '2px solid #10B981' : '1px solid #BAE6FD',
+                                    bgcolor: isSelected ? '#ECFDF5' : '#FFFFFF',
+                                    transition: 'all 0.2s',
+                                  }}
+                                >
+                                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
+                                    <Box>
+                                      <Chip label={ctrl.id} size="small" sx={{ fontWeight: 700, bgcolor: '#0284C7', color: '#FFF', mr: 1 }} />
+                                      <Chip label={ctrl.tema || 'ISO 27002'} size="small" variant="outlined" sx={{ fontSize: '0.7rem' }} />
+                                    </Box>
+                                    <Button
+                                      size="small"
+                                      variant={isSelected ? "outlined" : "contained"}
+                                      color={isSelected ? "success" : "primary"}
+                                      onClick={() => {
+                                        const cid = ctrl.id;
+                                        setWizardData(prev => ({
+                                          ...prev,
+                                          controles: {
+                                            ...prev.controles,
+                                            seleccionados: isSelected
+                                              ? prev.controles.seleccionados.filter(c => c !== cid && c !== ctrl.nombre)
+                                              : [...prev.controles.seleccionados, cid]
+                                          }
+                                        }));
+                                        toast.success(isSelected ? `Control ${cid} retirado` : `Control ${cid} aplicado`);
+                                      }}
+                                      sx={{ borderRadius: '16px', textTransform: 'none', fontSize: '0.75rem', fontWeight: 600 }}
+                                    >
+                                      {isSelected ? '✓ Aplicado' : '+ Aplicar Control'}
+                                    </Button>
+                                  </Box>
+                                  <Typography variant="subtitle2" sx={{ fontWeight: 600, color: '#1F2937', mb: 0.5 }}>
+                                    {ctrl.nombre}
+                                  </Typography>
+                                  <Typography variant="caption" sx={{ color: '#4B5563', display: 'block', mb: 1 }}>
+                                    {ctrl.proposito || ctrl.justificacion}
+                                  </Typography>
+                                  <Stack direction="row" spacing={1} alignItems="center">
+                                    <Typography variant="caption" sx={{ color: '#0369A1', fontWeight: 600 }}>
+                                      Eficacia: {ctrl.eficacia}%
+                                    </Typography>
+                                    <Typography variant="caption" sx={{ color: '#6B7280' }}>
+                                      • CIA: {ctrl.propiedades_cia?.join(', ') || 'C, I, A'}
+                                    </Typography>
+                                  </Stack>
+                                </Paper>
+                              </Grid>
+                            );
+                          })}
+                        </Grid>
+
+                        {copilotControlsSuggestion.eficacia_sugerida && (
+                          <Box sx={{ mt: 2, p: 1.5, borderRadius: 2, bgcolor: '#FFFFFF', border: '1px dashed #0284C7', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1 }}>
+                            <Typography variant="body2" sx={{ color: '#0369A1' }}>
+                              Recomendación de Eficacia: <strong>{copilotControlsSuggestion.eficacia_sugerida}</strong>
+                            </Typography>
+                            <Button
+                              size="small"
+                              variant="outlined"
+                              onClick={() => {
+                                setWizardData(prev => ({
+                                  ...prev,
+                                  controles: {
+                                    ...prev.controles,
+                                    eficacia: copilotControlsSuggestion.eficacia_sugerida,
+                                    justificacion: copilotControlsSuggestion.justificacion_eficacia || prev.controles.justificacion
+                                  }
+                                }));
+                                toast.success('Eficacia y justificación adoptadas');
+                              }}
+                              sx={{ borderRadius: '16px', textTransform: 'none', fontSize: '0.75rem' }}
+                            >
+                              Adoptar Eficacia Sugerida (1-Clic)
+                            </Button>
+                          </Box>
+                        )}
+                      </Box>
+                    )}
+                  </CardContent>
+                </Card>
+              </Grid>
+
+              {/* SECCIÓN 3: CONTROLES SELECCIONADOS ACTUALMENTE */}
+              <Grid size={{ xs: 12 }}>
+                <Card className="card">
+                  <CardContent sx={{ p: 3 }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 600, color: '#1E3A8A', mb: 1.5 }}>
+                      Controles Seleccionados ({wizardData.controles.seleccionados.length})
+                    </Typography>
+                    {wizardData.controles.seleccionados.length === 0 ? (
+                      <Typography variant="body2" sx={{ color: '#6B7280', fontStyle: 'italic' }}>
+                        No has seleccionado controles aún. Utiliza el Copilot arriba o añade controles de la lista.
+                      </Typography>
+                    ) : (
+                      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                        {wizardData.controles.seleccionados.map((code) => (
+                          <Chip
+                            key={code}
+                            label={code}
+                            onDelete={() => {
+                              setWizardData(prev => ({
+                                ...prev,
+                                controles: {
+                                  ...prev.controles,
+                                  seleccionados: prev.controles.seleccionados.filter(c => c !== code)
+                                }
+                              }));
+                            }}
+                            color="primary"
+                            sx={{ fontWeight: 600, borderRadius: '16px' }}
+                          />
+                        ))}
+                      </Stack>
+                    )}
+                  </CardContent>
+                </Card>
               </Grid>
             </Grid>
           </Box>
@@ -1831,24 +2239,46 @@ const RiskAssessmentWizard: React.FC = () => {
                 </FormControl>
               </Grid>
               <Grid size={{ xs: 12 }}>
-                <Typography variant="body2" sx={{ mb: 1.5, color: 'text.secondary', fontWeight: 500 }}>
-                  Justificación del Riesgo Residual (Asistencia IA)
-                </Typography>
-                <JustificationSuggestions
-                  riskType={wizardData.newRiesgo.amenaza}
-                  controls={wizardData.controles.seleccionados}
-                  onJustificationSelect={(text) => {
-                    setWizardData({
-                      ...wizardData,
-                      evaluacionResidual: {
-                        ...wizardData.evaluacionResidual,
-                        justificacion: wizardData.evaluacionResidual.justificacion 
-                          ? `${wizardData.evaluacionResidual.justificacion}\n\n${text}`
-                          : text
-                      }
-                    });
-                  }}
-                />
+                <Box sx={{
+                  mb: 2,
+                  p: 2.5,
+                  borderRadius: 2,
+                  backgroundColor: '#F0FDF4',
+                  border: '1px solid #BBF7D0',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap',
+                  gap: 1.5
+                }}>
+                  <Box>
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      <AutoAwesomeIcon sx={{ color: '#16A34A' }} />
+                      <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#166534' }}>
+                        Cálculo Automático de Riesgo Residual DAFP V7
+                      </Typography>
+                    </Stack>
+                    <Typography variant="caption" sx={{ color: '#15803D' }}>
+                      Riesgo Inherente: [{wizardData.evaluacionInherente.probabilidad || 'N/A'} × {wizardData.evaluacionInherente.impacto || 'N/A'}] • 
+                      Controles: {wizardData.controles.seleccionados.length} aplicados con eficacia {wizardData.controles.eficacia || 'Alta'}
+                    </Typography>
+                  </Box>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    startIcon={<AutoAwesomeIcon />}
+                    onClick={calcularRiesgoResidualAutomatico}
+                    sx={{
+                      borderRadius: '16px',
+                      textTransform: 'none',
+                      backgroundColor: '#16A34A',
+                      '&:hover': { backgroundColor: '#15803D' },
+                      fontWeight: 600,
+                    }}
+                  >
+                    ⚡ Calcular y Justificar con IA (1-Clic)
+                  </Button>
+                </Box>
                 <TextField
                   fullWidth
                   multiline
@@ -1870,6 +2300,48 @@ const RiskAssessmentWizard: React.FC = () => {
             <Typography variant="h6" className="font-poppins" sx={{ color: '#1E3A8A', mb: 3 }}>
               🛡️ Plan de Tratamiento del Riesgo
             </Typography>
+
+            {/* ASISTENTE COPILOT: ESTRATEGIA DE TRATAMIENTO DAFP V7 */}
+            <Box sx={{
+              mb: 3,
+              p: 2.5,
+              borderRadius: 2,
+              backgroundColor: '#FEF3C7',
+              border: '1px solid #FDE68A',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: 1.5
+            }}>
+              <Box>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <LightbulbIcon sx={{ color: '#D97706' }} />
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#92400E' }}>
+                    Sugerencia de Tratamiento DAFP V7 & ISO 27005
+                  </Typography>
+                </Stack>
+                <Typography variant="caption" sx={{ color: '#B45309' }}>
+                  Nivel Residual: [{wizardData.evaluacionResidual.nivelRiesgo || wizardData.evaluacionInherente.nivelRiesgo || 'MEDIO'}] • 
+                  Recomendación: {((wizardData.evaluacionResidual.nivelRiesgo || '').toUpperCase() === 'BAJO') ? 'Asumir / Aceptar' : 'Mitigar (Reducir)'}
+                </Typography>
+              </Box>
+              <Button
+                size="small"
+                variant="contained"
+                startIcon={<AutoAwesomeIcon />}
+                onClick={sugerirEstrategiaTratamiento}
+                sx={{
+                  borderRadius: '16px',
+                  textTransform: 'none',
+                  backgroundColor: '#D97706',
+                  '&:hover': { backgroundColor: '#B45309' },
+                  fontWeight: 600,
+                }}
+              >
+                🎯 Sugerir Estrategia DAFP V7 (1-Clic)
+              </Button>
+            </Box>
             <Grid container spacing={3}>
               <Grid size={{ xs: 12, md: 6 }}>
                 <FormControl fullWidth required>

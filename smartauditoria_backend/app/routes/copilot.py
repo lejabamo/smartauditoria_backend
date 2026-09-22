@@ -55,13 +55,25 @@ def copilot_stream():
 @copilot_bp.route('/evaluate-risk', methods=['POST'])
 @require_auth
 def copilot_evaluate_risk():
-    """Evalúa activo y genera propuesta de vector de riesgo según ISO 27005:2022."""
+    """Evalúa activo y genera propuesta de vector de riesgo según ISO 27005:2022 y DAFP V7."""
     data = request.get_json() or {}
     asset_name = data.get('asset_name', 'Activo')
     asset_type = data.get('asset_type', 'Hardware')
     cia_levels = data.get('cia_levels', {})
+    trd = data.get('trd', {})
+    criticidad = data.get('criticidad')
+    ley_1712 = data.get('ley_1712', {})
+    descripcion = data.get('descripcion', '')
 
-    res = rag_client.copilot_evaluate_risk(asset_name, asset_type, cia_levels)
+    res = rag_client.copilot_evaluate_risk(
+        asset_name=asset_name,
+        asset_type=asset_type,
+        cia_levels=cia_levels,
+        trd=trd,
+        criticidad=criticidad,
+        ley_1712=ley_1712,
+        descripcion=descripcion
+    )
     return jsonify(res), 200
 
 @copilot_bp.route('/suggest-controls', methods=['POST'])
@@ -74,13 +86,17 @@ def copilot_suggest_controls():
     threat = data.get('threat', '')
     vulnerability = data.get('vulnerability', '')
     risk_level = data.get('risk_level', 'HIGH')
+    trd = data.get('trd', {})
+    ley_1712 = data.get('ley_1712', {})
 
     res = rag_client.copilot_suggest_controls(
         asset_name=asset_name,
         asset_type=asset_type,
         threat=threat,
         vulnerability=vulnerability,
-        risk_level=risk_level
+        risk_level=risk_level,
+        trd=trd,
+        ley_1712=ley_1712
     )
     return jsonify(res), 200
 
