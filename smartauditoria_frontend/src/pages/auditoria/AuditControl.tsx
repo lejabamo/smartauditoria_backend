@@ -40,10 +40,12 @@ import {
   Warning as WarningIcon,
   FactCheck as FactCheckIcon,
   Assessment as AssessmentIcon,
+  Shield as ShieldIcon,
 } from '@mui/icons-material';
 import AuditorCopilot from '../../components/copilot/AuditorCopilot';
 import type { ActionChip } from '../../services/copilotService';
 import { auditoriasService } from '../../services/backend';
+import SoAPanel from '../../components/auditoria/SoAPanel';
 import { toast } from 'react-hot-toast';
 
 interface Auditoria {
@@ -236,6 +238,7 @@ const AuditControl: React.FC = () => {
         <Tab icon={<FactCheckIcon />} label="Auditorías" />
         <Tab icon={<WarningIcon />} label="No Conformidades / Hallazgos" />
         <Tab icon={<AssessmentIcon />} label="Análisis y Planes de Acción" />
+        <Tab icon={<ShieldIcon />} label="Declaración de Aplicabilidad (SoA ISO 27002:2022)" />
       </Tabs>
 
       {tabValue === 0 && (
@@ -345,6 +348,10 @@ const AuditControl: React.FC = () => {
             <Typography variant="caption">Progreso: 65% - Fecha límite: 2026-08-30</Typography>
           </Paper>
         </Box>
+      )}
+
+      {tabValue === 3 && (
+        <SoAPanel />
       )}
 
       {/* Dialog para planificar Auditoria */}

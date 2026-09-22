@@ -800,12 +800,112 @@ export const auditoriasService = {
   }
 };
 
+export interface ControlSoA {
+  ID_Control: number;
+  codigo_control_iso: string;
+  Nombre: string;
+  Descripcion?: string;
+  Tipo_Control: string;
+  Formalidad_Control: string;
+  categoria_control_iso: 'Organizacional' | 'Personas' | 'Fisico' | 'Tecnologico';
+  estado_implementacion: string;
+  aplica: boolean;
+  justificacion_no_aplicabilidad?: string;
+  efectividad_control_evaluada?: string;
+  documentacion_asociada_ref?: string;
+}
+
+export interface SoAMetricas {
+  total: number;
+  aplicables: number;
+  no_aplicables: number;
+  implementados: number;
+  parciales: number;
+  no_implementados: number;
+  porcentaje_aplicabilidad: number;
+  porcentaje_implementacion: number;
+  por_tema: Record<string, {
+    total: number;
+    implementados: number;
+    parciales: number;
+    no_aplica: number;
+    no_implementados: number;
+    porcentaje: number;
+  }>;
+}
+
+export interface SoAResponse {
+  norma: string;
+  metricas: SoAMetricas;
+  total_filtrados: number;
+  controles: ControlSoA[];
+}
+
+export const soaService = {
+  async getSoA(tema?: string): Promise<SoAResponse> {
+    const url = tema ? `/auditorias/soa?tema=${encodeURIComponent(tema)}` : '/auditorias/soa';
+    return await apiRequest<SoAResponse>(url);
+  },
+
+  async updateControl(id: number, data: Partial<ControlSoA>): Promise<any> {
+    return await apiRequest(`/auditorias/soa/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async copilotAudit(): Promise<any> {
+    return await apiRequest('/auditorias/soa/copilot-audit', {
+      method: 'POST',
+    });
+  },
+
+  async exportToExcel(controles: ControlSoA[], metricas: SoAMetricas): Promise<void> {
+    const XLSX = await import('xlsx');
+    const headers = [
+      'Código ISO',
+      'Tema ISO 27002:2022',
+      'Nombre del Control',
+      'Descripción / Propósito',
+      '¿Aplica?',
+      'Estado de Implementación',
+      'Efectividad Evaluada',
+      'Justificación de Inclusión / Exclusión',
+      'Evidencia / Documentación Asociada'
+    ];
+
+    const rows = controles.map(c => [
+      c.codigo_control_iso,
+      c.categoria_control_iso,
+      c.Nombre,
+      c.Descripcion || '',
+      c.aplica ? 'SÍ' : 'NO',
+      c.estado_implementacion,
+      c.efectividad_control_evaluada || 'No evaluada',
+      c.justificacion_no_aplicabilidad || '',
+      c.documentacion_asociada_ref || ''
+    ]);
+
+    const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+    ws['!cols'] = [
+      { wch: 12 }, { wch: 18 }, { wch: 35 }, { wch: 50 },
+      { wch: 10 }, { wch: 25 }, { wch: 18 }, { wch: 45 }, { wch: 35 }
+    ];
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'SoA ISO 27002-2022');
+    XLSX.writeFile(wb, 'Declaracion_de_Aplicabilidad_SoA_ISO27001_2022.xlsx');
+  }
+};
+
 export default {
   activosService,
   usuariosService,
   riesgosService,
   dashboardService,
   vulnerabilidadesService,
-  auditoriasService
+  auditoriasService,
+  soaService
 };
+
 
