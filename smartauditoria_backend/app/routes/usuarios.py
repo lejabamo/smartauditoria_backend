@@ -26,12 +26,18 @@ def get_usuarios():
         
         usuarios = query.all()
         return jsonify([{
-            'id': u.id_usuario,  # Agregar 'id' para compatibilidad con DataGrid
+            'id': u.id_usuario,
             'id_usuario': u.id_usuario,
+            'nombre': u.nombre_completo,
             'nombre_completo': u.nombre_completo,
+            'email': u.email_institucional,
             'email_institucional': u.email_institucional,
-            'puesto_organizacion': u.puesto_organizacion,
-            'estado_usuario': u.estado_usuario,
+            'puesto': u.puesto_organizacion or 'Usuario del Sistema',
+            'puesto_organizacion': u.puesto_organizacion or 'Usuario del Sistema',
+            'rol': u.puesto_organizacion or 'Usuario del Sistema',
+            'estado': u.estado_usuario or 'Activo',
+            'estado_usuario': u.estado_usuario or 'Activo',
+            'fecha_creacion': u.fecha_creacion_registro.isoformat() if u.fecha_creacion_registro else None,
             'fecha_creacion_registro': u.fecha_creacion_registro.isoformat() if u.fecha_creacion_registro else None
         } for u in usuarios]), 200
     except Exception as e:
@@ -45,11 +51,18 @@ def get_usuario(usuario_id):
     try:
         usuario = UsuarioSistema.query.get_or_404(usuario_id)
         return jsonify({
+            'id': usuario.id_usuario,
             'id_usuario': usuario.id_usuario,
+            'nombre': usuario.nombre_completo,
             'nombre_completo': usuario.nombre_completo,
+            'email': usuario.email_institucional,
             'email_institucional': usuario.email_institucional,
-            'puesto_organizacion': usuario.puesto_organizacion,
-            'estado_usuario': usuario.estado_usuario,
+            'puesto': usuario.puesto_organizacion or 'Usuario del Sistema',
+            'puesto_organizacion': usuario.puesto_organizacion or 'Usuario del Sistema',
+            'rol': usuario.puesto_organizacion or 'Usuario del Sistema',
+            'estado': usuario.estado_usuario or 'Activo',
+            'estado_usuario': usuario.estado_usuario or 'Activo',
+            'fecha_creacion': usuario.fecha_creacion_registro.isoformat() if usuario.fecha_creacion_registro else None,
             'fecha_creacion_registro': usuario.fecha_creacion_registro.isoformat() if usuario.fecha_creacion_registro else None
         }), 200
     except Exception as e:
@@ -65,33 +78,45 @@ def create_usuario():
         if not data:
             return jsonify({'error': 'No se proporcionaron datos'}), 400
         
+        nombre = data.get('nombre_completo') or data.get('nombre')
+        email = data.get('email_institucional') or data.get('email')
+        puesto = data.get('puesto_organizacion') or data.get('puesto') or data.get('rol') or 'Usuario del Sistema'
+        estado = data.get('estado_usuario') or data.get('estado') or 'Activo'
+
         # Validaciones básicas
-        if not data.get('nombre_completo'):
+        if not nombre:
             return jsonify({'error': 'El nombre completo del usuario es obligatorio'}), 400
-        if not data.get('email_institucional'):
+        if not email:
             return jsonify({'error': 'El email institucional del usuario es obligatorio'}), 400
         
         # Verificar si el email ya existe
-        usuario_existente = UsuarioSistema.query.filter_by(email_institucional=data['email_institucional']).first()
+        usuario_existente = UsuarioSistema.query.filter_by(email_institucional=email).first()
         if usuario_existente:
             return jsonify({'error': 'Ya existe un usuario con ese email institucional'}), 400
         
         usuario = UsuarioSistema(
-            nombre_completo=data.get('nombre_completo'),
-            email_institucional=data.get('email_institucional'),
-            puesto_organizacion=data.get('puesto_organizacion'),
-            estado_usuario=data.get('estado_usuario', 'Activo')
+            nombre_completo=nombre,
+            email_institucional=email,
+            puesto_organizacion=puesto,
+            estado_usuario=estado
         )
         
         db.session.add(usuario)
         db.session.commit()
         
         return jsonify({
+            'id': usuario.id_usuario,
             'id_usuario': usuario.id_usuario,
+            'nombre': usuario.nombre_completo,
             'nombre_completo': usuario.nombre_completo,
+            'email': usuario.email_institucional,
             'email_institucional': usuario.email_institucional,
+            'puesto': usuario.puesto_organizacion,
             'puesto_organizacion': usuario.puesto_organizacion,
+            'rol': usuario.puesto_organizacion,
+            'estado': usuario.estado_usuario,
             'estado_usuario': usuario.estado_usuario,
+            'fecha_creacion': usuario.fecha_creacion_registro.isoformat() if usuario.fecha_creacion_registro else None,
             'fecha_creacion_registro': usuario.fecha_creacion_registro.isoformat() if usuario.fecha_creacion_registro else None
         }), 201
     except SQLAlchemyError as e:
@@ -114,27 +139,39 @@ def update_usuario(usuario_id):
         if not data:
             return jsonify({'error': 'No se proporcionaron datos'}), 400
         
+        nombre = data.get('nombre_completo') or data.get('nombre')
+        email = data.get('email_institucional') or data.get('email')
+        puesto = data.get('puesto_organizacion') or data.get('puesto') or data.get('rol')
+        estado = data.get('estado_usuario') or data.get('estado')
+
         # Actualizar campos
-        if 'nombre_completo' in data:
-            usuario.nombre_completo = data['nombre_completo']
-        if 'email_institucional' in data:
+        if nombre:
+            usuario.nombre_completo = nombre
+        if email:
             # Verificar si el nuevo email ya existe en otro usuario
-            usuario_existente = UsuarioSistema.query.filter_by(email_institucional=data['email_institucional']).first()
+            usuario_existente = UsuarioSistema.query.filter_by(email_institucional=email).first()
             if usuario_existente and usuario_existente.id_usuario != usuario_id:
                 return jsonify({'error': 'Ya existe un usuario con ese email institucional'}), 400
-            usuario.email_institucional = data['email_institucional']
-        if 'puesto_organizacion' in data:
-            usuario.puesto_organizacion = data['puesto_organizacion']
-        if 'estado_usuario' in data:
-            usuario.estado_usuario = data['estado_usuario']
+            usuario.email_institucional = email
+        if puesto:
+            usuario.puesto_organizacion = puesto
+        if estado:
+            usuario.estado_usuario = estado
         
         db.session.commit()
         return jsonify({
+            'id': usuario.id_usuario,
             'id_usuario': usuario.id_usuario,
+            'nombre': usuario.nombre_completo,
             'nombre_completo': usuario.nombre_completo,
+            'email': usuario.email_institucional,
             'email_institucional': usuario.email_institucional,
+            'puesto': usuario.puesto_organizacion,
             'puesto_organizacion': usuario.puesto_organizacion,
+            'rol': usuario.puesto_organizacion,
+            'estado': usuario.estado_usuario,
             'estado_usuario': usuario.estado_usuario,
+            'fecha_creacion': usuario.fecha_creacion_registro.isoformat() if usuario.fecha_creacion_registro else None,
             'fecha_creacion_registro': usuario.fecha_creacion_registro.isoformat() if usuario.fecha_creacion_registro else None
         }), 200
     except SQLAlchemyError as e:

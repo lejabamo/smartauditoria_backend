@@ -531,11 +531,13 @@ class Auditoria(db.Model):
     __tablename__ = 'auditorias'
     
     id_auditoria = db.Column(db.Integer, primary_key=True)
+    codigo_auditoria = db.Column('codigo_auditoria', db.String(50))
     titulo = db.Column('nombre_auditoria', db.String(255), nullable=False)
+    tipo_auditoria = db.Column('tipo_auditoria', db.String(50), nullable=False, default='Interna ISO27001')
     descripcion = db.Column('alcance_auditoria', db.Text, nullable=False)
     fecha_inicio = db.Column('fecha_inicio_real', db.DateTime)
     fecha_fin = db.Column('fecha_fin_real', db.DateTime)
-    estado = db.Column('estado_auditoria', db.String(50), default='Planificada') # Planificada, En Proceso, Finalizada
+    estado = db.Column('estado_auditoria', db.String(50), default='Planificada') # Planificada, En curso, Finalizada
     id_auditor_responsable = db.Column('id_auditor_lider', db.Integer, db.ForeignKey('usuarios_sistema.id_usuario'))
     
     # Columnas no nulas requeridas de la base de datos con valores por defecto
@@ -547,9 +549,14 @@ class Auditoria(db.Model):
     
     def to_dict(self):
         return {
+            'id': self.id_auditoria,
             'id_auditoria': self.id_auditoria,
+            'codigo_auditoria': self.codigo_auditoria,
             'titulo': self.titulo,
+            'nombre_auditoria': self.titulo,
             'descripcion': self.descripcion,
+            'alcance_auditoria': self.descripcion,
+            'tipo_auditoria': self.tipo_auditoria,
             'fecha_inicio': self.fecha_inicio.isoformat() if self.fecha_inicio else None,
             'fecha_fin': self.fecha_fin.isoformat() if self.fecha_fin else None,
             'estado': self.estado,
@@ -562,6 +569,7 @@ class HallazgoAuditoria(db.Model):
     
     id_hallazgo = db.Column(db.Integer, primary_key=True)
     id_auditoria = db.Column(db.Integer, db.ForeignKey('auditorias.id_auditoria'), nullable=False)
+    codigo_hallazgo = db.Column('codigo_hallazgo', db.String(50))
     descripcion = db.Column('descripcion_hallazgo', db.Text, nullable=False)
     tipo_hallazgo = db.Column(db.String(50), nullable=False)
     requisito_iso = db.Column('clausula_norma_referencia', db.String(255))
@@ -592,15 +600,20 @@ class HallazgoAuditoria(db.Model):
     
     def to_dict(self):
         return {
+            'id': self.id_hallazgo,
             'id_hallazgo': self.id_hallazgo,
+            'codigo_hallazgo': self.codigo_hallazgo,
             'id_auditoria': self.id_auditoria,
             'descripcion': self.descripcion,
+            'descripcion_hallazgo': self.descripcion,
             'tipo_hallazgo': self.tipo_hallazgo,
             'severidad': self.severidad,
             'requisito_iso': self.requisito_iso,
+            'clausula_norma_referencia': self.requisito_iso,
             'analisis_causa_raiz': self.analisis_causa_raiz,
             'fecha_deteccion': self.fecha_deteccion.isoformat() if self.fecha_deteccion else None,
-            'estado': self.estado
+            'estado': self.estado,
+            'estado_hallazgo': self.estado
         }
 
 class PlanAccionCorreccion(db.Model):

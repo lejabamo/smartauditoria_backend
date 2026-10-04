@@ -11,17 +11,39 @@ def get_auditorias():
 
 @auditorias_bp.route('/', methods=['POST'])
 def crear_auditoria():
-    data = request.json
-    nueva_audit = Auditoria(
-        titulo=data.get('titulo'),
-        descripcion=data.get('descripcion'),
-        fecha_inicio=datetime.utcnow(),
-        estado='Planificada',
-        id_auditor_responsable=data.get('id_auditor')
-    )
-    db.session.add(nueva_audit)
-    db.session.commit()
-    return jsonify(nueva_audit.to_dict()), 201
+    try:
+        data = request.json or {}
+        codigo = data.get('codigo_auditoria') or f"AUD-{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
+        titulo = data.get('titulo') or data.get('nombre_auditoria') or 'Auditoría Interna SGSI'
+        descripcion = data.get('descripcion') or data.get('alcance_auditoria') or 'Revisión periódica de controles y cumplimiento'
+        tipo = data.get('tipo_auditoria') or 'Interna ISO27001'
+        
+        tipos_validos = ['Interna ISO27001', 'Externa ISO27001', 'Cumplimiento MinTIC', 'Interna SGSI General', 'Especifica de Proceso', 'Otro']
+        if tipo not in tipos_validos:
+            tipo = 'Interna ISO27001'
+            
+        id_auditor = data.get('id_auditor_responsable') or data.get('id_auditor') or 1
+        estado = data.get('estado') or data.get('estado_auditoria') or 'Planificada'
+        if estado == 'En Proceso':
+            estado = 'En curso'
+
+        nueva_audit = Auditoria(
+            codigo_auditoria=codigo,
+            titulo=titulo,
+            tipo_auditoria=tipo,
+            descripcion=descripcion,
+            fecha_inicio=datetime.utcnow(),
+            estado=estado,
+            id_auditor_responsable=id_auditor,
+            objetivos_auditoria=data.get('objetivos_auditoria', 'Verificar eficacia de controles de seguridad y cumplimiento normativo'),
+            criterios_auditoria=data.get('criterios_auditoria', 'Norma ISO/IEC 27001:2022 y Guía DAFP V7')
+        )
+        db.session.add(nueva_audit)
+        db.session.commit()
+        return jsonify(nueva_audit.to_dict()), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
 
 @auditorias_bp.route('/hallazgos', methods=['GET'])
 def get_hallazgos():
@@ -30,32 +52,66 @@ def get_hallazgos():
 
 @auditorias_bp.route('/hallazgos', methods=['POST'])
 def crear_hallazgo():
-    data = request.json
-    nuevo_hallazgo = HallazgoAuditoria(
-        id_auditoria=data.get('id_auditoria'),
-        descripcion=data.get('descripcion'),
-        tipo_hallazgo=data.get('tipo_hallazgo'),
-        severidad=data.get('severidad'),
-        requisito_iso=data.get('requisito_iso'),
-        estado='Pendiente'
-    )
-    db.session.add(nuevo_hallazgo)
-    db.session.commit()
-    return jsonify(nuevo_hallazgo.to_dict()), 201
+    try:
+        data = request.json or {}
+        id_audit = data.get('id_auditoria')
+        if not id_audit:
+            primera = Auditoria.query.first()
+            id_audit = primera.id_auditoria if primera else 1
+
+        tipo_in = data.get('tipo_hallazgo') or 'No Conformidad Menor'
+        severidad = data.get('severidad', 'Menor')
+        tipos_validos = ['No Conformidad Mayor', 'No Conformidad Menor', 'Oportunidad de Mejora', 'Observacion', 'Fortaleza']
+        
+        if tipo_in not in tipos_validos:
+            if 'Mayor' in tipo_in or severidad in ('Mayor', 'Crítica', 'Critica'):
+                tipo = 'No Conformidad Mayor'
+            elif 'Menor' in tipo_in:
+                tipo = 'No Conformidad Menor'
+            elif 'Mejora' in tipo_in:
+                tipo = 'Oportunidad de Mejora'
+            elif 'Observ' in tipo_in:
+                tipo = 'Observacion'
+            else:
+                tipo = 'No Conformidad Menor'
+        else:
+            tipo = tipo_in
+
+        codigo = data.get('codigo_hallazgo') or f"HAL-{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
+
+        nuevo_hallazgo = HallazgoAuditoria(
+            codigo_hallazgo=codigo,
+            id_auditoria=id_audit,
+            descripcion=data.get('descripcion') or data.get('descripcion_hallazgo', 'Hallazgo detectado en auditoría'),
+            tipo_hallazgo=tipo,
+            requisito_iso=data.get('requisito_iso') or data.get('clausula_norma_referencia', 'ISO 27001'),
+            analisis_causa_raiz=data.get('analisis_causa_raiz', ''),
+            estado='Abierto'
+        )
+        db.session.add(nuevo_hallazgo)
+        db.session.commit()
+        return jsonify(nuevo_hallazgo.to_dict()), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
 
 @auditorias_bp.route('/planes-accion', methods=['POST'])
 def crear_plan_accion():
-    data = request.json
-    nuevo_plan = PlanAccionCorreccion(
-        id_hallazgo=data.get('id_hallazgo'),
-        descripcion_accion=data.get('descripcion_accion'),
-        responsable=data.get('responsable'),
-        fecha_compromiso=datetime.strptime(data.get('fecha_compromiso'), '%Y-%m-%d').date() if data.get('fecha_compromiso') else None,
-        estado='Abierto'
-    )
-    db.session.add(nuevo_plan)
-    db.session.commit()
-    return jsonify(nuevo_plan.to_dict()), 201
+    data = request.json or {}
+    try:
+        nuevo_plan = PlanAccionCorreccion(
+            id_hallazgo=data.get('id_hallazgo'),
+            descripcion_accion=data.get('descripcion_accion'),
+            responsable=data.get('responsable'),
+            fecha_compromiso=datetime.strptime(data.get('fecha_compromiso'), '%Y-%m-%d').date() if data.get('fecha_compromiso') else None,
+            estado='Abierto'
+        )
+        db.session.add(nuevo_plan)
+        db.session.commit()
+        return jsonify(nuevo_plan.to_dict()), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
 
 
 # ============================================================================

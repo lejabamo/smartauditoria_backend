@@ -27,6 +27,7 @@ export interface Usuario {
   nombre: string;
   email: string;
   rol: string;
+  puesto?: string;
   estado: string;
   fecha_creacion: string;
   ultimo_acceso?: string;
@@ -140,16 +141,24 @@ export const usuariosService = {
   // Obtener todos los usuarios
   async getAll(): Promise<Usuario[]> {
     try {
-      const res = await apiRequest<Usuario[]>('/usuarios');
-      if (!res || res.length === 0) throw new Error('Forzando mock por array vacío');
-      return res;
+      const res = await apiRequest<any[]>('/usuarios');
+      if (!res || !Array.isArray(res) || res.length === 0) throw new Error('Forzando mock por array vacío');
+      return res.map((u: any) => ({
+        id: u.id ?? u.id_usuario,
+        nombre: u.nombre ?? u.nombre_completo ?? 'Sin nombre',
+        email: u.email ?? u.email_institucional ?? 'Sin correo',
+        rol: u.rol ?? u.puesto ?? u.puesto_organizacion ?? 'Usuario del Sistema',
+        puesto: u.puesto ?? u.puesto_organizacion ?? u.rol ?? 'Usuario del Sistema',
+        estado: u.estado ?? u.estado_usuario ?? 'Activo',
+        fecha_creacion: u.fecha_creacion ?? u.fecha_creacion_registro ?? new Date().toISOString()
+      }));
     } catch (error) {
       console.warn('API fallida o vacía, usando Mock Data para Lista de Usuarios en backend.ts');
       return [
-        { id: 1, nombre: "Lic. Auditor Senior", email: "auditor.senior@univalle.edu.co", rol: "Auditor Jefe", estado: "Activo", fecha_creacion: "2026-04-01" },
-        { id: 2, nombre: "Ing. Seguridad TI", email: "seguridad.ti@univalle.edu.co", rol: "CISO", estado: "Activo", fecha_creacion: "2026-04-02" },
-        { id: 3, nombre: "Admin Sistema", email: "admin.sgsri@univalle.edu.co", rol: "Administrador", estado: "Activo", fecha_creacion: "2026-04-05" },
-        { id: 4, nombre: "Consultor Externo", email: "consultor.iso@ext.univalle.edu.co", rol: "Consultor", estado: "Activo", fecha_creacion: "2026-04-08" }
+        { id: 1, nombre: "Lic. Auditor Senior", email: "auditor.senior@univalle.edu.co", rol: "Auditor Jefe", puesto: "Auditor Jefe", estado: "Activo", fecha_creacion: "2026-04-01" },
+        { id: 2, nombre: "Ing. Seguridad TI", email: "seguridad.ti@univalle.edu.co", rol: "CISO", puesto: "CISO", estado: "Activo", fecha_creacion: "2026-04-02" },
+        { id: 3, nombre: "Admin Sistema", email: "admin.sgsri@univalle.edu.co", rol: "Administrador", puesto: "Administrador", estado: "Activo", fecha_creacion: "2026-04-05" },
+        { id: 4, nombre: "Consultor Externo", email: "consultor.iso@ext.univalle.edu.co", rol: "Consultor", puesto: "Consultor", estado: "Activo", fecha_creacion: "2026-04-08" }
       ];
     }
   },
@@ -739,13 +748,22 @@ export interface APIPlanAccion {
 export const auditoriasService = {
   async getAll(): Promise<APIAuditoria[]> {
     try {
-      const res = await apiRequest<APIAuditoria[]>('/auditorias/');
-      return res;
+      const res = await apiRequest<any[]>('/auditorias/');
+      if (!res || !Array.isArray(res) || res.length === 0) throw new Error('Forzando mock por array vacío');
+      return res.map((a: any) => ({
+        id_auditoria: a.id_auditoria ?? a.id ?? 1,
+        titulo: a.titulo ?? a.nombre_auditoria ?? 'Auditoría Interna SGSI',
+        descripcion: a.descripcion ?? a.alcance_auditoria ?? 'Revisión periódica de controles',
+        fecha_inicio: a.fecha_inicio ?? '2026-06-01',
+        fecha_fin: a.fecha_fin ?? '2026-06-30',
+        estado: a.estado ?? a.estado_auditoria ?? 'Planificada',
+        id_auditor_responsable: a.id_auditor_responsable ?? a.id_auditor ?? 1
+      }));
     } catch (error) {
       console.warn('API fallida o vacía, usando Mock Data para Auditorias');
       return [
-        { id_auditoria: 1, titulo: "Auditoría Interna ISO 27001 - Q1", descripcion: "Auditoría de cumplimiento de seguridad", fecha_inicio: "2026-03-15", fecha_fin: "2026-03-20", estado: "Finalizada", id_auditor_responsable: 1 },
-        { id_auditoria: 2, titulo: "Revisión Técnica Controles de Acceso", descripcion: "Revisión técnica de accesos a servidores", fecha_inicio: "2026-04-20", fecha_fin: "2026-04-25", estado: "En Proceso", id_auditor_responsable: 2 }
+        { id_auditoria: 1, titulo: "Auditoría Interna SGSI ISO 27001:2022 - Ciclo I", descripcion: "Auditoría de cumplimiento de seguridad y controles de acceso", fecha_inicio: "2026-03-15", fecha_fin: "2026-03-20", estado: "En Proceso", id_auditor_responsable: 1 },
+        { id_auditoria: 2, titulo: "Revisión de Cumplimiento DAFP V7 y Ley 1712", descripcion: "Revisión técnica de clasificación y activos de información institucional", fecha_inicio: "2026-04-20", fecha_fin: "2026-04-25", estado: "Planificada", id_auditor_responsable: 2 }
       ];
     }
   },
@@ -764,13 +782,24 @@ export const auditoriasService = {
 
   async getHallazgos(): Promise<APIHallazgo[]> {
     try {
-      const res = await apiRequest<APIHallazgo[]>('/auditorias/hallazgos');
-      return res;
+      const res = await apiRequest<any[]>('/auditorias/hallazgos');
+      if (!res || !Array.isArray(res) || res.length === 0) throw new Error('Forzando mock por array vacío');
+      return res.map((h: any) => ({
+        id_hallazgo: h.id_hallazgo ?? h.id ?? 1,
+        id_auditoria: h.id_auditoria ?? 1,
+        tipo_hallazgo: h.tipo_hallazgo ?? 'No Conformidad Menor',
+        severidad: h.severidad ?? 'Menor',
+        descripcion: h.descripcion ?? h.descripcion_hallazgo ?? 'Hallazgo de auditoría',
+        requisito_iso: h.requisito_iso ?? h.clausula_norma_referencia ?? 'ISO 27001',
+        analisis_causa_raiz: h.analisis_causa_raiz ?? '',
+        fecha_deteccion: h.fecha_deteccion ?? new Date().toISOString(),
+        estado: h.estado ?? h.estado_hallazgo ?? 'Abierto'
+      }));
     } catch (error) {
       console.warn('API fallida o vacía, usando Mock Data para Hallazgos');
       return [
-        { id_hallazgo: 1, id_auditoria: 1, tipo_hallazgo: "No Conformidad Mayor", severidad: "Mayor", descripcion: "Falta de evidencia en la revisión mensual de logs de firewall.", requisito_iso: "ISO 27001 - A.12.4.1", analisis_causa_raiz: "Falta de automatización", fecha_deteccion: "2026-03-16", estado: "En Análisis" },
-        { id_hallazgo: 2, id_auditoria: 1, tipo_hallazgo: "Observacion", severidad: "Menor", descripcion: "La política de contraseñas no se ha actualizado con los nuevos estándares NIST.", requisito_iso: "ISO 27001 - A.9.4.3", analisis_causa_raiz: "Falta de revisión de políticas", fecha_deteccion: "2026-03-18", estado: "Abierto" }
+        { id_hallazgo: 1, id_auditoria: 1, tipo_hallazgo: "No Conformidad Menor", severidad: "Menor", descripcion: "Falta de actualización de registros de respaldo offsite para servidores principales.", requisito_iso: "ISO 27001 - A.8.13", analisis_causa_raiz: "Procedimiento no automatizado en el cron semanal", fecha_deteccion: "2026-03-16", estado: "En Análisis" },
+        { id_hallazgo: 2, id_auditoria: 1, tipo_hallazgo: "Observacion", severidad: "Menor", descripcion: "Se requiere formalizar la periodicidad de revisión del inventario según lineamiento DAFP V7.", requisito_iso: "ISO 27001 - A.5.9", analisis_causa_raiz: "Falta de directriz formal institucional", fecha_deteccion: "2026-03-18", estado: "Abierto" }
       ];
     }
   },

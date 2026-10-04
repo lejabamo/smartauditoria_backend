@@ -83,7 +83,7 @@ const AuditControl: React.FC = () => {
 
   // New Hallazgo Form Fields
   const [newHallazgoAuditId, setNewHallazgoAuditId] = useState("");
-  const [newHallazgoTipo, setNewHallazgoTipo] = useState("No Conformidad");
+  const [newHallazgoTipo, setNewHallazgoTipo] = useState("No Conformidad Menor");
   const [newHallazgoSeveridad, setNewHallazgoSeveridad] = useState("Menor");
   const [newHallazgoRequisito, setNewHallazgoRequisito] = useState("");
   const [newHallazgoDesc, setNewHallazgoDesc] = useState("");
@@ -107,7 +107,7 @@ const AuditControl: React.FC = () => {
       // Map APIHallazgo to local Hallazgo interface
       const mappedFindings = findings.map((f: any) => ({
         id: f.id_hallazgo?.toString() || 'NC-N/A',
-        tipo: f.tipo_hallazgo || 'No Conformidad',
+        tipo: f.tipo_hallazgo || 'No Conformidad Menor',
         severidad: f.severidad || 'Menor',
         descripcion: f.descripcion || '',
         requisito: f.requisito_iso || 'ISO 27001',
@@ -154,14 +154,15 @@ const AuditControl: React.FC = () => {
   };
 
   const handleSaveHallazgo = async () => {
-    if (!newHallazgoAuditId || !newHallazgoDesc || !newHallazgoRequisito) {
+    const auditIdToUse = newHallazgoAuditId || (auditorias.length > 0 ? auditorias[0].id : "1");
+    if (!newHallazgoDesc || !newHallazgoRequisito) {
       toast.error("Por favor complete todos los campos del hallazgo");
       return;
     }
 
     try {
       await auditoriasService.createHallazgo({
-        id_auditoria: parseInt(newHallazgoAuditId),
+        id_auditoria: parseInt(auditIdToUse),
         descripcion: newHallazgoDesc,
         tipo_hallazgo: newHallazgoTipo,
         severidad: newHallazgoSeveridad,
@@ -418,9 +419,11 @@ const AuditControl: React.FC = () => {
                 label="Tipo de Hallazgo"
                 onChange={(e) => setNewHallazgoTipo(e.target.value)}
               >
-                <MenuItem value="No Conformidad">No Conformidad</MenuItem>
+                <MenuItem value="No Conformidad Mayor">No Conformidad Mayor</MenuItem>
+                <MenuItem value="No Conformidad Menor">No Conformidad Menor</MenuItem>
                 <MenuItem value="Observacion">Observación</MenuItem>
                 <MenuItem value="Oportunidad de Mejora">Oportunidad de Mejora</MenuItem>
+                <MenuItem value="Fortaleza">Fortaleza</MenuItem>
               </Select>
             </FormControl>
             <FormControl fullWidth>

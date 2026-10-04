@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -161,13 +161,18 @@ const Usuarios: React.FC = () => {
 
   // Filtered usuarios based on search term and filters
   const filteredUsuarios = usuarios.filter(usuario => {
+    const rolPuesto = usuario.rol || (usuario as any).puesto || (usuario as any).puesto_organizacion || '';
+    const nombre = usuario.nombre || (usuario as any).nombre_completo || '';
+    const email = usuario.email || (usuario as any).email_institucional || '';
+    const estado = usuario.estado || (usuario as any).estado_usuario || 'Activo';
+
     const matchesSearch = !searchTerm || 
-      (usuario.nombre || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (usuario.email || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (usuario.rol && usuario.rol.toLowerCase().includes(searchTerm.toLowerCase()));
+      nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      rolPuesto.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesPuesto = !puestoFilter || usuario.rol === puestoFilter;
-    const matchesEstado = !estadoFilter || usuario.estado === estadoFilter;
+    const matchesPuesto = !puestoFilter || rolPuesto === puestoFilter;
+    const matchesEstado = !estadoFilter || estado === estadoFilter;
     
     return matchesSearch && matchesPuesto && matchesEstado;
   });
