@@ -68,6 +68,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     handleClose();
   };
 
+  const currentUserRole = (user?.rol_nombre || (user as any)?.role || "").toUpperCase();
   const menuItems = [
     { text: "Dashboard", icon: <Dashboard />, path: "/dashboard", roles: ["ADMIN", "OPERADOR", "CONSULTOR"] },
     { text: "Activos", icon: <Security />, path: "/activos", roles: ["ADMIN", "OPERADOR", "CONSULTOR"] },
@@ -76,43 +77,44 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { text: "Evaluacion", icon: <Star />, path: "/wizard", roles: ["ADMIN", "OPERADOR"] },
     { text: "Auditoría", icon: <FactCheck />, path: "/auditoria", roles: ["ADMIN", "OPERADOR"] },
     { text: "Reportes", icon: <Report />, path: "/reportes", roles: ["ADMIN", "OPERADOR", "CONSULTOR"] },
-  ].filter(item => item.roles.includes(user?.rol_nombre || ""));
+  ].filter(item => item.roles.includes(currentUserRole) || currentUserRole === "ADMIN");
 
   const drawer = (
     <Box sx={{ 
       height: '100%', 
-      background: 'linear-gradient(180deg, #1E3A8A 0%, #1E40AF 100%)',
+      background: 'linear-gradient(180deg, #1D3867 0%, #11223F 100%)',
       display: 'flex',
       flexDirection: 'column'
     }}>
       {/* Logo Section */}
       <Box sx={{ 
-        p: 3, 
+        p: 2.5, 
         borderBottom: '1px solid rgba(255,255,255,0.1)',
         display: 'flex',
         alignItems: 'center',
-        gap: 2
+        gap: 1.5
       }}>
         <Box sx={{
-          width: 40,
-          height: 40,
+          width: 42,
+          height: 42,
           borderRadius: '12px',
-          background: 'linear-gradient(135deg, #FACC15 0%, #FDE047 100%)',
+          background: 'linear-gradient(135deg, #eb6408 0%, #f97316 100%)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          boxShadow: '0 4px 12px rgba(250, 204, 21, 0.3)'
+          boxShadow: '0 4px 12px rgba(235, 100, 8, 0.35)',
+          flexShrink: 0
         }}>
-          <Shield sx={{ color: '#1E3A8A', fontSize: 24 }} />
+          <Shield sx={{ color: '#FFFFFF', fontSize: 24 }} />
         </Box>
-        <Box>
+        <Box sx={{ minWidth: 0 }}>
           <Typography
             variant="h6"
             className="font-poppins"
             sx={{
               color: '#FFFFFF',
-              fontWeight: 600,
-              fontSize: '1.25rem',
+              fontWeight: 700,
+              fontSize: '1.15rem',
               lineHeight: 1.2
             }}
           >
@@ -120,103 +122,106 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </Typography>
           <Typography
             variant="caption"
-            className="font-roboto"
             sx={{
-              color: 'rgba(255,255,255,0.7)',
-              fontSize: '0.75rem',
-              fontWeight: 400
+              color: 'rgba(255,255,255,0.75)',
+              fontSize: '0.72rem',
+              fontWeight: 500,
+              display: 'block'
             }}
           >
-            Auditoría Inteligente
+            SedCauca • SGSI
           </Typography>
         </Box>
       </Box>
 
       {/* Navigation Menu */}
       <List sx={{ px: 2, py: 2, flex: 1 }}>
-        {menuItems.map((item) => (
-          <ListItem key={item.text} disablePadding sx={{ mb: 1 }}>
-            <ListItemButton
-              selected={location.pathname === item.path}
-              onClick={() => navigate(item.path)}
-              sx={{
-                borderRadius: '12px',
-                py: 1.5,
-                px: 2,
-                minHeight: 48,
-                '&.Mui-selected': {
-                  backgroundColor: 'rgba(250, 204, 21, 0.15)',
-                  border: '1px solid rgba(250, 204, 21, 0.3)',
+        {menuItems.map((item) => {
+          const isSelected = location.pathname === item.path;
+          return (
+            <ListItem key={item.text} disablePadding sx={{ mb: 1 }}>
+              <ListItemButton
+                selected={isSelected}
+                onClick={() => navigate(item.path)}
+                sx={{
+                  borderRadius: '10px',
+                  py: 1.3,
+                  px: 2,
+                  minHeight: 46,
+                  '&.Mui-selected': {
+                    backgroundColor: 'rgba(235, 100, 8, 0.16)',
+                    border: '1px solid rgba(235, 100, 8, 0.4)',
+                    borderLeft: '4px solid #eb6408',
+                    '&:hover': {
+                      backgroundColor: 'rgba(235, 100, 8, 0.24)',
+                    },
+                    '& .MuiListItemIcon-root': {
+                      color: '#eb6408',
+                    },
+                    '& .MuiListItemText-primary': {
+                      color: '#FFFFFF',
+                      fontWeight: 600,
+                    },
+                  },
                   '&:hover': {
-                    backgroundColor: 'rgba(250, 204, 21, 0.2)',
+                    backgroundColor: 'rgba(255,255,255,0.08)',
+                    transform: 'translateX(4px)',
                   },
-                  '& .MuiListItemIcon-root': {
-                    color: '#FACC15',
-                  },
-                  '& .MuiListItemText-primary': {
-                    color: '#FFFFFF',
-                    fontWeight: 500,
-                  },
-                },
-                '&:hover': {
-                  backgroundColor: 'rgba(255,255,255,0.08)',
-                  transform: 'translateX(4px)',
-                },
-                transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
-              }}
-            >
-              <ListItemIcon sx={{ 
-                color: 'rgba(255,255,255,0.7)', 
-                minWidth: '44px',
-                transition: 'color 0.25s ease'
-              }}>
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText
-                primary={item.text}
-                primaryTypographyProps={{
-                  fontFamily: "'Roboto', sans-serif",
-                  fontWeight: 400,
-                  color: 'rgba(255,255,255,0.9)',
-                  fontSize: '0.95rem'
+                  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                 }}
-              />
-              <ArrowForwardIos sx={{ 
-                fontSize: '0.75rem', 
-                color: location.pathname === item.path ? '#FACC15' : 'rgba(255,255,255,0.3)',
-                transition: 'transform 0.2s ease',
-                ml: 1
-              }} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+              >
+                <ListItemIcon sx={{ 
+                  color: isSelected ? '#eb6408' : 'rgba(255,255,255,0.75)', 
+                  minWidth: '40px',
+                  transition: 'color 0.2s ease'
+                }}>
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText
+                  primary={item.text}
+                  primaryTypographyProps={{
+                    fontFamily: "'Roboto', sans-serif",
+                    fontWeight: isSelected ? 600 : 400,
+                    color: 'rgba(255,255,255,0.92)',
+                    fontSize: '0.92rem'
+                  }}
+                />
+                <ArrowForwardIos sx={{ 
+                  fontSize: '0.7rem', 
+                  color: isSelected ? '#eb6408' : 'rgba(255,255,255,0.3)',
+                  transition: 'transform 0.2s ease',
+                  ml: 1
+                }} />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
       </List>
 
-      {/* User Info Footer */}
+      {/* User Info Footer in Drawer */}
       <Box sx={{ 
         p: 2, 
         borderTop: '1px solid rgba(255,255,255,0.1)',
-        background: 'rgba(0,0,0,0.1)'
+        background: 'rgba(0,0,0,0.15)'
       }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Avatar sx={{ 
-            width: 36, 
-            height: 36, 
-            background: 'linear-gradient(135deg, #FACC15 0%, #FDE047 100%)',
-            color: '#1E3A8A',
-            fontSize: '0.875rem',
-            fontWeight: 600
+            width: 38, 
+            height: 38, 
+            background: 'linear-gradient(135deg, #eb6408 0%, #f97316 100%)',
+            color: '#FFFFFF',
+            fontSize: '0.9rem',
+            fontWeight: 700
           }}>
             {user?.username?.charAt(0).toUpperCase()}
           </Avatar>
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Typography
               variant="body2"
-              className="font-roboto"
               sx={{
                 color: '#FFFFFF',
-                fontWeight: 500,
-                fontSize: '0.875rem',
+                fontWeight: 600,
+                fontSize: '0.85rem',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap'
@@ -225,16 +230,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               {user?.username}
             </Typography>
             <Chip
-              label={user?.rol_nombre}
+              label={currentUserRole || "USUARIO"}
               size="small"
               sx={{
                 height: 20,
-                fontSize: '0.7rem',
-                background: 'rgba(250, 204, 21, 0.2)',
-                color: '#FACC15',
-                border: '1px solid rgba(250, 204, 21, 0.3)',
+                fontSize: '0.68rem',
+                fontWeight: 700,
+                background: 'rgba(235, 100, 8, 0.2)',
+                color: '#f97316',
+                border: '1px solid rgba(235, 100, 8, 0.4)',
                 '& .MuiChip-label': {
-                  px: 1
+                  px: 0.8
                 }
               }}
             />
@@ -254,102 +260,186 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
           background: '#FFFFFF',
-          borderBottom: '1px solid #E5E7EB',
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+          borderBottom: '1px solid #E2E8F0',
+          boxShadow: '0 2px 6px rgba(29, 56, 103, 0.05)',
+          zIndex: (theme) => theme.zIndex.drawer + 1,
         }}
       >
-        <Toolbar sx={{ px: 4, py: 1, minHeight: '72px !important' }}>
+        {/* Franja Superior Oficial GOV.CO */}
+        <Box
+          sx={{
+            backgroundColor: '#3366CC',
+            py: 0.6,
+            px: { xs: 2, sm: 3 },
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <a
+            href="https://www.gov.co/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: 'inline-flex', alignItems: 'center' }}
+          >
+            <Box
+              component="img"
+              src="/assets/images/institutional/logoGov.svg"
+              alt="Portal GOV.CO"
+              sx={{
+                height: 18,
+                width: 'auto',
+                filter: 'brightness(0) invert(1)',
+              }}
+            />
+          </a>
+          <Typography
+            variant="caption"
+            sx={{
+              color: '#FFFFFF',
+              fontWeight: 500,
+              fontSize: '0.72rem',
+              letterSpacing: '0.02em',
+              display: { xs: 'none', md: 'block' },
+            }}
+          >
+            Gobernación del Cauca • Secretaría de Educación y Cultura
+          </Typography>
+        </Box>
+
+        {/* Encabezado Institucional Principal */}
+        <Toolbar sx={{ px: { xs: 2, sm: 3 }, py: 1, minHeight: '66px !important' }}>
           <IconButton
             color="inherit"
-            aria-label="open drawer"
+            aria-label="abrir menú"
             edge="start"
             onClick={handleDrawerToggle}
             sx={{
-              mr: 2,
+              mr: 1.5,
               display: { sm: "none" },
-              color: '#374151',
+              color: '#1D3867',
               '&:hover': {
-                backgroundColor: '#F3F4F6',
+                backgroundColor: '#F1F4F9',
               },
             }}
           >
             <MenuIcon />
           </IconButton>
-          
-          <Box sx={{ flexGrow: 1 }}>
-            <Typography
-              variant="h5"
-              className="font-poppins"
+
+          {/* Escudos Institucionales en Header */}
+          <Box
+            sx={{
+              display: { xs: 'none', md: 'flex' },
+              alignItems: 'center',
+              gap: 1.5,
+              mr: 2,
+            }}
+          >
+            <Box
+              component="img"
+              src="/assets/images/institutional/colombia.svg"
+              alt="República de Colombia"
               sx={{
-                color: '#1E3A8A',
-                fontWeight: 600,
-                fontSize: '1.5rem',
-                lineHeight: 1.2
+                height: 38,
+                width: 'auto',
+                objectFit: 'contain',
+              }}
+            />
+            <Box
+              component="img"
+              src="/assets/images/institutional/logoCaucaHorizontal.png"
+              alt="Gobernación del Cauca"
+              sx={{
+                height: 38,
+                width: 'auto',
+                objectFit: 'contain',
+              }}
+            />
+            <Divider orientation="vertical" flexItem sx={{ mx: 0.5, borderColor: '#E2E8F0' }} />
+          </Box>
+          
+          <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+            <Typography
+              variant="subtitle1"
+              sx={{
+                color: '#1D3867',
+                fontWeight: 800,
+                fontSize: { xs: '0.95rem', sm: '1.15rem' },
+                lineHeight: 1.2,
+                fontFamily: "'Poppins', sans-serif",
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
               }}
             >
-              SmartAuditorIA: Sistema Experto de Auditoría
+              Secretaría de Educación y Cultura
             </Typography>
             <Typography
-              variant="body2"
-              className="font-roboto"
+              variant="caption"
               sx={{
-                color: '#6B7280',
-                fontSize: '0.875rem',
-                mt: 0.5
+                color: '#64748B',
+                fontSize: '0.75rem',
+                fontWeight: 500,
+                display: 'block',
+                lineHeight: 1.2,
               }}
             >
-              Plataforma integral para la gestion de activos y evaluacion de riesgos
+              Gobernación del Cauca • SmartAuditorIA SGSI
             </Typography>
           </Box>
           
-          <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 1.5, sm: 2.5 } }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
               <Avatar sx={{ 
-                width: 40, 
-                height: 40, 
-                background: 'linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%)',
+                width: 38, 
+                height: 38, 
+                background: 'linear-gradient(135deg, #1D3867 0%, #2A4F8A 100%)',
                 color: '#FFFFFF',
-                fontSize: '0.875rem',
-                fontWeight: 600
+                fontSize: '0.85rem',
+                fontWeight: 700
               }}>
                 {user?.username?.charAt(0).toUpperCase()}
               </Avatar>
-              <Box sx={{ textAlign: 'right' }}>
+              <Box sx={{ textAlign: 'right', display: { xs: 'none', sm: 'block' } }}>
                 <Typography
                   variant="body2"
-                  className="font-roboto"
                   sx={{
-                    color: '#374151',
-                    fontWeight: 500,
-                    fontSize: '0.875rem'
+                    color: '#1D3867',
+                    fontWeight: 600,
+                    fontSize: '0.85rem'
                   }}
                 >
                   {user?.username}
                 </Typography>
-                <Typography
-                  variant="caption"
-                  className="font-roboto"
+                <Chip
+                  label={currentUserRole || "USUARIO"}
+                  size="small"
                   sx={{
-                    color: '#6B7280',
-                    fontSize: '0.75rem'
+                    height: 18,
+                    fontSize: '0.65rem',
+                    fontWeight: 700,
+                    color: '#eb6408',
+                    backgroundColor: 'rgba(235, 100, 8, 0.08)',
+                    border: '1px solid rgba(235, 100, 8, 0.3)',
+                    '& .MuiChip-label': {
+                      px: 0.6,
+                    },
                   }}
-                >
-                  {user?.rol_nombre}
-                </Typography>
+                />
               </Box>
             </Box>
             
             <IconButton
               size="large"
-              aria-label="account of current user"
+              aria-label="configuración de usuario"
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleMenu}
               sx={{
-                color: '#6B7280',
+                color: '#475569',
                 '&:hover': {
-                  backgroundColor: '#F3F4F6',
-                  color: '#1E3A8A'
+                  backgroundColor: '#F1F4F9',
+                  color: '#1D3867'
                 },
                 transition: 'all 0.2s ease'
               }}
@@ -374,41 +464,52 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               PaperProps={{
                 sx: {
                   borderRadius: '12px',
-                  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
-                  border: '1px solid #E5E7EB',
+                  boxShadow: '0 10px 25px rgba(29, 56, 103, 0.1)',
+                  border: '1px solid #E2E8F0',
                   mt: 1,
                   minWidth: 200
                 },
               }}
             >
+              <Box sx={{ px: 2, py: 1.5, borderBottom: '1px solid #E2E8F0' }}>
+                <Typography variant="body2" sx={{ fontWeight: 600, color: '#1D3867' }}>
+                  {user?.username}
+                </Typography>
+                <Typography variant="caption" sx={{ color: '#64748B' }}>
+                  Rol: {user?.rol_nombre}
+                </Typography>
+              </Box>
               <MenuItem
                 onClick={handleLogout}
                 sx={{
-                  fontFamily: "'Roboto', sans-serif",
                   py: 1.5,
                   px: 2,
                   '&:hover': {
-                    backgroundColor: '#F3F4F6',
+                    backgroundColor: '#FEF2F2',
                   },
                 }}
               >
-                <ListItemIcon sx={{ color: '#EF4444', minWidth: 40 }}>
+                <ListItemIcon sx={{ color: '#EF4444', minWidth: 36 }}>
                   <Logout fontSize="small" />
                 </ListItemIcon>
                 <ListItemText
-                  primary="Cerrar Sesion"
+                  primary="Cerrar Sesión"
                   primaryTypographyProps={{
-                    fontFamily: "'Roboto', sans-serif",
-                    color: '#374151',
-                    fontSize: '0.875rem'
+                    color: '#EF4444',
+                    fontSize: '0.875rem',
+                    fontWeight: 500,
                   }}
                 />
-              </MenuItem>\n            </Menu>\n          </Box>\n        </Toolbar>
+              </MenuItem>
+            </Menu>
+          </Box>
+        </Toolbar>
       </AppBar>
+
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
+        aria-label="navegación del sistema"
       >
         <Drawer
           variant="temporary"
@@ -435,21 +536,23 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           {drawer}
         </Drawer>
       </Box>
+
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
-          backgroundColor: '#F9FAFB',
+          backgroundColor: '#F7F8FA',
           minHeight: '100vh',
         }}
       >
-        <Toolbar sx={{ minHeight: '72px !important' }} />
+        {/* Espaciador para compensar el AppBar con Ribbon GOV.CO */}
+        <Box sx={{ height: { xs: '100px', sm: '104px' } }} />
         <Box
           sx={{
             p: { xs: 2, sm: 3, md: 4 },
-            minHeight: 'calc(100vh - 72px)',
-            background: 'linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%)',
+            minHeight: 'calc(100vh - 104px)',
+            backgroundColor: '#F7F8FA',
           }}
         >
           {children}

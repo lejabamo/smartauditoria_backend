@@ -26,18 +26,27 @@ const MapaRiesgosDAFPView = lazy(() => import("./components/reportes/MapaRiesgos
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#2F3E46",
+      main: "#1D3867", // Deep Cauca Navy
+      light: "#2A4F8A",
+      dark: "#122443",
+      contrastText: "#FFFFFF",
     },
     secondary: {
-      main: "#84A98C",
+      main: "#eb6408", // Cauca Vibrant Orange
+      light: "#f97316",
+      dark: "#c85305",
+      contrastText: "#FFFFFF",
+    },
+    info: {
+      main: "#3366CC", // GOV.CO Blue
     },
     background: {
-      default: "#F6F7F8",
+      default: "#F7F8FA",
       paper: "#FFFFFF",
     },
     text: {
-      primary: "#2F3E46",
-      secondary: "#666666",
+      primary: "#1D3867",
+      secondary: "#475569",
     },
   },
   typography: {
@@ -45,26 +54,32 @@ const theme = createTheme({
     h1: {
       fontFamily: "'Poppins', sans-serif",
       fontWeight: 600,
+      color: "#1D3867",
     },
     h2: {
       fontFamily: "'Poppins', sans-serif",
       fontWeight: 600,
+      color: "#1D3867",
     },
     h3: {
       fontFamily: "'Poppins', sans-serif",
       fontWeight: 600,
+      color: "#1D3867",
     },
     h4: {
       fontFamily: "'Poppins', sans-serif",
       fontWeight: 600,
+      color: "#1D3867",
     },
     h5: {
       fontFamily: "'Poppins', sans-serif",
-      fontWeight: 500,
+      fontWeight: 600,
+      color: "#1D3867",
     },
     h6: {
       fontFamily: "'Poppins', sans-serif",
       fontWeight: 500,
+      color: "#1D3867",
     },
     button: {
       fontFamily: "'Poppins', sans-serif",
@@ -83,29 +98,36 @@ const theme = createTheme({
           padding: '10px 24px',
           fontSize: '0.95rem',
           fontWeight: 500,
-          boxShadow: '0 2px 8px rgba(47, 62, 70, 0.15)',
+          boxShadow: '0 2px 8px rgba(29, 56, 103, 0.12)',
           transition: 'all 0.2s ease-in-out',
           '&:hover': {
             transform: 'translateY(-1px)',
-            boxShadow: '0 4px 16px rgba(47, 62, 70, 0.25)',
+            boxShadow: '0 4px 16px rgba(29, 56, 103, 0.2)',
           },
           '&:active': {
             transform: 'translateY(0)',
           },
         },
         contained: {
-          backgroundColor: '#2F3E46',
-          color: '#F6F7F8',
+          backgroundColor: '#1D3867',
+          color: '#FFFFFF',
           '&:hover': {
-            backgroundColor: '#1a2529',
+            backgroundColor: '#122443',
+          },
+        },
+        containedSecondary: {
+          backgroundColor: '#eb6408',
+          color: '#FFFFFF',
+          '&:hover': {
+            backgroundColor: '#c85305',
           },
         },
         outlined: {
-          borderColor: '#84A98C',
-          color: '#52796F',
+          borderColor: '#1D3867',
+          color: '#1D3867',
           '&:hover': {
-            borderColor: '#52796F',
-            backgroundColor: 'rgba(132, 169, 140, 0.04)',
+            borderColor: '#122443',
+            backgroundColor: 'rgba(29, 56, 103, 0.04)',
           },
         },
       },
@@ -114,11 +136,11 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 12,
-          boxShadow: '0 4px 20px rgba(47, 62, 70, 0.08)',
-          border: '1px solid rgba(47, 62, 70, 0.06)',
+          boxShadow: '0 4px 20px rgba(29, 56, 103, 0.06)',
+          border: '1px solid rgba(226, 232, 240, 0.9)',
           transition: 'all 0.2s ease-in-out',
           '&:hover': {
-            boxShadow: '0 8px 32px rgba(47, 62, 70, 0.12)',
+            boxShadow: '0 8px 32px rgba(29, 56, 103, 0.1)',
             transform: 'translateY(-2px)',
           },
         },
@@ -131,10 +153,10 @@ const theme = createTheme({
             borderRadius: 8,
             transition: 'all 0.2s ease-in-out',
             '&:hover fieldset': {
-              borderColor: '#84A98C',
+              borderColor: '#3366CC',
             },
             '&.Mui-focused fieldset': {
-              borderColor: '#52796F',
+              borderColor: '#1D3867',
             },
           },
         },
@@ -144,7 +166,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 12,
-          boxShadow: '0 2px 12px rgba(47, 62, 70, 0.06)',
+          boxShadow: '0 2px 12px rgba(29, 56, 103, 0.06)',
         },
       },
     },

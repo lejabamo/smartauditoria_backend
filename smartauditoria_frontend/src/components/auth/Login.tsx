@@ -173,231 +173,375 @@ const Login: React.FC = () => {
     <Box
       sx={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #0F172A 0%, #1E3A8A 50%, #0F172A 100%)",
         display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        py: 4,
-        px: 2,
+        flexDirection: "column",
+        background: "linear-gradient(180deg, #FFFFFF 0%, #F4F6F9 100%)",
       }}
     >
-      <Container maxWidth="sm">
-        <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
-          {/* Logo Section */}
-          <Box sx={{ textAlign: "center" }}>
+      {/* 1. Franja Superior Oficial GOV.CO */}
+      <Box
+        component="header"
+        sx={{
+          backgroundColor: "#3366CC", // colorGob oficial
+          py: 1,
+          px: { xs: 2, sm: 4 },
+          display: "flex",
+          alignItems: "center",
+          justifyContent: { xs: "center", sm: "flex-start" },
+          boxShadow: "0 2px 4px rgba(0,0,0,0.08)",
+          zIndex: 10,
+        }}
+      >
+        <a
+          href="https://www.gov.co/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ display: "inline-flex", alignItems: "center" }}
+        >
+          <Box
+            component="img"
+            src="/assets/images/institutional/logoGov.svg"
+            alt="Portal GOV.CO"
+            sx={{
+              height: 24,
+              width: "auto",
+              filter: "brightness(0) invert(1)", // Blanco puro oficial
+            }}
+          />
+        </a>
+      </Box>
+
+      {/* 2. Encabezado Institucional - Escudos y Secretaría */}
+      <Box
+        sx={{
+          backgroundColor: "#FFFFFF",
+          borderBottom: "1px solid #E2E8F0",
+          py: { xs: 1.2, sm: 1.8 },
+          px: { xs: 2, sm: 4 },
+          boxShadow: "0 1px 3px rgba(29, 56, 103, 0.05)",
+        }}
+      >
+        <Container maxWidth="lg">
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 1.5,
+            }}
+          >
+            {/* Escudos Oficiales */}
             <Box
               sx={{
-                width: 76,
-                height: 76,
-                borderRadius: "20px",
-                background: "linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%)",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
-                boxShadow: "0 10px 30px rgba(59, 130, 246, 0.4)",
-                mb: 2,
-                mx: "auto",
-                border: "2px solid rgba(255,255,255,0.15)",
+                gap: { xs: 1.5, sm: 2 },
               }}
             >
-              <ShieldIcon sx={{ color: "#FFFFFF", fontSize: 42 }} />
+              <Box
+                component="img"
+                src="/assets/images/institutional/colombia.svg"
+                alt="República de Colombia"
+                sx={{
+                  height: { xs: 38, sm: 48 },
+                  width: "auto",
+                  objectFit: "contain",
+                }}
+              />
+              <Box
+                sx={{
+                  height: { xs: 32, sm: 40 },
+                  width: "1px",
+                  backgroundColor: "#CBD5E1",
+                }}
+              />
+              <Box
+                component="img"
+                src="/assets/images/institutional/logoCaucaHorizontal.png"
+                alt="Gobernación del Cauca"
+                sx={{
+                  height: { xs: 38, sm: 48 },
+                  width: "auto",
+                  objectFit: "contain",
+                }}
+              />
             </Box>
-            <Typography
-              variant="h4"
+
+            {/* Título de la Entidad */}
+            <Box sx={{ textAlign: { xs: "center", md: "right" } }}>
+              <Typography
+                variant="h6"
+                sx={{
+                  color: "#1D3867", // Cauca Navy
+                  fontWeight: 800,
+                  fontSize: { xs: "1rem", sm: "1.25rem" },
+                  fontFamily: "'Poppins', sans-serif",
+                  lineHeight: 1.2,
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                Secretaría de Educación y Cultura
+              </Typography>
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  color: "#475569",
+                  fontWeight: 600,
+                  fontSize: { xs: "0.8rem", sm: "0.9rem" },
+                  lineHeight: 1.3,
+                }}
+              >
+                Gobernación del Cauca
+              </Typography>
+            </Box>
+          </Box>
+        </Container>
+      </Box>
+
+      {/* 3. Contenedor Principal del Formulario */}
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          py: { xs: 2.5, sm: 3.5 },
+          px: 2,
+        }}
+      >
+        <Container maxWidth="sm">
+          {/* Badge del Sistema SmartAuditorIA */}
+          <Box sx={{ textAlign: "center", mb: 2 }}>
+            <Box
               sx={{
-                color: "#FFFFFF",
-                fontWeight: 700,
-                fontSize: { xs: "2rem", sm: "2.3rem" },
-                mb: 0.5,
-                letterSpacing: "-0.02em",
-                fontFamily: "'Poppins', sans-serif",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 1.2,
+                px: 2.2,
+                py: 0.6,
+                borderRadius: "50px",
+                backgroundColor: "rgba(29, 56, 103, 0.06)",
+                border: "1px solid rgba(29, 56, 103, 0.15)",
+                mb: 1,
               }}
             >
-              SmartAuditorIA
-            </Typography>
+              <ShieldIcon sx={{ color: "#eb6408", fontSize: 20 }} />
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  color: "#1D3867",
+                  fontWeight: 700,
+                  letterSpacing: "0.02em",
+                  fontSize: "0.85rem",
+                }}
+              >
+                SmartAuditorIA • SGSI
+              </Typography>
+            </Box>
+
             <Typography
-              variant="subtitle1"
+              variant="body2"
               sx={{
-                color: "#93C5FD",
+                color: "#64748B",
+                fontSize: "0.82rem",
                 fontWeight: 500,
-                fontSize: "1rem",
-                mb: 0.5,
-              }}
-            >
-              Gobernanza y Auditoría de Seguridad TI (SGSI)
-            </Typography>
-            <Typography
-              variant="caption"
-              sx={{
-                color: "#94A3B8",
-                fontSize: "0.85rem",
               }}
             >
               ISO/IEC 27001 • MIPG / DAFP V7 • Control de Acceso RBAC
             </Typography>
           </Box>
-        </Box>
 
-        <Card
-          sx={{
-            maxWidth: 480,
-            mx: "auto",
-            borderRadius: "20px",
-            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.35)",
-            border: "1px solid rgba(255, 255, 255, 0.1)",
-            background: "rgba(255, 255, 255, 0.98)",
-            backdropFilter: "blur(16px)",
-            overflow: "hidden",
-          }}
-        >
-          <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
-            <Box sx={{ textAlign: "center", mb: 3 }}>
-              <Typography
-                variant="h5"
-                sx={{
-                  color: "#0F172A",
-                  fontWeight: 700,
-                  fontFamily: "'Poppins', sans-serif",
-                  mb: 0.5,
-                }}
-              >
-                Iniciar Sesión
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{
-                  color: "#64748B",
-                  fontSize: "0.9rem",
-                }}
-              >
-                Ingresa tus credenciales autorizadas del sistema
-              </Typography>
-            </Box>
+          {/* Tarjeta de Inicio de Sesión */}
+          <Card
+            sx={{
+              maxWidth: 450,
+              mx: "auto",
+              borderRadius: "16px",
+              boxShadow: "0 12px 36px -10px rgba(29, 56, 103, 0.14)",
+              border: "1px solid #E2E8F0",
+              backgroundColor: "#FFFFFF",
+              overflow: "hidden",
+            }}
+          >
+            {/* Franja superior decorativa en tarjeta */}
+            <Box
+              sx={{
+                height: 4,
+                background: "linear-gradient(90deg, #1D3867 0%, #3366CC 50%, #eb6408 100%)",
+              }}
+            />
 
-            {error && (
-              <Alert
-                severity="error"
-                sx={{
-                  mb: 3,
-                  borderRadius: "12px",
-                  backgroundColor: "#FEF2F2",
-                  border: "1px solid #FECACA",
-                  color: "#991B1B",
-                }}
-              >
-                {error}
-              </Alert>
-            )}
-
-            <Box component="form" onSubmit={handleSubmit}>
-              <Stack spacing={2.5}>
-                <TextField
-                  fullWidth
-                  label="Usuario o Correo Institucional"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                  disabled={isLoading}
-                  placeholder="ej. admin, operador, auxiliar"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <PersonIcon sx={{ color: "#64748B" }} />
-                      </InputAdornment>
-                    ),
-                    sx: { borderRadius: "12px" },
-                  }}
-                />
-
-                <TextField
-                  fullWidth
-                  label="Contraseña"
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  disabled={isLoading}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <LockIcon sx={{ color: "#64748B" }} />
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setShowPassword(!showPassword)}
-                          edge="end"
-                          size="small"
-                        >
-                          {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                    sx: { borderRadius: "12px" },
-                  }}
-                />
-
-                {/* Enlace de recuperación de contraseña */}
-                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                  <Button
-                    variant="text"
-                    size="small"
-                    startIcon={<KeyIcon sx={{ fontSize: "1rem" }} />}
-                    onClick={handleOpenRecovery}
-                    sx={{
-                      color: "#2563EB",
-                      textTransform: "none",
-                      fontWeight: 600,
-                      fontSize: "0.85rem",
-                      p: 0,
-                      "&:hover": {
-                        backgroundColor: "transparent",
-                        textDecoration: "underline",
-                      },
-                    }}
-                  >
-                    ¿Olvidaste tu contraseña?
-                  </Button>
-                </Box>
-
-                <Button
-                  type="submit"
-                  fullWidth
-                  disabled={isLoading}
-                  startIcon={!isLoading && <LoginIcon />}
+            <CardContent sx={{ p: { xs: 2.5, sm: 3.5 } }}>
+              <Box sx={{ textAlign: "center", mb: 2.5 }}>
+                <Typography
+                  variant="h5"
                   sx={{
-                    background: "linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%)",
-                    color: "#FFFFFF",
-                    py: 1.5,
-                    borderRadius: "12px",
-                    textTransform: "none",
-                    fontWeight: 600,
-                    fontSize: "1rem",
-                    boxShadow: "0 4px 14px rgba(30, 58, 138, 0.35)",
-                    "&:hover": {
-                      background: "linear-gradient(135deg, #1E40AF 0%, #2563EB 100%)",
-                      transform: "translateY(-1px)",
-                      boxShadow: "0 6px 18px rgba(30, 58, 138, 0.45)",
-                    },
-                    "&:disabled": {
-                      background: "#94A3B8",
-                    },
-                    transition: "all 0.2s ease",
+                    color: "#1D3867",
+                    fontWeight: 700,
+                    fontFamily: "'Poppins', sans-serif",
+                    fontSize: { xs: "1.25rem", sm: "1.45rem" },
+                    mb: 0.5,
                   }}
                 >
-                  {isLoading ? (
-                    <CircularProgress size={24} sx={{ color: "#FFFFFF" }} />
-                  ) : (
-                    "Acceder al Sistema"
-                  )}
-                </Button>
-              </Stack>
-            </Box>
-          </CardContent>
-        </Card>
+                  Iniciar Sesión
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: "#64748B",
+                    fontSize: "0.85rem",
+                  }}
+                >
+                  Ingresa tus credenciales autorizadas del sistema
+                </Typography>
+              </Box>
 
-        {/* Modal de Recuperación de Contraseña (HU-010 / SCRUM-37) */}
+              {error && (
+                <Alert
+                  severity="error"
+                  sx={{
+                    mb: 3,
+                    borderRadius: "10px",
+                    backgroundColor: "#FEF2F2",
+                    border: "1px solid #FECACA",
+                    color: "#991B1B",
+                  }}
+                >
+                  {error}
+                </Alert>
+              )}
+
+              <Box component="form" onSubmit={handleSubmit}>
+                <Stack spacing={2.5}>
+                  <TextField
+                    fullWidth
+                    label="Usuario o Correo Institucional"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                    disabled={isLoading}
+                    placeholder="ej. admin, operador, auxiliar"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <PersonIcon sx={{ color: "#1D3867" }} />
+                        </InputAdornment>
+                      ),
+                      sx: { borderRadius: "10px" },
+                    }}
+                  />
+
+                  <TextField
+                    fullWidth
+                    label="Contraseña"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    disabled={isLoading}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <LockIcon sx={{ color: "#1D3867" }} />
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => setShowPassword(!showPassword)}
+                            edge="end"
+                            size="small"
+                          >
+                            {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                      sx: { borderRadius: "10px" },
+                    }}
+                  />
+
+                  {/* Enlace de recuperación de contraseña */}
+                  <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Button
+                      variant="text"
+                      size="small"
+                      startIcon={<KeyIcon sx={{ fontSize: "1rem", color: "#eb6408" }} />}
+                      onClick={handleOpenRecovery}
+                      sx={{
+                        color: "#1D3867",
+                        textTransform: "none",
+                        fontWeight: 600,
+                        fontSize: "0.85rem",
+                        p: 0,
+                        "&:hover": {
+                          backgroundColor: "transparent",
+                          color: "#eb6408",
+                          textDecoration: "underline",
+                        },
+                      }}
+                    >
+                      ¿Olvidaste tu contraseña?
+                    </Button>
+                  </Box>
+
+                  {/* Botón Principal en Naranja Cauca Oficial #eb6408 */}
+                  <Button
+                    type="submit"
+                    fullWidth
+                    disabled={isLoading}
+                    startIcon={!isLoading && <LoginIcon />}
+                    sx={{
+                      background: "linear-gradient(135deg, #eb6408 0%, #f97316 100%)",
+                      color: "#FFFFFF",
+                      py: 1.5,
+                      borderRadius: "10px",
+                      textTransform: "none",
+                      fontWeight: 700,
+                      fontSize: "1rem",
+                      boxShadow: "0 4px 14px rgba(235, 100, 8, 0.35)",
+                      "&:hover": {
+                        background: "linear-gradient(135deg, #c85305 0%, #eb6408 100%)",
+                        transform: "translateY(-1px)",
+                        boxShadow: "0 6px 18px rgba(235, 100, 8, 0.45)",
+                      },
+                      "&:disabled": {
+                        background: "#CBD5E1",
+                        color: "#94A3B8",
+                      },
+                      transition: "all 0.2s ease",
+                    }}
+                  >
+                    {isLoading ? (
+                      <CircularProgress size={24} sx={{ color: "#FFFFFF" }} />
+                    ) : (
+                      "Acceder al Sistema"
+                    )}
+                  </Button>
+                </Stack>
+              </Box>
+            </CardContent>
+          </Card>
+
+          {/* Pie Institucional */}
+          <Box sx={{ textAlign: "center", mt: 4 }}>
+            <Typography
+              variant="caption"
+              sx={{
+                color: "#64748B",
+                fontSize: "0.82rem",
+                display: "block",
+                lineHeight: 1.6,
+              }}
+            >
+              Gobernación del Cauca • Secretaría de Educación y Cultura<br />
+              Sistema de Gestión de Seguridad de la Información (SGSI) • Popayán, Colombia
+            </Typography>
+          </Box>
+        </Container>
+      </Box>
+
+      {/* Modal de Recuperación de Contraseña (HU-010 / SCRUM-37) */}
         <Dialog
           open={openRecoveryDialog}
           onClose={() => !isRecovering && setOpenRecoveryDialog(false)}
@@ -480,8 +624,11 @@ const Login: React.FC = () => {
                   sx={{
                     py: 1.2,
                     borderRadius: "10px",
-                    background: "linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%)",
+                    background: "linear-gradient(135deg, #1D3867 0%, #2A4F8A 100%)",
                     fontWeight: 600,
+                    "&:hover": {
+                      background: "#122443",
+                    },
                   }}
                 >
                   {isRecovering ? (
@@ -665,20 +812,6 @@ const Login: React.FC = () => {
             </Button>
           </DialogActions>
         </Dialog>
-
-        {/* Footer */}
-        <Box sx={{ textAlign: "center", mt: 4 }}>
-          <Typography
-            variant="caption"
-            sx={{
-              color: "#94A3B8",
-              fontSize: "0.85rem",
-            }}
-          >
-            © 2026 SmartAuditorIA | Maestría en Computación | Universidad del Valle
-          </Typography>
-        </Box>
-      </Container>
     </Box>
   );
 };

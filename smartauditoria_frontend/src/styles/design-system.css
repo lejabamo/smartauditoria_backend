@@ -1,38 +1,47 @@
-/* Sistema de Diseño SGSRI - Paleta Institucional */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap');
+
+/* Sistema de Diseño SmartAuditorIA - Paleta Oficial Gobernación del Cauca / SedCauca */
 
 :root {
-  /* Colores Primarios */
-  --primary-blue: #1E3A8A;
-  --primary-blue-light: #3B82F6;
-  --primary-blue-dark: #1E40AF;
+  /* Identidad Institucional Gobernación del Cauca */
+  --color-gob: #3366CC;            /* Azul Oficial GOV.CO */
+  --primary-cauca-navy: #1D3867;   /* Azul Oscuro Institucional Gobernación del Cauca */
+  --primary-cauca-navy-dark: #122443;
+  --primary-cauca-navy-light: #2A4F8A;
+  --accent-cauca-orange: #eb6408;  /* Naranja Oficial Gobernación del Cauca */
+  --accent-cauca-orange-dark: #c85305;
+  --accent-cauca-orange-light: #f97316;
+
+  /* Aliases para compatibilidad */
+  --primary-blue: #1D3867;
+  --primary-blue-light: #3366CC;
+  --primary-blue-dark: #122443;
+  --accent-gold: #eb6408;
+  --accent-gold-light: #f97316;
   
-  /* Colores de Fondo */
-  --bg-primary: #F9FAFB;
+  /* Colores de Fondo Institucional */
+  --bg-primary: #F7F8FA;
   --bg-secondary: #FFFFFF;
-  --bg-tertiary: #F3F4F6;
+  --bg-tertiary: #F1F4F9;
   
   /* Colores de Texto */
-  --text-primary: #374151;
-  --text-secondary: #6B7280;
-  --text-tertiary: #9CA3AF;
+  --text-primary: #1D3867;
+  --text-secondary: #475569;
+  --text-tertiary: #94A3B8;
   --text-white: #FFFFFF;
-  
-  /* Color de Acento */
-  --accent-gold: #FACC15;
-  --accent-gold-light: #FDE047;
   
   /* Estados */
   --success: #10B981;
   --warning: #F59E0B;
   --error: #EF4444;
-  --info: #3B82F6;
+  --info: #3366CC;
   
   /* Bordes y Sombras */
-  --border-light: #E5E7EB;
-  --border-medium: #D1D5DB;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --border-light: #E2E8F0;
+  --border-medium: #CBD5E1;
+  --shadow-sm: 0 1px 2px 0 rgba(29, 56, 103, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(29, 56, 103, 0.1), 0 2px 4px -1px rgba(29, 56, 103, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(29, 56, 103, 0.1), 0 4px 6px -2px rgba(29, 56, 103, 0.05);
   
   /* Espaciado */
   --spacing-xs: 0.25rem;
@@ -55,7 +64,6 @@
 }
 
 /* Tipografías */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap');
 
 .font-poppins {
   font-family: 'Poppins', sans-serif;
