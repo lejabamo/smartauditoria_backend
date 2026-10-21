@@ -94,10 +94,10 @@ Este documento contiene las Historias de Usuario (User Stories) priorizadas y co
 ### HU-009: Módulo de Gestión de Usuarios y Roles RBAC (Jira: SCRUM-36)
 **Como** Administrador del Sistema
 **Quiero** gestionar de forma integral el ciclo de vida de los usuarios (crear, editar, activar, inactivar, desbloquear y asignar roles RBAC)
-**Para** asegurar que cada integrante de la organización (ADMIN, OPERADOR, AUXILIAR, CONSULTOR) acceda únicamente a las funcionalidades que le corresponden según el principio de mínimo privilegio.
+**Para** asegurar que cada integrante de la organización (ADMIN, OPERADOR, CONSULTOR) acceda únicamente a las funcionalidades que le corresponden según el principio de mínimo privilegio.
 * **Criterios de Aceptación (DoD):**
   1. Sincronización bidireccional entre la identidad institucional (`usuarios_sistema`) y la cuenta de credenciales (`usuarios_auth`).
-  2. Catálogo dinámico de roles (`ADMIN`, `OPERADOR`, `AUXILIAR`, `CONSULTOR`) con filtro interactivo en la UI.
+  2. Catálogo dinámico de roles (`ADMIN`, `OPERADOR`, `CONSULTOR`) con filtro interactivo en la UI.
   3. Visualización clara en DataGrid de estado de cuenta (Activo, Inactivo, Bloqueado) y fecha de último login.
   4. Capacidad administrativa para activar/desactivar cuentas y desbloquear usuarios bloqueados por intentos fallidos.
   5. Acción de restablecimiento forzado de contraseña por el Administrador con generación de clave temporal segura.

@@ -16,11 +16,10 @@ with app.app_context():
     try:
         from app.models import UsuarioSistema, UsuarioAuth, Rol
         
-        # 2. Crear roles estándar si no existen (ADMIN, OPERADOR, AUXILIAR, CONSULTOR)
+        # 2. Crear roles estándar si no existen (ADMIN, OPERADOR, CONSULTOR)
         roles_data = [
             ('ADMIN', 'Administrador del Sistema con acceso total', '["*"]'),
             ('OPERADOR', 'Operador SGSI con gestión de activos, riesgos y auditorías', '["activos:read", "activos:write", "riesgos:read", "riesgos:write", "auditorias:read", "auditorias:write", "usuarios:read"]'),
-            ('AUXILIAR', 'Auxiliar de Auditoría operativo para wizard y recolección de evidencias (sin aprobación)', '["activos:read", "riesgos:read", "auditorias:read", "auditorias:write", "wizard:execute"]'),
             ('CONSULTOR', 'Consultor con permisos de solo lectura (modo consulta)', '["activos:read", "riesgos:read", "auditorias:read", "usuarios:read"]')
         ]
         

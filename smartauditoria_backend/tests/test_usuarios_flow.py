@@ -17,12 +17,14 @@ def test_client():
     with app.test_client() as client:
         with app.app_context():
             db.create_all()
-            # Ensure roles
-            for rol_name in ["ADMIN", "OPERADOR", "AUXILIAR", "CONSULTOR"]:
+            # Ensure the 3 standard roles
+            for rol_name in ["ADMIN", "OPERADOR", "CONSULTOR"]:
                 r = Rol.query.filter_by(nombre_rol=rol_name).first()
                 if not r:
                     r = Rol(nombre_rol=rol_name, descripcion=f"Rol {rol_name}", permisos="[]", activo=True)
                     db.session.add(r)
+                else:
+                    r.activo = True
             db.session.commit()
             
             # Ensure admin
@@ -74,22 +76,21 @@ def test_user_management_and_password_recovery(test_client):
     roles_list = roles_resp.json if isinstance(roles_resp.json, list) else roles_resp.json.get("data", [])
     role_names = [r["nombre_rol"] for r in roles_list]
     assert "ADMIN" in role_names
-    assert "AUXILIAR" in role_names
     assert "OPERADOR" in role_names
     assert "CONSULTOR" in role_names
     
-    auxiliar_rol = next(r for r in roles_list if r["nombre_rol"] == "AUXILIAR")
+    operador_rol = next(r for r in roles_list if r["nombre_rol"] == "OPERADOR")
     
-    # 3. Create a new user with AUXILIAR role (SCRUM-36)
+    # 3. Create a new user with OPERADOR role (SCRUM-36)
     import time
     ts = int(time.time())
-    new_user_email = f"auxiliar_auditor_{ts}@smartauditoria.co"
+    new_user_email = f"operador_sgsi_{ts}@smartauditoria.co"
     create_payload = {
-        "nombre_completo": f"Carlos Auxiliar Auditor {ts}",
+        "nombre_completo": f"Carlos Operador SGSI {ts}",
         "email_institucional": new_user_email,
-        "puesto_organizacion": "Auditor Junior",
-        "rol": "AUXILIAR",
-        "id_rol": auxiliar_rol["id_rol"],
+        "puesto_organizacion": "Oficial de Seguridad",
+        "rol": "OPERADOR",
+        "id_rol": operador_rol["id_rol"],
         "password": "InitialPass2026!"
     }
     create_resp = test_client.post("/api/usuarios/", json=create_payload, headers=headers)
@@ -103,7 +104,7 @@ def test_user_management_and_password_recovery(test_client):
     users = users_resp.json if isinstance(users_resp.json, list) else users_resp.json.get("data", [])
     created_user = next((u for u in users if u["email_institucional"] == new_user_email), None)
     assert created_user is not None
-    assert created_user["rol_nombre"] == "AUXILIAR"
+    assert created_user["rol_nombre"] == "OPERADOR"
     assert created_user["activo"] is True
     assert created_user["bloqueado"] is False
     
@@ -132,7 +133,7 @@ def test_user_management_and_password_recovery(test_client):
         "password": new_password
     })
     assert recovered_login.status_code == 200
-    assert recovered_login.json.get("user", {}).get("rol") == "AUXILIAR"
+    assert recovered_login.json.get("user", {}).get("rol") == "OPERADOR"
     
     # 6. Admin Reset Password (SCRUM-36 / SCRUM-37)
     admin_reset_resp = test_client.post(

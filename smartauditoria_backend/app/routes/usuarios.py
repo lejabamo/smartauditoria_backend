@@ -11,11 +11,10 @@ logger = get_logger(__name__)
 usuarios_bp = Blueprint('usuarios', __name__)
 
 def _ensure_default_roles():
-    """Asegura que los roles estándar del sistema existan en roles_auth"""
+    """Asegura que los 3 roles estándar del sistema (ADMINISTRADOR, OPERADOR, CONSULTOR) existan y estén activos"""
     roles_def = [
         ('ADMIN', 'Administrador del sistema con acceso completo', '["*"]'),
         ('OPERADOR', 'Operador SGSI con gestión de activos, riesgos y auditorías', '["activos:read", "activos:write", "riesgos:read", "riesgos:write", "auditorias:read", "auditorias:write", "usuarios:read"]'),
-        ('AUXILIAR', 'Auxiliar de Auditoría operativo para wizard y recolección de evidencias (sin aprobación)', '["activos:read", "riesgos:read", "auditorias:read", "auditorias:write", "wizard:execute"]'),
         ('CONSULTOR', 'Consultor con permisos de solo lectura (modo consulta)', '["activos:read", "riesgos:read", "auditorias:read", "usuarios:read"]')
     ]
     for nombre, desc, perms in roles_def:
@@ -23,7 +22,14 @@ def _ensure_default_roles():
         if not rol:
             rol = Rol(nombre_rol=nombre, descripcion=desc, permisos=perms, activo=True)
             db.session.add(rol)
+        else:
+            rol.activo = True
+            rol.descripcion = desc
+            rol.permisos = perms
+            
+    # Desactivar roles fuera de los 3 oficiales
     try:
+        Rol.query.filter(Rol.nombre_rol.notin_(['ADMIN', 'OPERADOR', 'CONSULTOR'])).update({'activo': False}, synchronize_session=False)
         db.session.commit()
     except Exception:
         db.session.rollback()
@@ -67,8 +73,8 @@ def get_usuarios():
             if auth and auth.rol:
                 rol_nombre = auth.rol.nombre_rol
                 id_rol = auth.id_rol
-            elif u.puesto_organizacion in ['ADMIN', 'OPERADOR', 'CONSULTOR', 'AUXILIAR', 'Administrador', 'Auditor']:
-                rol_nombre = u.puesto_organizacion
+            elif u.puesto_organizacion in ['ADMIN', 'OPERADOR', 'CONSULTOR', 'Administrador', 'Operador', 'Consultor']:
+                rol_nombre = u.puesto_organizacion.upper() if u.puesto_organizacion.upper() in ['ADMIN', 'OPERADOR', 'CONSULTOR'] else ('ADMIN' if 'Admin' in u.puesto_organizacion else 'OPERADOR')
             else:
                 rol_nombre = 'CONSULTOR'
             

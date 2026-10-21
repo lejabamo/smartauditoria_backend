@@ -84,5 +84,5 @@ export interface Activo {
   ID_Propietario?: number | null;
 }
 
-export type UserRole = "ADMIN" | "OPERADOR" | "CONSULTOR" | "AUXILIAR" | "AUXILIAR_AUDITORIA";
+export type UserRole = "ADMIN" | "OPERADOR" | "CONSULTOR";
 

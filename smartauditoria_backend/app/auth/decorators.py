@@ -80,27 +80,22 @@ def require_any_role(required_roles):
         return decorated_function
     return decorator
 
-# Mapeado de roles: acepta tanto nombres cortos (legacy) como nombres reales de la BD
+# Mapeado de los 3 roles oficiales del sistema: ADMINISTRADOR, OPERADOR, CONSULTOR
 ROL_ADMIN = ['ADMIN', 'Administrador']
 ROL_OPERADOR = ['OPERADOR', 'Operador']
 ROL_CONSULTOR = ['CONSULTOR', 'Consultor']
-ROL_AUXILIAR = ['AUXILIAR', 'Auxiliar', 'AUXILIAR_AUDITORIA', 'Auxiliar de Auditoría', 'Auxiliar de Auditoria']
 
 def admin_required(f):
     """Decorador que requiere rol de administrador"""
     return require_any_role(ROL_ADMIN)(f)
 
 def operator_required(f):
-    """Decorador que requiere rol de operador o superior"""
+    """Decorador que requiere rol de operador o administrador"""
     return require_any_role(ROL_ADMIN + ROL_OPERADOR)(f)
 
-def auxiliar_required(f):
-    """Decorador que requiere rol de auxiliar, operador o administrador"""
-    return require_any_role(ROL_ADMIN + ROL_OPERADOR + ROL_AUXILIAR)(f)
-
 def consultant_required(f):
-    """Decorador que permite lectura a cualquier rol autenticado activo"""
-    return require_any_role(ROL_ADMIN + ROL_OPERADOR + ROL_CONSULTOR + ROL_AUXILIAR)(f)
+    """Decorador que permite lectura a cualquier rol autenticado activo (Administrador, Operador, Consultor)"""
+    return require_any_role(ROL_ADMIN + ROL_OPERADOR + ROL_CONSULTOR)(f)
 
 def require_permission(resource, action):
     """

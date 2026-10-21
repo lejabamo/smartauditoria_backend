@@ -278,7 +278,7 @@ const Usuarios: React.FC = () => {
         puesto: '',
         estado: 'Activo',
         rol: 'CONSULTOR',
-        id_rol: 4,
+        id_rol: 3,
         username: '',
         password: '',
         activo: true,
@@ -672,11 +672,9 @@ const Usuarios: React.FC = () => {
         const rol = (params.value || params.row.rol_nombre || 'CONSULTOR').toUpperCase();
         let config = { label: 'CONSULTOR', bg: '#FEF3C7', color: '#92400E', icon: <VisibilityIcon sx={{ fontSize: 13 }} /> };
         if (rol === 'ADMIN' || rol.includes('ADMIN')) {
-          config = { label: 'ADMIN', bg: '#EDE9FE', color: '#6D28D9', icon: <ShieldIcon sx={{ fontSize: 13 }} /> };
-        } else if (rol === 'OPERADOR') {
+          config = { label: 'ADMINISTRADOR', bg: '#EDE9FE', color: '#6D28D9', icon: <ShieldIcon sx={{ fontSize: 13 }} /> };
+        } else if (rol === 'OPERADOR' || rol.includes('OPERADOR')) {
           config = { label: 'OPERADOR', bg: '#E0F2FE', color: '#0369A1', icon: <SecurityIcon sx={{ fontSize: 13 }} /> };
-        } else if (rol === 'AUXILIAR' || rol.includes('AUXILIAR')) {
-          config = { label: 'AUXILIAR', bg: '#D1FAE5', color: '#047857', icon: <AssignmentIcon sx={{ fontSize: 13 }} /> };
         }
 
         return (
@@ -1110,10 +1108,9 @@ const Usuarios: React.FC = () => {
                 }}
               >
                 <MenuItem value="">Todos los roles</MenuItem>
-                <MenuItem value="ADMIN">ADMIN (Control Total)</MenuItem>
-                <MenuItem value="OPERADOR">OPERADOR (Gestión SGSI)</MenuItem>
-                <MenuItem value="AUXILIAR">AUXILIAR (Auditoría / Wizard)</MenuItem>
-                <MenuItem value="CONSULTOR">CONSULTOR (Solo Lectura)</MenuItem>
+                <MenuItem value="ADMIN">ADMINISTRADOR</MenuItem>
+                <MenuItem value="OPERADOR">OPERADOR</MenuItem>
+                <MenuItem value="CONSULTOR">CONSULTOR</MenuItem>
               </Select>
             </FormControl>
             
@@ -1291,15 +1288,6 @@ const Usuarios: React.FC = () => {
                         <Box>
                           <Typography variant="body2" sx={{ fontWeight: 600 }}>OPERADOR</Typography>
                           <Typography variant="caption" sx={{ color: '#6B7280' }}>Gestión de Activos, Riesgos y Auditorías</Typography>
-                        </Box>
-                      </Box>
-                    </MenuItem>
-                    <MenuItem value="AUXILIAR">
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <AssignmentIcon sx={{ color: '#047857', fontSize: 18 }} />
-                        <Box>
-                          <Typography variant="body2" sx={{ fontWeight: 600 }}>AUXILIAR DE AUDITORÍA (HU-003)</Typography>
-                          <Typography variant="caption" sx={{ color: '#6B7280' }}>Ejecución Wizard y Evidencias (Sin Aprobación)</Typography>
                         </Box>
                       </Box>
                     </MenuItem>
