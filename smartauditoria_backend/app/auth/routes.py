@@ -26,9 +26,13 @@ def login():
         if not username or not password:
             return jsonify({'error': 'Username y password son requeridos'}), 400
         
-        # Buscar usuario con relación de rol cargada
+        # Buscar usuario por username o por email institucional
         from sqlalchemy.orm import joinedload
         usuario = UsuarioAuth.query.options(joinedload(UsuarioAuth.rol)).filter_by(username=username).first()
+        if not usuario:
+            usuario = UsuarioAuth.query.options(joinedload(UsuarioAuth.rol))\
+                .join(UsuarioSistema, UsuarioAuth.id_usuario_sistema == UsuarioSistema.id_usuario)\
+                .filter(UsuarioSistema.email_institucional == username).first()
         
         if not usuario:
             return jsonify({'error': 'Credenciales inválidas'}), 401
@@ -212,3 +216,159 @@ def get_roles():
         return jsonify([rol.to_dict() for rol in roles]), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@auth_bp.route('/forgot-password', methods=['POST'])
+def forgot_password():
+    """
+    Solicitar recuperación de contraseña (HU-010 / SCRUM-37)
+    Acepta username o email institucional
+    """
+    try:
+        data = request.json or {}
+        identifier = data.get('identifier') or data.get('email') or data.get('username')
+        
+        if not identifier or not str(identifier).strip():
+            return jsonify({'error': 'Debe ingresar su nombre de usuario o correo institucional'}), 400
+        
+        identifier = str(identifier).strip()
+        
+        # 1. Buscar primero por username directo
+        usuario = UsuarioAuth.query.filter(UsuarioAuth.username.ilike(identifier)).first()
+        
+        # 2. Si no se encuentra, buscar por email en UsuarioSistema
+        if not usuario:
+            usuario_sistema = UsuarioSistema.query.filter(UsuarioSistema.email_institucional.ilike(identifier)).first()
+            if usuario_sistema:
+                usuario = UsuarioAuth.query.filter_by(id_usuario_sistema=usuario_sistema.id_usuario).first()
+        
+        if not usuario:
+            return jsonify({
+                'error': 'No se encontró ninguna cuenta asociada a las credenciales suministradas'
+            }), 404
+        
+        if not usuario.activo:
+            return jsonify({
+                'error': 'La cuenta se encuentra inactiva. Por favor comuníquese con el administrador del sistema'
+            }), 403
+        
+        # Generar token de recuperación JWT con tiempo de expiración de 1 hora
+        reset_token = usuario.generate_reset_token(expires_in=3600)
+        
+        # Código numérico de verificación de 6 dígitos para conveniencia en interfaces móviles o código directo
+        import hashlib
+        hash_digest = hashlib.sha256(reset_token.encode('utf-8')).hexdigest()
+        reset_code = str(int(hash_digest[:8], 16) % 900000 + 100000)
+        
+        email_dest = (
+            usuario.usuario_sistema.email_institucional
+            if hasattr(usuario, 'usuario_sistema') and usuario.usuario_sistema
+            else usuario.username
+        )
+        
+        return jsonify({
+            'message': 'Token y código de recuperación generados exitosamente.',
+            'reset_token': reset_token,
+            'reset_code': reset_code,
+            'username': usuario.username,
+            'email': email_dest,
+            'expires_in': 3600,
+            'instrucciones': 'Utilice este token o código para establecer su nueva contraseña antes de 1 hora.'
+        }), 200
+        
+    except Exception as e:
+        import traceback
+        current_app.logger.error(f"Error en forgot_password: {str(e)}\n{traceback.format_exc()}")
+        return jsonify({'error': f'Error procesando la solicitud de recuperación: {str(e)}'}), 500
+
+@auth_bp.route('/reset-password', methods=['POST'])
+def reset_password():
+    """
+    Restablecer contraseña usando token de recuperación (HU-010 / SCRUM-37)
+    """
+    try:
+        data = request.json or {}
+        token = data.get('token') or data.get('reset_token')
+        new_password = data.get('new_password') or data.get('password')
+        
+        if not token:
+            return jsonify({'error': 'El token de recuperación es obligatorio'}), 400
+        
+        if not new_password or len(str(new_password)) < 8:
+            return jsonify({'error': 'La nueva contraseña debe tener al menos 8 caracteres'}), 400
+        
+        # Verificar token firmado
+        usuario = UsuarioAuth.verify_reset_token(token)
+        if not usuario:
+            return jsonify({'error': 'El token de recuperación es inválido o ha expirado. Por favor solicite uno nuevo.'}), 400
+        
+        # Actualizar contraseña y desbloquear usuario si estaba bloqueado
+        usuario.set_password(str(new_password))
+        usuario.intentos_fallidos = 0
+        usuario.bloqueado_hasta = None
+        
+        if hasattr(usuario, 'usuario_sistema') and usuario.usuario_sistema:
+            usuario.usuario_sistema.password_hash = usuario.password_hash
+            usuario.usuario_sistema.requiere_cambio_password = False
+        
+        # Desactivar sesiones anteriores por seguridad
+        SesionUsuario.query.filter_by(id_usuario_auth=usuario.id_usuario_auth, activa=True).update({'activa': False})
+        
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': 'Contraseña restablecida exitosamente. Ya puede iniciar sesión con sus nuevas credenciales.',
+            'username': usuario.username
+        }), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        import traceback
+        current_app.logger.error(f"Error en reset_password: {str(e)}\n{traceback.format_exc()}")
+        return jsonify({'error': f'Error al restablecer contraseña: {str(e)}'}), 500
+
+@auth_bp.route('/change-password', methods=['POST'])
+def change_password():
+    """
+    Cambio voluntario de contraseña para usuario autenticado
+    """
+    try:
+        token = None
+        if 'Authorization' in request.headers:
+            auth_header = request.headers['Authorization']
+            try:
+                token = auth_header.split(" ")[1]
+            except IndexError:
+                return jsonify({'error': 'Token malformado'}), 401
+        
+        if not token:
+            return jsonify({'error': 'Token de autenticación requerido'}), 401
+        
+        usuario = UsuarioAuth.verify_token(token)
+        if not usuario:
+            return jsonify({'error': 'Sesión inválida o expirada'}), 401
+        
+        data = request.json or {}
+        current_password = data.get('current_password')
+        new_password = data.get('new_password')
+        
+        if not current_password or not new_password:
+            return jsonify({'error': 'La contraseña actual y la nueva son requeridas'}), 400
+        
+        if len(new_password) < 8:
+            return jsonify({'error': 'La nueva contraseña debe tener al menos 8 caracteres'}), 400
+        
+        if not usuario.check_password(current_password):
+            return jsonify({'error': 'La contraseña actual no es correcta'}), 400
+        
+        usuario.set_password(new_password)
+        if hasattr(usuario, 'usuario_sistema') and usuario.usuario_sistema:
+            usuario.usuario_sistema.password_hash = usuario.password_hash
+        
+        db.session.commit()
+        return jsonify({'message': 'Contraseña actualizada exitosamente'}), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+

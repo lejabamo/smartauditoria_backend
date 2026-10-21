@@ -92,19 +92,50 @@ class UsuarioAuth(db.Model):
         except jwt.InvalidTokenError:
             return None
     
+    def generate_reset_token(self, expires_in=3600):
+        """Genera un JWT token para recuperación de contraseña (válido por 1 hora por defecto)"""
+        payload = {
+            'reset_user_id': self.id_usuario_auth,
+            'username': self.username,
+            'purpose': 'password_reset',
+            'exp': datetime.utcnow() + timedelta(seconds=expires_in),
+            'iat': datetime.utcnow()
+        }
+        return jwt.encode(payload, current_app.config['SECRET_KEY'], algorithm='HS256')
+
+    @staticmethod
+    def verify_reset_token(token):
+        """Verifica un token de recuperación y retorna el usuario correspondiente"""
+        try:
+            payload = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
+            if payload.get('purpose') != 'password_reset':
+                return None
+            user_id = payload.get('reset_user_id')
+            if not user_id:
+                return None
+            return UsuarioAuth.query.get(user_id)
+        except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
+            return None
+
     def to_dict(self):
         try:
             rol_nombre = self.rol.nombre_rol if hasattr(self, 'rol') and self.rol else None
         except Exception:
             rol_nombre = None
         
+        is_blocked = bool(self.bloqueado_hasta and datetime.utcnow() < self.bloqueado_hasta)
+        
         return {
             'id_usuario_auth': self.id_usuario_auth,
             'id_usuario_sistema': self.id_usuario_sistema,
             'username': self.username,
             'id_rol': self.id_rol,
+            'rol': rol_nombre,
             'rol_nombre': rol_nombre,
             'activo': self.activo,
+            'bloqueado': is_blocked,
+            'intentos_fallidos': self.intentos_fallidos or 0,
+            'bloqueado_hasta': self.bloqueado_hasta.isoformat() if self.bloqueado_hasta else None,
             'fecha_creacion': self.fecha_creacion.isoformat() if self.fecha_creacion else None,
             'fecha_ultimo_login': self.fecha_ultimo_login.isoformat() if self.fecha_ultimo_login else None
         }
