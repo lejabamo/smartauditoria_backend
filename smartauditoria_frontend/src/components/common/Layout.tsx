@@ -68,7 +68,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     handleClose();
   };
 
-  const currentUserRole = (user?.rol_nombre || (user as any)?.role || "").toUpperCase();
+  const currentUserRole = (user?.rol_nombre || (user as any)?.rol || (user as any)?.role || "").toUpperCase();
   const menuItems = [
     { text: "Dashboard", icon: <Dashboard />, path: "/dashboard", roles: ["ADMIN", "OPERADOR", "CONSULTOR"] },
     { text: "Activos", icon: <Security />, path: "/activos", roles: ["ADMIN", "OPERADOR", "CONSULTOR"] },

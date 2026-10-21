@@ -191,10 +191,9 @@ export const usuariosService = {
       return await apiRequest<any[]>('/usuarios/roles');
     } catch (error) {
       return [
-        { id_rol: 1, nombre_rol: 'ADMIN', descripcion: 'Administrador del sistema con acceso completo', activo: true },
+        { id_rol: 1, nombre_rol: 'ADMIN', descripcion: 'Administrador del sistema con acceso completo y gestión de usuarios', activo: true },
         { id_rol: 2, nombre_rol: 'OPERADOR', descripcion: 'Operador SGSI con gestión de activos, riesgos y auditorías', activo: true },
-        { id_rol: 3, nombre_rol: 'AUXILIAR', descripcion: 'Auxiliar de Auditoría operativo para wizard y evidencias', activo: true },
-        { id_rol: 4, nombre_rol: 'CONSULTOR', descripcion: 'Consultor con permisos de solo lectura (modo consulta)', activo: true }
+        { id_rol: 3, nombre_rol: 'CONSULTOR', descripcion: 'Consultor con permisos de solo lectura (modo consulta)', activo: true }
       ];
     }
   },

@@ -209,7 +209,8 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: strin
     return <Navigate to="/login" />;
   }
 
-  if (allowedRoles && user && !allowedRoles.includes(user.rol_nombre)) {
+  const currentUserRole = (user?.rol_nombre || (user as any)?.rol || (user as any)?.role || "").toUpperCase();
+  if (allowedRoles && user && !allowedRoles.map(r => r.toUpperCase()).includes(currentUserRole)) {
     return <Navigate to="/dashboard" />;
   }
 

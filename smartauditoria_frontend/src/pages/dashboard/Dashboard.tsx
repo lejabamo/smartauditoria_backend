@@ -27,9 +27,13 @@ import { evaluacionRiesgosService } from "../../services/evaluacionRiesgos";
 import type { DashboardHistory } from "../../services/backend";
 import RiskMatrix4x5 from "../../components/riesgos/RiskMatrix4x5";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const currentUserRole = (user?.rol_nombre || (user as any)?.rol || (user as any)?.role || "").toUpperCase();
+  const isAdmin = currentUserRole === "ADMIN";
   const [stats, setStats] = useState([
     { title: "Salud Institucional", value: "0%", icon: <Security />, color: "#1976d2" },
     { title: "Riesgos Activos", value: "0", icon: <Assessment />, color: "#f57c00" },
@@ -104,27 +108,68 @@ const Dashboard: React.FC = () => {
             Panel de Control Estratégico de Riesgos
           </Typography>
         </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 }}>
-          <Button 
-            variant="contained" 
-            size="large"
-            onClick={() => navigate('/wizard')}
-            startIcon={<Assessment />}
-            sx={{ 
-              borderRadius: '12px', 
-              px: 4, 
-              py: 1.5,
-              backgroundColor: '#1E3A8A',
-              textTransform: 'none',
-              fontWeight: 600,
-              boxShadow: '0 4px 12px rgba(30, 58, 138, 0.2)',
-              '&:hover': { backgroundColor: '#1e40af' }
-            }}
-          >
-            Nueva Evaluación
-          </Button>
-          <Typography variant="body2" sx={{ color: '#94A3B8' }}>
-            Última actualización: {new Date().toLocaleTimeString()}
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 1.5 }}>
+          <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+            {isAdmin && (
+              <Button 
+                variant="outlined" 
+                size="medium"
+                onClick={() => navigate('/usuarios')}
+                startIcon={<People />}
+                sx={{ 
+                  borderRadius: '10px', 
+                  px: 2.5, 
+                  py: 1,
+                  borderColor: '#1D3867',
+                  color: '#1D3867',
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  '&:hover': { backgroundColor: 'rgba(29, 56, 103, 0.08)', borderColor: '#122443' }
+                }}
+              >
+                Panel de Usuarios (Admin)
+              </Button>
+            )}
+            <Button 
+              variant="outlined" 
+              size="medium"
+              onClick={() => navigate('/activos')}
+              startIcon={<Security />}
+              sx={{ 
+                borderRadius: '10px', 
+                px: 2.5, 
+                py: 1,
+                borderColor: '#3366CC',
+                color: '#3366CC',
+                textTransform: 'none',
+                fontWeight: 600,
+                '&:hover': { backgroundColor: 'rgba(51, 102, 204, 0.08)' }
+              }}
+            >
+              Inventario Activos
+            </Button>
+            <Button 
+              variant="contained" 
+              size="medium"
+              onClick={() => navigate('/wizard')}
+              startIcon={<Assessment />}
+              sx={{ 
+                borderRadius: '10px', 
+                px: 3, 
+                py: 1,
+                background: 'linear-gradient(135deg, #1D3867 0%, #2A4F8A 100%)',
+                color: '#FFFFFF',
+                textTransform: 'none',
+                fontWeight: 600,
+                boxShadow: '0 4px 12px rgba(29, 56, 103, 0.2)',
+                '&:hover': { background: 'linear-gradient(135deg, #122443 0%, #1D3867 100%)' }
+              }}
+            >
+              Nueva Evaluación
+            </Button>
+          </Box>
+          <Typography variant="body2" sx={{ color: '#94A3B8', fontSize: '0.8rem' }}>
+            Sesión: {user?.username} ({currentUserRole || "USUARIO"}) • Actualizado: {new Date().toLocaleTimeString()}
           </Typography>
         </Box>
       </Box>

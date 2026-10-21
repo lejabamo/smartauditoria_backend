@@ -97,10 +97,18 @@ Este documento contiene las Historias de Usuario (User Stories) priorizadas y co
 **Para** asegurar que cada integrante de la organización (ADMIN, OPERADOR, CONSULTOR) acceda únicamente a las funcionalidades que le corresponden según el principio de mínimo privilegio.
 * **Criterios de Aceptación (DoD):**
   1. Sincronización bidireccional entre la identidad institucional (`usuarios_sistema`) y la cuenta de credenciales (`usuarios_auth`).
-  2. Catálogo dinámico de roles (`ADMIN`, `OPERADOR`, `CONSULTOR`) con filtro interactivo en la UI.
+  2. Catálogo dinámico de roles (`ADMIN`, `OPERADOR`, `CONSULTOR`) con filtro interactivo en la UI y tarjetas de conteo por rol.
   3. Visualización clara en DataGrid de estado de cuenta (Activo, Inactivo, Bloqueado) y fecha de último login.
   4. Capacidad administrativa para activar/desactivar cuentas y desbloquear usuarios bloqueados por intentos fallidos.
   5. Acción de restablecimiento forzado de contraseña por el Administrador con generación de clave temporal segura.
+  6. **Panel de Control de Roles:** Botones de acción rápida en cabecera (`+ Agregar Operador`, `+ Agregar Consultor`, `+ Nuevo Usuario`) y selección visual segmentada de roles RBAC en modal.
+  7. **Gestión de Responsables en Activos:** Selector de *Usuario Responsable / Propietario del Activo (SGSI)* en `/activos`, columna en tabla y modal integrado `+ Crear Nuevo Responsable` al vuelo.
+  8. **Evaluación Directa de Activos:** Acción `Evaluar Riesgo en Wizard` en tabla y detalle de activo con precarga automática del activo mediante query param (`/wizard?activoId=...`).
+* **Evidencias Registradas:**
+  - **Prueba E2E en VPS:** Superada 8/8 flujos en vivo (`e2e_vps_validation.py`).
+  - **Verificación Visual:** Capturas `gestion_usuarios_panel_1792620723085.png`, `modal_usuario_rbac_1792620742518.png`, `activos_table_responsable_1792620819383.png`, `modal_activo_responsable_1792620907595.png`, `modal_quick_responsible_1792620941079.png`.
+  - **Video Sesión Navegador:** `roles_management_demo_1792620676166.webp`.
+  - **Despliegue Activo en Producción:** [https://riesgosti.tics.sedcauca.gov.co/usuarios](https://riesgosti.tics.sedcauca.gov.co/usuarios) y [/activos](https://riesgosti.tics.sedcauca.gov.co/activos).
 
 ### HU-010: Autoservicio y Recuperación Segura de Contraseñas (Jira: SCRUM-37)
 **Como** Usuario del Sistema

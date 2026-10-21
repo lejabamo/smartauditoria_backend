@@ -21,12 +21,12 @@ init(autoreset=True)
 # =============================================================================
 # Configuración
 # =============================================================================
-BACKEND_URL = "http://51.79.35.88"      # VPS SGSRI — Frontend + Backend
+BACKEND_URL = "https://riesgosti.tics.sedcauca.gov.co"      # VPS SGSRI — Frontend + Backend
 ENGINE_URL  = "http://158.69.114.73:8001" # VPS Oracle — Engine IA
 API_URL     = f"{BACKEND_URL}/api"
 
-ADMIN_EMAIL    = "admin@smartauditoria.co"
-ADMIN_PASSWORD = "Admin@2024!"
+ADMIN_EMAIL    = "admin"
+ADMIN_PASSWORD = "admin123"
 
 TIMEOUT = 30
 

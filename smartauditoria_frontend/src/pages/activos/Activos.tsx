@@ -56,12 +56,16 @@ import {
   Description as DocIcon,
   CheckCircle as CheckCircleIcon,
   CloudUpload as CloudUploadIcon,
+  Person as PersonIcon,
+  PersonAdd as PersonAddIcon,
 } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
 import type { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-hot-toast';
 import { activosService as activosServiceCorrecto, type Activo, type CreateActivoData } from '../../services/activos';
+import { usuariosService } from '../../services/backend';
 import copilotService, { type AssetAssessmentResponse } from '../../services/copilotService';
 import BulkUploadActivosModal from '../../components/activos/BulkUploadActivosModal';
 import '../../styles/design-system.css';
@@ -73,6 +77,8 @@ const initialFormData: CreateActivoData = {
   subtipo_activo: '',
   estado_activo: 'En produccion',
   nivel_criticidad_negocio: 'Medio',
+  ID_Propietario: undefined,
+  ID_Custodio: undefined,
   Nivel_Clasificacion_Confidencialidad: 'Medio',
   Nivel_Clasificacion_Integridad: 'Alto',
   Nivel_Clasificacion_Disponibilidad: 'Medio',
@@ -102,6 +108,7 @@ const initialFormData: CreateActivoData = {
 };
 
 const Activos: React.FC = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [tipoFilter, setTipoFilter] = useState('');
   const [estadoFilter, setEstadoFilter] = useState('');
@@ -116,12 +123,54 @@ const Activos: React.FC = () => {
   const [editingActivo, setEditingActivo] = useState<Activo | null>(null);
   const [formData, setFormData] = useState<CreateActivoData>(initialFormData);
 
+  // Estados para Creación Rápida de Responsable
+  const [openNuevoResponsableDialog, setOpenNuevoResponsableDialog] = useState(false);
+  const [nuevoResponsableData, setNuevoResponsableData] = useState({
+    nombre: '',
+    email: '',
+    puesto: '',
+    rol: 'OPERADOR',
+  });
+
   // Estados para AuditorCopilot
   const [assessingAsset, setAssessingAsset] = useState(false);
   const [copilotAssessment, setCopilotAssessment] = useState<AssetAssessmentResponse | null>(null);
   const [openBulkModal, setOpenBulkModal] = useState(false);
 
   const queryClient = useQueryClient();
+
+  // Cargar usuarios para asignación de responsable
+  const { data: usuariosList = [] } = useQuery({
+    queryKey: ['usuarios-activos'],
+    queryFn: async () => {
+      try {
+        return await usuariosService.getAll();
+      } catch (err) {
+        console.warn('Error fetching usuarios for activos:', err);
+        return [];
+      }
+    },
+  });
+
+  const createResponsableMutation = useMutation({
+    mutationFn: async (data: any) => {
+      return await usuariosService.create(data);
+    },
+    onSuccess: (newUser: any) => {
+      queryClient.invalidateQueries({ queryKey: ['usuarios-activos'] });
+      queryClient.invalidateQueries({ queryKey: ['usuarios'] });
+      const newId = newUser?.id || newUser?.id_usuario;
+      if (newId) {
+        setFormData(prev => ({ ...prev, ID_Propietario: newId }));
+      }
+      toast.success(`Responsable registrado y seleccionado: ${newUser?.nombre || newUser?.nombre_completo || ''}`);
+      setOpenNuevoResponsableDialog(false);
+      setNuevoResponsableData({ nombre: '', email: '', puesto: '', rol: 'OPERADOR' });
+    },
+    onError: (err: any) => {
+      toast.error(`Error al registrar responsable: ${err.response?.data?.error || err.message}`);
+    }
+  });
 
   // Queries
   const { data: activos = [], isLoading, error } = useQuery({
@@ -247,7 +296,8 @@ const Activos: React.FC = () => {
         Tipo_Activo: activo.Tipo_Activo || 'Información y datos',
         subtipo_activo: activo.subtipo_activo || '',
         estado_activo: activo.estado_activo || 'En produccion',
-        nivel_criticidad_negocio: activo.nivel_criticidad_negocio || 'Medio',
+        ID_Propietario: activo.ID_Propietario || undefined,
+        ID_Custodio: activo.ID_Custodio || undefined,
         Nivel_Clasificacion_Confidencialidad: activo.Nivel_Clasificacion_Confidencialidad || 'Medio',
         Nivel_Clasificacion_Integridad: activo.Nivel_Clasificacion_Integridad || 'Alto',
         Nivel_Clasificacion_Disponibilidad: activo.Nivel_Clasificacion_Disponibilidad || 'Medio',
@@ -801,6 +851,37 @@ const Activos: React.FC = () => {
         />
       ),
     },
+    {
+      field: 'ID_Propietario',
+      headerName: 'Responsable SGSI',
+      width: 220,
+      renderCell: (params: GridRenderCellParams) => {
+        const ownerId = params.value || params.row.ID_Propietario;
+        const owner = usuariosList.find((u: any) => (u.id === ownerId || u.id_usuario === ownerId));
+        if (!owner) {
+          return (
+            <Typography variant="caption" sx={{ color: '#9CA3AF', fontStyle: 'italic' }}>
+              Sin Asignar
+            </Typography>
+          );
+        }
+        return (
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
+            <Avatar sx={{ width: 28, height: 28, fontSize: '0.75rem', bgcolor: '#1D3867' }}>
+              {(owner.nombre || owner.nombre_completo || 'U')[0].toUpperCase()}
+            </Avatar>
+            <Box sx={{ minWidth: 0, overflow: 'hidden' }}>
+              <Typography variant="body2" sx={{ fontWeight: 600, color: '#1E293B', fontSize: '0.82rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {owner.nombre || owner.nombre_completo}
+              </Typography>
+              <Typography variant="caption" sx={{ color: '#64748B', display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontSize: '0.7rem' }}>
+                {owner.puesto || owner.puesto_organizacion || 'Funcionario'}
+              </Typography>
+            </Box>
+          </Box>
+        );
+      },
+    },
     { 
       field: 'fecha_creacion_registro', 
       headerName: 'Fecha Creacion', 
@@ -820,12 +901,28 @@ const Activos: React.FC = () => {
     {
       field: 'actions',
       headerName: 'Acciones',
-      width: 160,
+      width: 190,
       headerAlign: 'center',
       align: 'center',
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
         <Box sx={{ display: 'flex', gap: 0.5, justifyContent: 'center' }}>
+          <Tooltip title="Evaluar Riesgo en Wizard (Asistente)">
+            <IconButton
+              size="small"
+              onClick={() => navigate(`/wizard?activoId=${params.row.ID_Activo || params.row.id}`)}
+              sx={{
+                color: '#eb6408',
+                '&:hover': {
+                  backgroundColor: '#FFF7ED',
+                  color: '#c85305',
+                },
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <AssessmentIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
           <Tooltip title="Consultar detalle del activo">
             <IconButton
               size="small"
@@ -1565,6 +1662,105 @@ const Activos: React.FC = () => {
                     placeholder="Ej: Expedientes de Carrera Administrativa"
                     InputProps={{ sx: { borderRadius: '12px' } }}
                   />
+                </Grid>
+
+                {/* ── Asignación de Responsable del Activo (SGSI) ── */}
+                <Grid size={{ xs: 12 }}>
+                  <Paper 
+                    elevation={0}
+                    sx={{ 
+                      p: 2.5, 
+                      borderRadius: '12px', 
+                      border: '1px solid #CBD5E1', 
+                      backgroundColor: '#F8FAFC' 
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, flexWrap: 'wrap', gap: 1 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <PersonIcon sx={{ color: '#1D3867' }} />
+                        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#1D3867' }}>
+                          Asignación de Usuario Responsable del Activo (SGSI) *
+                        </Typography>
+                      </Box>
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        startIcon={<PersonAddIcon />}
+                        onClick={() => setOpenNuevoResponsableDialog(true)}
+                        sx={{
+                          borderRadius: '8px',
+                          textTransform: 'none',
+                          borderColor: '#eb6408',
+                          color: '#eb6408',
+                          fontWeight: 600,
+                          '&:hover': {
+                            borderColor: '#c85305',
+                            backgroundColor: 'rgba(235, 100, 8, 0.08)'
+                          }
+                        }}
+                      >
+                        + Crear Nuevo Responsable
+                      </Button>
+                    </Box>
+
+                    <Grid container spacing={2}>
+                      <Grid size={{ xs: 12, sm: 8 }}>
+                        <FormControl fullWidth>
+                          <InputLabel id="propietario-label">Usuario Responsable / Propietario (Líder del Activo)</InputLabel>
+                          <Select
+                            labelId="propietario-label"
+                            value={formData.ID_Propietario || ''}
+                            onChange={(e) => setFormData({ ...formData, ID_Propietario: e.target.value ? Number(e.target.value) : undefined })}
+                            label="Usuario Responsable / Propietario (Líder del Activo)"
+                            sx={{ borderRadius: '10px', backgroundColor: '#FFFFFF' }}
+                          >
+                            <MenuItem value="">
+                              <em>-- Sin Asignar / Seleccionar luego --</em>
+                            </MenuItem>
+                            {usuariosList.map((u: any) => (
+                              <MenuItem key={u.id || u.id_usuario} value={u.id || u.id_usuario}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                                  <Avatar sx={{ width: 26, height: 26, fontSize: '0.75rem', bgcolor: '#1D3867' }}>
+                                    {(u.nombre || u.nombre_completo || 'U')[0].toUpperCase()}
+                                  </Avatar>
+                                  <Box>
+                                    <Typography variant="body2" sx={{ fontWeight: 600, color: '#1E293B' }}>
+                                      {u.nombre || u.nombre_completo}
+                                    </Typography>
+                                    <Typography variant="caption" sx={{ color: '#64748B' }}>
+                                      {u.puesto || u.puesto_organizacion || 'Funcionario'} • {u.email || u.email_institucional}
+                                    </Typography>
+                                  </Box>
+                                </Box>
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+
+                      <Grid size={{ xs: 12, sm: 4 }}>
+                        <FormControl fullWidth>
+                          <InputLabel id="custodio-label">Custodio Técnico (Opcional)</InputLabel>
+                          <Select
+                            labelId="custodio-label"
+                            value={formData.ID_Custodio || ''}
+                            onChange={(e) => setFormData({ ...formData, ID_Custodio: e.target.value ? Number(e.target.value) : undefined })}
+                            label="Custodio Técnico (Opcional)"
+                            sx={{ borderRadius: '10px', backgroundColor: '#FFFFFF' }}
+                          >
+                            <MenuItem value="">
+                              <em>-- Ninguno --</em>
+                            </MenuItem>
+                            {usuariosList.map((u: any) => (
+                              <MenuItem key={u.id || u.id_usuario} value={u.id || u.id_usuario}>
+                                {u.nombre || u.nombre_completo} ({u.puesto || 'Custodio'})
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                    </Grid>
+                  </Paper>
                 </Grid>
               </Grid>
             )}
@@ -2394,6 +2590,29 @@ const Activos: React.FC = () => {
             >
               {exportando ? 'Exportando...' : 'Excel'}
             </Button>
+            <Button
+              variant="contained"
+              startIcon={<AssessmentIcon />}
+              onClick={() => {
+                const activoIdToEval = selectedActivo?.ID_Activo || selectedActivo?.id;
+                handleCloseDetalleDialog();
+                navigate(`/wizard?activoId=${activoIdToEval}`);
+              }}
+              sx={{
+                background: 'linear-gradient(135deg, #eb6408 0%, #f97316 100%)',
+                color: '#FFFFFF',
+                borderRadius: '12px',
+                px: 2.5,
+                py: 1.5,
+                textTransform: 'none',
+                fontWeight: 600,
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #c85305 0%, #eb6408 100%)',
+                }
+              }}
+            >
+              Evaluar en Wizard
+            </Button>
           </Box>
           <Button 
             onClick={handleCloseDetalleDialog}
@@ -2409,6 +2628,117 @@ const Activos: React.FC = () => {
             Cerrar
           </Button>
         </DialogActions>
+      </Dialog>
+
+      {/* ── Dialog para Crear Usuario Responsable al Vuelo ── */}
+      <Dialog 
+        open={openNuevoResponsableDialog} 
+        onClose={() => setOpenNuevoResponsableDialog(false)}
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{ sx: { borderRadius: '16px' } }}
+      >
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          createResponsableMutation.mutate({
+            nombre: nuevoResponsableData.nombre,
+            nombre_completo: nuevoResponsableData.nombre,
+            email: nuevoResponsableData.email,
+            email_institucional: nuevoResponsableData.email,
+            puesto: nuevoResponsableData.puesto || 'Líder del Activo',
+            puesto_organizacion: nuevoResponsableData.puesto || 'Líder del Activo',
+            rol: nuevoResponsableData.rol,
+            rol_nombre: nuevoResponsableData.rol,
+            estado: 'Activo',
+            estado_usuario: 'Activo'
+          });
+        }}>
+          <DialogTitle sx={{ 
+            background: 'linear-gradient(135deg, #1D3867 0%, #2A4F8A 100%)',
+            color: '#FFFFFF',
+            py: 2,
+            px: 3,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1.5
+          }}>
+            <PersonAddIcon />
+            <Box>
+              <Typography variant="h6" sx={{ fontWeight: 700, fontSize: '1.1rem' }}>
+                Registrar Nuevo Usuario Responsable
+              </Typography>
+              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.85)' }}>
+                Crea el usuario en el directorio y lo asigna automáticamente al activo
+              </Typography>
+            </Box>
+          </DialogTitle>
+          <DialogContent sx={{ p: 3, pt: 3 }}>
+            <Stack spacing={2.5} sx={{ mt: 1 }}>
+              <TextField
+                fullWidth
+                label="Nombre Completo del Responsable *"
+                required
+                value={nuevoResponsableData.nombre}
+                onChange={(e) => setNuevoResponsableData({ ...nuevoResponsableData, nombre: e.target.value })}
+                placeholder="ej. Dra. María Claudia Salazar"
+                InputProps={{ sx: { borderRadius: '10px' } }}
+              />
+              <TextField
+                fullWidth
+                label="Email Institucional *"
+                type="email"
+                required
+                value={nuevoResponsableData.email}
+                onChange={(e) => setNuevoResponsableData({ ...nuevoResponsableData, email: e.target.value })}
+                placeholder="ej. msalazar@sedcauca.gov.co"
+                InputProps={{ sx: { borderRadius: '10px' } }}
+              />
+              <TextField
+                fullWidth
+                label="Puesto / Cargo Organizacional"
+                value={nuevoResponsableData.puesto}
+                onChange={(e) => setNuevoResponsableData({ ...nuevoResponsableData, puesto: e.target.value })}
+                placeholder="ej. Líder de Gestión Documental / Subdirectora TI"
+                InputProps={{ sx: { borderRadius: '10px' } }}
+              />
+              <FormControl fullWidth>
+                <InputLabel>Rol en SmartAuditorIA</InputLabel>
+                <Select
+                  value={nuevoResponsableData.rol}
+                  onChange={(e) => setNuevoResponsableData({ ...nuevoResponsableData, rol: e.target.value })}
+                  label="Rol en SmartAuditorIA"
+                  sx={{ borderRadius: '10px' }}
+                >
+                  <MenuItem value="OPERADOR">OPERADOR (Gestión Activos y Riesgos)</MenuItem>
+                  <MenuItem value="CONSULTOR">CONSULTOR (Modo Consulta y Lectura)</MenuItem>
+                </Select>
+              </FormControl>
+            </Stack>
+          </DialogContent>
+          <DialogActions sx={{ p: 2.5, borderTop: '1px solid #E2E8F0', gap: 1 }}>
+            <Button 
+              onClick={() => setOpenNuevoResponsableDialog(false)}
+              variant="outlined"
+              sx={{ borderRadius: '8px', textTransform: 'none' }}
+            >
+              Cancelar
+            </Button>
+            <Button 
+              type="submit"
+              variant="contained"
+              disabled={createResponsableMutation.isPending}
+              sx={{ 
+                borderRadius: '8px', 
+                textTransform: 'none',
+                background: '#eb6408',
+                fontWeight: 600,
+                '&:hover': { background: '#c85305' }
+              }}
+            >
+              {createResponsableMutation.isPending ? 'Guardando...' : 'Crear y Asignar Responsable'}
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
 
       {/* Modal de Carga Masiva Inteligente DAFP V7 */}

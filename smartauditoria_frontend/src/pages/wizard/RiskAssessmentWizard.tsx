@@ -5,7 +5,7 @@ import ContextualIntelligencePanel from '../../features/wizard-ai/components/Con
 import FinalAnalysisPanel from '../../features/wizard-ai/components/FinalAnalysisPanel';
 import type { SimilarAsset } from '../../features/wizard-ai/domain/types';
 import { useAuth } from "../../contexts/AuthContext";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import AuditorCopilot from '../../components/copilot/AuditorCopilot';
 import copilotService from '../../services/copilotService';
 import type { ActionChip } from '../../services/copilotService';
@@ -459,6 +459,25 @@ const RiskAssessmentWizard: React.FC = () => {
       }
     }
   });
+
+  // ── Auto-selección por Query Param (ej: /wizard?activoId=123) ──
+  const [searchParams] = useSearchParams();
+  const paramActivoId = searchParams.get('activoId');
+
+  useEffect(() => {
+    if (paramActivoId && activos.length > 0 && !wizardData.selectedActivo) {
+      const match = activos.find((a: any) => 
+        String(a.id || a.ID_Activo || a.ID) === String(paramActivoId)
+      );
+      if (match) {
+        setWizardData(prev => ({
+          ...prev,
+          selectedActivo: match
+        }));
+        toast.success(`Activo cargado para evaluación: ${(match as any).Nombre || match.nombre || 'Activo ' + paramActivoId}`);
+      }
+    }
+  }, [paramActivoId, activos]);
 
   const { data: controlesBD = [] } = useQuery({
     queryKey: ['controles'],

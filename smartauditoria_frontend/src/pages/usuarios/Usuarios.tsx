@@ -138,10 +138,9 @@ const Usuarios: React.FC = () => {
         return await usuariosService.getRoles();
       } catch (err) {
         return [
-          { id_rol: 1, nombre_rol: 'ADMIN', descripcion: 'Administrador con acceso completo' },
-          { id_rol: 2, nombre_rol: 'OPERADOR', descripcion: 'Operador SGSI (Gestión Activos y Riesgos)' },
-          { id_rol: 3, nombre_rol: 'AUXILIAR', descripcion: 'Auxiliar de Auditoría (Wizard y Evidencias)' },
-          { id_rol: 4, nombre_rol: 'CONSULTOR', descripcion: 'Consultor (Modo Consulta)' },
+          { id_rol: 1, nombre_rol: 'ADMIN', descripcion: 'Administrador con acceso completo y gestión de usuarios' },
+          { id_rol: 2, nombre_rol: 'OPERADOR', descripcion: 'Operador SGSI (Gestión de Activos, Riesgos y Auditorías)' },
+          { id_rol: 3, nombre_rol: 'CONSULTOR', descripcion: 'Consultor (Modo Consulta y Reportes)' },
         ];
       }
     },
@@ -254,17 +253,18 @@ const Usuarios: React.FC = () => {
     return matchesSearch && matchesPuesto && matchesEstado && matchesRol;
   });
 
-  const handleOpenDialog = (usuario?: any) => {
+  const handleOpenDialog = (usuario?: any, defaultRol?: string) => {
     if (usuario) {
       setEditingUsuario(usuario);
-      const userRol = usuario.rol || usuario.rol_nombre || 'CONSULTOR';
+      const userRol = (usuario.rol || usuario.rol_nombre || 'CONSULTOR').toUpperCase();
+      const matchedRol = roles.find((r: any) => r.nombre_rol?.toUpperCase() === userRol);
       setFormData({
         nombre: usuario.nombre || usuario.nombre_completo || '',
         email: usuario.email || usuario.email_institucional || '',
         puesto: usuario.puesto || usuario.puesto_organizacion || '',
         estado: usuario.estado || usuario.estado_usuario || 'Activo',
         rol: userRol,
-        id_rol: usuario.id_rol,
+        id_rol: usuario.id_rol || matchedRol?.id_rol || (userRol === 'ADMIN' ? 1 : (userRol === 'OPERADOR' ? 2 : 3)),
         username: usuario.username || '',
         password: '',
         activo: usuario.activo ?? true,
@@ -272,13 +272,15 @@ const Usuarios: React.FC = () => {
       });
     } else {
       setEditingUsuario(null);
+      const initialRol = (defaultRol || 'OPERADOR').toUpperCase();
+      const matchedRol = roles.find((r: any) => r.nombre_rol?.toUpperCase() === initialRol);
       setFormData({
         nombre: '',
         email: '',
         puesto: '',
         estado: 'Activo',
-        rol: 'CONSULTOR',
-        id_rol: 3,
+        rol: initialRol,
+        id_rol: matchedRol?.id_rol || (initialRol === 'ADMIN' ? 1 : (initialRol === 'OPERADOR' ? 2 : 3)),
         username: '',
         password: '',
         activo: true,
@@ -850,110 +852,190 @@ const Usuarios: React.FC = () => {
     <Box>
       {/* Header Section */}
       <Box sx={{ mb: 4 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 3 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: { xs: 'stretch', md: 'center' }, flexDirection: { xs: 'column', md: 'row' }, gap: 2, mb: 3 }}>
           <Box>
-            <Typography variant="h4" className="font-poppins" sx={{ color: '#1E3A8A', fontWeight: 600, mb: 1 }}>
-              Gestion de Usuarios
+            <Typography variant="h4" className="font-poppins" sx={{ color: '#1D3867', fontWeight: 700, mb: 0.5 }}>
+              Gestión de Usuarios y Roles (RBAC)
             </Typography>
             <Typography variant="body1" className="font-roboto" sx={{ color: '#6B7280' }}>
-              Administra los usuarios del sistema y sus roles organizacionales
+              Panel de control de usuarios institucionales, perfiles de seguridad y asignación de roles SGSI
             </Typography>
           </Box>
-          <Button
-            className="btn btn-primary"
-            startIcon={<PersonAddIcon />}
-            onClick={() => handleOpenDialog()}
-            sx={{
-              background: 'linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%)',
-              color: '#FFFFFF',
-              px: 3,
-              py: 1.5,
-              borderRadius: '12px',
-              textTransform: 'none',
-              fontWeight: 500,
-              boxShadow: '0 4px 12px rgba(30, 58, 138, 0.3)',
-              '&:hover': {
-                background: 'linear-gradient(135deg, #1E40AF 0%, #2563EB 100%)',
-                transform: 'translateY(-2px)',
-                boxShadow: '0 6px 16px rgba(30, 58, 138, 0.4)',
-              },
-              transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
-            }}
-          >
-            Nuevo Usuario
-          </Button>
+          <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
+            <Button
+              variant="outlined"
+              startIcon={<SecurityIcon />}
+              onClick={() => handleOpenDialog(undefined, 'OPERADOR')}
+              sx={{
+                borderRadius: '10px',
+                borderColor: '#eb6408',
+                color: '#eb6408',
+                fontWeight: 600,
+                textTransform: 'none',
+                px: 2,
+                py: 1,
+                '&:hover': {
+                  borderColor: '#c85305',
+                  backgroundColor: 'rgba(235, 100, 8, 0.08)'
+                }
+              }}
+            >
+              + Agregar Operador
+            </Button>
+            <Button
+              variant="outlined"
+              startIcon={<VisibilityIcon />}
+              onClick={() => handleOpenDialog(undefined, 'CONSULTOR')}
+              sx={{
+                borderRadius: '10px',
+                borderColor: '#3366CC',
+                color: '#3366CC',
+                fontWeight: 600,
+                textTransform: 'none',
+                px: 2,
+                py: 1,
+                '&:hover': {
+                  borderColor: '#1D3867',
+                  backgroundColor: 'rgba(51, 102, 204, 0.08)'
+                }
+              }}
+            >
+              + Agregar Consultor
+            </Button>
+            <Button
+              variant="contained"
+              startIcon={<PersonAddIcon />}
+              onClick={() => handleOpenDialog()}
+              sx={{
+                background: 'linear-gradient(135deg, #1D3867 0%, #2A4F8A 100%)',
+                color: '#FFFFFF',
+                px: 2.5,
+                py: 1,
+                borderRadius: '10px',
+                textTransform: 'none',
+                fontWeight: 600,
+                boxShadow: '0 4px 12px rgba(29, 56, 103, 0.25)',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #122443 0%, #1D3867 100%)',
+                  transform: 'translateY(-1px)',
+                }
+              }}
+            >
+              + Nuevo Usuario
+            </Button>
+          </Box>
         </Box>
 
-        {/* Stats Cards */}
-        <Grid container spacing={3} sx={{ mb: 4 }}>
-          <Grid  size={{ xs: 12, md: 3, sm: 6 }}>
-            <Card className="card" sx={{ 
-              background: 'linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%)',
-              color: '#FFFFFF',
-              border: 'none'
-            }}>
-              <CardContent sx={{ p: 3 }}>
+        {/* Stats Cards by Role */}
+        <Grid container spacing={2.5} sx={{ mb: 4 }}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Card 
+              onClick={() => setRolFilter('')}
+              sx={{ 
+                cursor: 'pointer',
+                borderRadius: '14px',
+                border: rolFilter === '' ? '2px solid #1D3867' : '1px solid #E2E8F0',
+                background: rolFilter === '' ? 'linear-gradient(135deg, #1D3867 0%, #2A4F8A 100%)' : '#FFFFFF',
+                color: rolFilter === '' ? '#FFFFFF' : '#1D3867',
+                transition: 'all 0.2s ease',
+                '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 6px 16px rgba(0,0,0,0.08)' }
+              }}
+            >
+              <CardContent sx={{ p: 2.5 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <Box>
-                    <Typography variant="h4" className="font-poppins" sx={{ fontWeight: 600, mb: 0.5 }}>
+                    <Typography variant="h4" className="font-poppins" sx={{ fontWeight: 700, mb: 0.5 }}>
                       {usuarios.length}
                     </Typography>
-                    <Typography variant="body2" className="font-roboto" sx={{ opacity: 0.9 }}>
+                    <Typography variant="body2" sx={{ opacity: rolFilter === '' ? 0.9 : 0.7, fontWeight: 500 }}>
                       Total Usuarios
                     </Typography>
                   </Box>
-                  <PeopleIcon sx={{ fontSize: 40, opacity: 0.8 }} />
+                  <PeopleIcon sx={{ fontSize: 38, opacity: 0.8 }} />
                 </Box>
               </CardContent>
             </Card>
           </Grid>
-          <Grid  size={{ xs: 12, md: 3, sm: 6 }}>
-            <Card className="card">
-              <CardContent sx={{ p: 3 }}>
+
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Card 
+              onClick={() => setRolFilter(rolFilter === 'ADMIN' ? '' : 'ADMIN')}
+              sx={{ 
+                cursor: 'pointer',
+                borderRadius: '14px',
+                border: rolFilter === 'ADMIN' ? '2px solid #6D28D9' : '1px solid #E2E8F0',
+                background: rolFilter === 'ADMIN' ? '#EDE9FE' : '#FFFFFF',
+                transition: 'all 0.2s ease',
+                '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 6px 16px rgba(109, 40, 217, 0.12)' }
+              }}
+            >
+              <CardContent sx={{ p: 2.5 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <Box>
-                    <Typography variant="h4" className="font-poppins" sx={{ fontWeight: 600, mb: 0.5, color: '#1E3A8A' }}>
-                      {usuarios.filter(u => u.estado === 'Activo').length}
+                    <Typography variant="h4" className="font-poppins" sx={{ fontWeight: 700, mb: 0.5, color: '#6D28D9' }}>
+                      {usuarios.filter((u: any) => (u.rol || u.rol_nombre || '').toUpperCase() === 'ADMIN').length}
                     </Typography>
-                    <Typography variant="body2" className="font-roboto" sx={{ color: '#6B7280' }}>
-                      Usuarios Activos
+                    <Typography variant="body2" sx={{ color: '#4B5563', fontWeight: 600 }}>
+                      Administradores
                     </Typography>
                   </Box>
-                  <PersonAddIcon sx={{ fontSize: 40, color: '#10B981' }} />
+                  <ShieldIcon sx={{ fontSize: 38, color: '#6D28D9' }} />
                 </Box>
               </CardContent>
             </Card>
           </Grid>
-          <Grid  size={{ xs: 12, md: 3, sm: 6 }}>
-            <Card className="card">
-              <CardContent sx={{ p: 3 }}>
+
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Card 
+              onClick={() => setRolFilter(rolFilter === 'OPERADOR' ? '' : 'OPERADOR')}
+              sx={{ 
+                cursor: 'pointer',
+                borderRadius: '14px',
+                border: rolFilter === 'OPERADOR' ? '2px solid #0284C7' : '1px solid #E2E8F0',
+                background: rolFilter === 'OPERADOR' ? '#E0F2FE' : '#FFFFFF',
+                transition: 'all 0.2s ease',
+                '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 6px 16px rgba(2, 132, 199, 0.12)' }
+              }}
+            >
+              <CardContent sx={{ p: 2.5 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <Box>
-                    <Typography variant="h4" className="font-poppins" sx={{ fontWeight: 600, mb: 0.5, color: '#1E3A8A' }}>
-                      {usuarios.filter(u => u.estado === 'Inactivo').length}
+                    <Typography variant="h4" className="font-poppins" sx={{ fontWeight: 700, mb: 0.5, color: '#0284C7' }}>
+                      {usuarios.filter((u: any) => (u.rol || u.rol_nombre || '').toUpperCase() === 'OPERADOR').length}
                     </Typography>
-                    <Typography variant="body2" className="font-roboto" sx={{ color: '#6B7280' }}>
-                      Usuarios Inactivos
+                    <Typography variant="body2" sx={{ color: '#4B5563', fontWeight: 600 }}>
+                      Operadores SGSI
                     </Typography>
                   </Box>
-                  <GroupIcon sx={{ fontSize: 40, color: '#F59E0B' }} />
+                  <SecurityIcon sx={{ fontSize: 38, color: '#0284C7' }} />
                 </Box>
               </CardContent>
             </Card>
           </Grid>
-          <Grid  size={{ xs: 12, md: 3, sm: 6 }}>
-            <Card className="card">
-              <CardContent sx={{ p: 3 }}>
+
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Card 
+              onClick={() => setRolFilter(rolFilter === 'CONSULTOR' ? '' : 'CONSULTOR')}
+              sx={{ 
+                cursor: 'pointer',
+                borderRadius: '14px',
+                border: rolFilter === 'CONSULTOR' ? '2px solid #D97706' : '1px solid #E2E8F0',
+                background: rolFilter === 'CONSULTOR' ? '#FEF3C7' : '#FFFFFF',
+                transition: 'all 0.2s ease',
+                '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 6px 16px rgba(217, 119, 6, 0.12)' }
+              }}
+            >
+              <CardContent sx={{ p: 2.5 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <Box>
-                    <Typography variant="h4" className="font-poppins" sx={{ fontWeight: 600, mb: 0.5, color: '#1E3A8A' }}>
-                      {usuarios.filter(u => u.estado === 'Bloqueado').length}
+                    <Typography variant="h4" className="font-poppins" sx={{ fontWeight: 700, mb: 0.5, color: '#D97706' }}>
+                      {usuarios.filter((u: any) => (u.rol || u.rol_nombre || '').toUpperCase() === 'CONSULTOR').length}
                     </Typography>
-                    <Typography variant="body2" className="font-roboto" sx={{ color: '#6B7280' }}>
-                      Usuarios Bloqueados
+                    <Typography variant="body2" sx={{ color: '#4B5563', fontWeight: 600 }}>
+                      Consultores
                     </Typography>
                   </Box>
-                  <PeopleIcon sx={{ fontSize: 40, color: '#EF4444' }} />
+                  <VisibilityIcon sx={{ fontSize: 38, color: '#D97706' }} />
                 </Box>
               </CardContent>
             </Card>
@@ -1256,64 +1338,95 @@ const Usuarios: React.FC = () => {
                 />
               </Box>
               
-              <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                <FormControl sx={{ flex: '1 1 300px' }}>
-                  <InputLabel>Rol del Sistema (RBAC)</InputLabel>
-                  <Select
-                    value={formData.rol || 'CONSULTOR'}
-                    onChange={(e) => {
-                      const selectedRolName = e.target.value;
-                      const matchedRol = roles.find((r: any) => r.nombre_rol === selectedRolName);
-                      setFormData({
-                        ...formData,
-                        rol: selectedRolName,
-                        id_rol: matchedRol?.id_rol || formData.id_rol
-                      });
-                    }}
-                    label="Rol del Sistema (RBAC)"
-                    sx={{ borderRadius: '12px' }}
-                  >
-                    <MenuItem value="ADMIN">
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <ShieldIcon sx={{ color: '#6D28D9', fontSize: 18 }} />
-                        <Box>
-                          <Typography variant="body2" sx={{ fontWeight: 600 }}>ADMIN</Typography>
-                          <Typography variant="caption" sx={{ color: '#6B7280' }}>Control Total y Gestión de Usuarios</Typography>
-                        </Box>
-                      </Box>
-                    </MenuItem>
-                    <MenuItem value="OPERADOR">
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <SecurityIcon sx={{ color: '#0369A1', fontSize: 18 }} />
-                        <Box>
-                          <Typography variant="body2" sx={{ fontWeight: 600 }}>OPERADOR</Typography>
-                          <Typography variant="caption" sx={{ color: '#6B7280' }}>Gestión de Activos, Riesgos y Auditorías</Typography>
-                        </Box>
-                      </Box>
-                    </MenuItem>
-                    <MenuItem value="CONSULTOR">
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <VisibilityIcon sx={{ color: '#B45309', fontSize: 18 }} />
-                        <Box>
-                          <Typography variant="body2" sx={{ fontWeight: 600 }}>CONSULTOR</Typography>
-                          <Typography variant="caption" sx={{ color: '#6B7280' }}>Modo Solo Consulta y Reportes</Typography>
-                        </Box>
-                      </Box>
-                    </MenuItem>
-                  </Select>
-                </FormControl>
+              {/* ── Segmented Role Selection Cards ── */}
+              <Box>
+                <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#1D3867', mb: 1.5 }}>
+                  Seleccione el Rol de Seguridad y Acceso (RBAC) *
+                </Typography>
+                <Grid container spacing={2}>
+                  {[
+                    {
+                      rol: 'ADMIN',
+                      id: 1,
+                      title: 'ADMINISTRADOR',
+                      desc: 'Control total del sistema, configuración global y gestión de usuarios.',
+                      color: '#6D28D9',
+                      bg: '#EDE9FE',
+                      icon: <ShieldIcon fontSize="small" />
+                    },
+                    {
+                      rol: 'OPERADOR',
+                      id: 2,
+                      title: 'OPERADOR SGSI',
+                      desc: 'Crea activos, asigna responsables, evalúa riesgos en Wizard y auditorías.',
+                      color: '#0284C7',
+                      bg: '#E0F2FE',
+                      icon: <SecurityIcon fontSize="small" />
+                    },
+                    {
+                      rol: 'CONSULTOR',
+                      id: 3,
+                      title: 'CONSULTOR',
+                      desc: 'Modo lectura. Consulta activos, mapa de riesgos DAFP y reportes.',
+                      color: '#D97706',
+                      bg: '#FEF3C7',
+                      icon: <VisibilityIcon fontSize="small" />
+                    }
+                  ].map((r) => {
+                    const isSelected = (formData.rol || '').toUpperCase() === r.rol;
+                    return (
+                      <Grid size={{ xs: 12, md: 4 }} key={r.rol}>
+                        <Paper
+                          elevation={0}
+                          onClick={() => {
+                            const matchedRol = roles.find((item: any) => item.nombre_rol?.toUpperCase() === r.rol);
+                            setFormData({
+                              ...formData,
+                              rol: r.rol,
+                              id_rol: matchedRol?.id_rol || r.id
+                            });
+                          }}
+                          sx={{
+                            p: 2,
+                            borderRadius: '12px',
+                            cursor: 'pointer',
+                            border: isSelected ? `2px solid ${r.color}` : '1px solid #E2E8F0',
+                            backgroundColor: isSelected ? r.bg : '#F8FAFC',
+                            transition: 'all 0.2s ease',
+                            '&:hover': {
+                              borderColor: r.color,
+                              transform: 'translateY(-2px)'
+                            }
+                          }}
+                        >
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5, color: r.color }}>
+                            {r.icon}
+                            <Typography variant="body2" sx={{ fontWeight: 700, color: r.color }}>
+                              {r.title}
+                            </Typography>
+                          </Box>
+                          <Typography variant="caption" sx={{ color: '#475569', display: 'block', lineHeight: 1.35 }}>
+                            {r.desc}
+                          </Typography>
+                        </Paper>
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              </Box>
 
+              <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
                 <FormControl sx={{ flex: '1 1 200px' }}>
-                  <InputLabel>Estado del Usuario</InputLabel>
+                  <InputLabel>Estado de la Cuenta</InputLabel>
                   <Select
                     value={formData.estado}
                     onChange={(e) => setFormData({ ...formData, estado: e.target.value })}
-                    label="Estado del Usuario"
+                    label="Estado de la Cuenta"
                     sx={{ borderRadius: '12px' }}
                   >
-                    <MenuItem value="Activo">Activo</MenuItem>
-                    <MenuItem value="Inactivo">Inactivo</MenuItem>
-                    <MenuItem value="Bloqueado">Bloqueado</MenuItem>
+                    <MenuItem value="Activo">Activo (Habilitado)</MenuItem>
+                    <MenuItem value="Inactivo">Inactivo (Deshabilitado)</MenuItem>
+                    <MenuItem value="Bloqueado">Bloqueado (Acceso Suspendido)</MenuItem>
                   </Select>
                 </FormControl>
               </Box>
