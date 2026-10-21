@@ -197,10 +197,16 @@ def create_usuario():
         if not rol:
             rol = Rol.query.filter_by(nombre_rol='CONSULTOR').first() or Rol.query.first()
         
+        # Generar contraseña inicial si no se proporcionó
+        pwd_to_use = password or "User@2026!"
+        from werkzeug.security import generate_password_hash
+        hashed_pwd = generate_password_hash(pwd_to_use)
+
         # Crear UsuarioSistema
         usuario = UsuarioSistema(
             nombre_completo=nombre,
             email_institucional=email,
+            password_hash=hashed_pwd,
             puesto_organizacion=puesto,
             estado_usuario=estado
         )
@@ -208,27 +214,22 @@ def create_usuario():
         db.session.flush() # Obtener id_usuario generado
         
         # Crear cuenta de autenticación si se requiere o si se proveen credenciales
-        auth_created = None
-        if username or password:
-            if not username:
-                username = f"user_{usuario.id_usuario}"
-            
-            # Verificar username único
-            existing_auth = UsuarioAuth.query.filter_by(username=username).first()
-            if existing_auth:
-                username = f"{username}_{usuario.id_usuario}"
-            
-            if not password:
-                password = "User@2026!"
-            
-            auth_created = UsuarioAuth(
-                id_usuario_sistema=usuario.id_usuario,
-                username=username,
-                id_rol=rol.id_rol if rol else 3,
-                activo=(estado == 'Activo')
-            )
-            auth_created.set_password(password)
-            db.session.add(auth_created)
+        if not username:
+            username = email.split('@')[0] if (email and '@' in email) else f"user_{usuario.id_usuario}"
+        
+        # Verificar username único
+        existing_auth = UsuarioAuth.query.filter_by(username=username).first()
+        if existing_auth:
+            username = f"{username}_{usuario.id_usuario}"
+        
+        auth_created = UsuarioAuth(
+            id_usuario_sistema=usuario.id_usuario,
+            username=username,
+            id_rol=rol.id_rol if rol else 3,
+            activo=(estado == 'Activo')
+        )
+        auth_created.set_password(pwd_to_use)
+        db.session.add(auth_created)
         
         db.session.commit()
         
