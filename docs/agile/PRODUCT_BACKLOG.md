@@ -85,3 +85,31 @@ Este documento contiene las Historias de Usuario (User Stories) priorizadas y co
   1. El frontend debe estar servido por Nginx y el backend por Gunicorn/Flask en un VPS/Cloud.
   2. La base de datos debe ser persistente (MariaDB).
   3. Se debe configurar un certificado SSL válido para acceso por HTTPS.
+
+---
+
+## Épica 4: Gestión de Identidades, Seguridad y Autoservicio de Acceso
+*Correspondiente a la administración centralizada de usuarios, control de acceso RBAC y recuperación de credenciales.*
+
+### HU-009: Módulo de Gestión de Usuarios y Roles RBAC (Jira: SCRUM-36)
+**Como** Administrador del Sistema
+**Quiero** gestionar de forma integral el ciclo de vida de los usuarios (crear, editar, activar, inactivar, desbloquear y asignar roles RBAC)
+**Para** asegurar que cada integrante de la organización (ADMIN, OPERADOR, AUXILIAR, CONSULTOR) acceda únicamente a las funcionalidades que le corresponden según el principio de mínimo privilegio.
+* **Criterios de Aceptación (DoD):**
+  1. Sincronización bidireccional entre la identidad institucional (`usuarios_sistema`) y la cuenta de credenciales (`usuarios_auth`).
+  2. Catálogo dinámico de roles (`ADMIN`, `OPERADOR`, `AUXILIAR`, `CONSULTOR`) con filtro interactivo en la UI.
+  3. Visualización clara en DataGrid de estado de cuenta (Activo, Inactivo, Bloqueado) y fecha de último login.
+  4. Capacidad administrativa para activar/desactivar cuentas y desbloquear usuarios bloqueados por intentos fallidos.
+  5. Acción de restablecimiento forzado de contraseña por el Administrador con generación de clave temporal segura.
+
+### HU-010: Autoservicio y Recuperación Segura de Contraseñas (Jira: SCRUM-37)
+**Como** Usuario del Sistema
+**Quiero** solicitar la recuperación de mi contraseña de forma autónoma mediante un token criptográfico seguro
+**Para** restablecer mi acceso a la plataforma sin demoras operativas ni intervención manual insegura.
+* **Criterios de Aceptación (DoD):**
+  1. Solicitud de recuperación mediante nombre de usuario o correo electrónico institucional en endpoint `POST /api/auth/forgot-password`.
+  2. Generación de token JWT firmado con expiración estricta de 1 hora y código de verificación numérico de 6 dígitos.
+  3. Endpoint seguro `POST /api/auth/reset-password` que valida la firma criptográfica del token, actualiza el hash de la contraseña usando bcrypt y desbloquea la cuenta.
+  4. Invalidación automática de sesiones previas activas por motivos de seguridad.
+  5. Componente interactivo en el frontend (Modal "¿Olvidaste tu contraseña?") con medidor de fortaleza de clave y retroalimentación en tiempo real.
+
