@@ -84,6 +84,7 @@ def require_any_role(required_roles):
 ROL_ADMIN = ['ADMIN', 'Administrador']
 ROL_OPERADOR = ['OPERADOR', 'Operador']
 ROL_CONSULTOR = ['CONSULTOR', 'Consultor']
+ROL_AUXILIAR = ['AUXILIAR', 'Auxiliar', 'AUXILIAR_AUDITORIA', 'Auxiliar de Auditoría', 'Auxiliar de Auditoria']
 
 def admin_required(f):
     """Decorador que requiere rol de administrador"""
@@ -93,9 +94,13 @@ def operator_required(f):
     """Decorador que requiere rol de operador o superior"""
     return require_any_role(ROL_ADMIN + ROL_OPERADOR)(f)
 
+def auxiliar_required(f):
+    """Decorador que requiere rol de auxiliar, operador o administrador"""
+    return require_any_role(ROL_ADMIN + ROL_OPERADOR + ROL_AUXILIAR)(f)
+
 def consultant_required(f):
-    """Decorador que requiere rol de consultor o superior"""
-    return require_any_role(ROL_ADMIN + ROL_OPERADOR + ROL_CONSULTOR)(f)
+    """Decorador que permite lectura a cualquier rol autenticado activo"""
+    return require_any_role(ROL_ADMIN + ROL_OPERADOR + ROL_CONSULTOR + ROL_AUXILIAR)(f)
 
 def require_permission(resource, action):
     """

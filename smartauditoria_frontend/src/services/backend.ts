@@ -137,36 +137,72 @@ export const activosService = {
 };
 
 // Servicios de Usuarios
+// Servicios de Usuarios
 export const usuariosService = {
-  // Obtener todos los usuarios
-  async getAll(): Promise<Usuario[]> {
+  // Obtener todos los usuarios con roles y credenciales
+  async getAll(filters?: { puesto?: string; estado?: string; rol?: string }): Promise<any[]> {
     try {
-      const res = await apiRequest<any[]>('/usuarios');
+      const params = new URLSearchParams();
+      if (filters?.puesto) params.append('puesto', filters.puesto);
+      if (filters?.estado) params.append('estado', filters.estado);
+      if (filters?.rol) params.append('rol', filters.rol);
+
+      const url = `/usuarios${params.toString() ? '?' + params.toString() : ''}`;
+      const res = await apiRequest<any[]>(url);
       if (!res || !Array.isArray(res) || res.length === 0) throw new Error('Forzando mock por array vacío');
       return res.map((u: any) => ({
         id: u.id ?? u.id_usuario,
+        id_usuario: u.id_usuario ?? u.id,
         nombre: u.nombre ?? u.nombre_completo ?? 'Sin nombre',
+        nombre_completo: u.nombre_completo ?? u.nombre ?? 'Sin nombre',
         email: u.email ?? u.email_institucional ?? 'Sin correo',
-        rol: u.rol ?? u.puesto ?? u.puesto_organizacion ?? 'Usuario del Sistema',
-        puesto: u.puesto ?? u.puesto_organizacion ?? u.rol ?? 'Usuario del Sistema',
+        email_institucional: u.email_institucional ?? u.email ?? 'Sin correo',
+        rol: u.rol ?? u.rol_nombre ?? u.puesto_organizacion ?? 'CONSULTOR',
+        rol_nombre: u.rol_nombre ?? u.rol ?? 'CONSULTOR',
+        id_rol: u.id_rol,
+        username: u.username ?? (u.email ? u.email.split('@')[0] : `user_${u.id}`),
+        tiene_auth: u.tiene_auth ?? true,
+        id_usuario_auth: u.id_usuario_auth,
+        activo: u.activo ?? true,
+        bloqueado: u.bloqueado ?? false,
+        intentos_fallidos: u.intentos_fallidos ?? 0,
+        puesto: u.puesto ?? u.puesto_organizacion ?? 'Usuario del Sistema',
+        puesto_organizacion: u.puesto_organizacion ?? u.puesto ?? 'Usuario del Sistema',
         estado: u.estado ?? u.estado_usuario ?? 'Activo',
-        fecha_creacion: u.fecha_creacion ?? u.fecha_creacion_registro ?? new Date().toISOString()
+        estado_usuario: u.estado_usuario ?? u.estado ?? 'Activo',
+        fecha_creacion: u.fecha_creacion ?? u.fecha_creacion_registro ?? new Date().toISOString(),
+        fecha_creacion_registro: u.fecha_creacion_registro ?? u.fecha_creacion ?? new Date().toISOString(),
+        fecha_ultimo_login: u.fecha_ultimo_login
       }));
     } catch (error) {
       console.warn('API fallida o vacía, usando Mock Data para Lista de Usuarios en backend.ts');
       return [
-        { id: 1, nombre: "Lic. Auditor Senior", email: "auditor.senior@univalle.edu.co", rol: "Auditor Jefe", puesto: "Auditor Jefe", estado: "Activo", fecha_creacion: "2026-04-01" },
-        { id: 2, nombre: "Ing. Seguridad TI", email: "seguridad.ti@univalle.edu.co", rol: "CISO", puesto: "CISO", estado: "Activo", fecha_creacion: "2026-04-02" },
-        { id: 3, nombre: "Admin Sistema", email: "admin.sgsri@univalle.edu.co", rol: "Administrador", puesto: "Administrador", estado: "Activo", fecha_creacion: "2026-04-05" },
-        { id: 4, nombre: "Consultor Externo", email: "consultor.iso@ext.univalle.edu.co", rol: "Consultor", puesto: "Consultor", estado: "Activo", fecha_creacion: "2026-04-08" }
+        { id: 1, id_usuario: 1, nombre: "Lic. Auditor Senior", nombre_completo: "Lic. Auditor Senior", email: "auditor.senior@univalle.edu.co", email_institucional: "auditor.senior@univalle.edu.co", rol: "ADMIN", rol_nombre: "ADMIN", puesto: "Auditor Jefe", puesto_organizacion: "Auditor Jefe", estado: "Activo", estado_usuario: "Activo", username: "admin", tiene_auth: true, activo: true, bloqueado: false, intentos_fallidos: 0, fecha_creacion: "2026-04-01" },
+        { id: 2, id_usuario: 2, nombre: "Ing. Seguridad TI", nombre_completo: "Ing. Seguridad TI", email: "seguridad.ti@univalle.edu.co", email_institucional: "seguridad.ti@univalle.edu.co", rol: "OPERADOR", rol_nombre: "OPERADOR", puesto: "CISO", puesto_organizacion: "CISO", estado: "Activo", estado_usuario: "Activo", username: "operador", tiene_auth: true, activo: true, bloqueado: false, intentos_fallidos: 0, fecha_creacion: "2026-04-02" },
+        { id: 3, id_usuario: 3, nombre: "Auxiliar Auditoría", nombre_completo: "Auxiliar Auditoría", email: "auxiliar.auditoria@univalle.edu.co", email_institucional: "auxiliar.auditoria@univalle.edu.co", rol: "AUXILIAR", rol_nombre: "AUXILIAR", puesto: "Auxiliar Operativo", puesto_organizacion: "Auxiliar Operativo", estado: "Activo", estado_usuario: "Activo", username: "auxiliar", tiene_auth: true, activo: true, bloqueado: false, intentos_fallidos: 0, fecha_creacion: "2026-04-05" },
+        { id: 4, id_usuario: 4, nombre: "Consultor Externo", nombre_completo: "Consultor Externo", email: "consultor.iso@ext.univalle.edu.co", email_institucional: "consultor.iso@ext.univalle.edu.co", rol: "CONSULTOR", rol_nombre: "CONSULTOR", puesto: "Consultor", puesto_organizacion: "Consultor", estado: "Activo", estado_usuario: "Activo", username: "consultor", tiene_auth: true, activo: true, bloqueado: false, intentos_fallidos: 0, fecha_creacion: "2026-04-08" }
+      ];
+    }
+  },
+
+  // Obtener roles disponibles
+  async getRoles(): Promise<any[]> {
+    try {
+      return await apiRequest<any[]>('/usuarios/roles');
+    } catch (error) {
+      return [
+        { id_rol: 1, nombre_rol: 'ADMIN', descripcion: 'Administrador del sistema con acceso completo', activo: true },
+        { id_rol: 2, nombre_rol: 'OPERADOR', descripcion: 'Operador SGSI con gestión de activos, riesgos y auditorías', activo: true },
+        { id_rol: 3, nombre_rol: 'AUXILIAR', descripcion: 'Auxiliar de Auditoría operativo para wizard y evidencias', activo: true },
+        { id_rol: 4, nombre_rol: 'CONSULTOR', descripcion: 'Consultor con permisos de solo lectura (modo consulta)', activo: true }
       ];
     }
   },
 
   // Crear nuevo usuario
-  async create(usuario: Omit<Usuario, 'id' | 'fecha_creacion'>): Promise<Usuario> {
+  async create(usuario: any): Promise<any> {
     try {
-      return await apiRequest<Usuario>('/usuarios', {
+      return await apiRequest<any>('/usuarios', {
         method: 'POST',
         body: JSON.stringify(usuario),
       });
@@ -177,14 +213,39 @@ export const usuariosService = {
   },
 
   // Actualizar usuario
-  async update(id: number, usuario: Partial<Usuario>): Promise<Usuario> {
+  async update(id: number, usuario: any): Promise<any> {
     try {
-      return await apiRequest<Usuario>(`/usuarios/${id}`, {
+      return await apiRequest<any>(`/usuarios/${id}`, {
         method: 'PUT',
         body: JSON.stringify(usuario),
       });
     } catch (error) {
       console.error('Error updating usuario:', error);
+      throw error;
+    }
+  },
+
+  // Restablecer contraseña desde Admin
+  async adminResetPassword(id: number, newPassword?: string): Promise<any> {
+    try {
+      return await apiRequest<any>(`/usuarios/${id}/reset-password`, {
+        method: 'POST',
+        body: JSON.stringify({ new_password: newPassword }),
+      });
+    } catch (error) {
+      console.error('Error in adminResetPassword:', error);
+      throw error;
+    }
+  },
+
+  // Alternar estado activo/inactivo/desbloquear
+  async toggleStatus(id: number): Promise<any> {
+    try {
+      return await apiRequest<any>(`/usuarios/${id}/toggle-status`, {
+        method: 'POST',
+      });
+    } catch (error) {
+      console.error('Error in toggleStatus:', error);
       throw error;
     }
   },
@@ -209,6 +270,22 @@ export const usuariosService = {
       console.error('Error fetching detalle usuario:', error);
       throw error;
     }
+  },
+
+  // Solicitar recuperación de contraseña (Forgot Password)
+  async forgotPassword(identifier: string): Promise<any> {
+    return await apiRequest<any>('/auth/forgot-password', {
+      method: 'POST',
+      body: JSON.stringify({ identifier }),
+    });
+  },
+
+  // Restablecer contraseña con token (Reset Password)
+  async resetPasswordWithToken(token: string, newPassword: string): Promise<any> {
+    return await apiRequest<any>('/auth/reset-password', {
+      method: 'POST',
+      body: JSON.stringify({ token, new_password: newPassword }),
+    });
   }
 };
 

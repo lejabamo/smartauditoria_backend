@@ -23,11 +23,13 @@ export const usuariosService = {
   async getUsuarios(filters?: {
     puesto?: string;
     estado?: string;
+    rol?: string;
   }): Promise<Usuario[]> {
     try {
       const params = new URLSearchParams();
       if (filters?.puesto) params.append('puesto', filters.puesto);
       if (filters?.estado) params.append('estado', filters.estado);
+      if (filters?.rol) params.append('rol', filters.rol);
 
       const response = await api.get(`/usuarios/?${params.toString()}`);
       return response.data;
@@ -48,15 +50,42 @@ export const usuariosService = {
     return response.data;
   },
 
+  // Obtener roles disponibles del sistema (RBAC)
+  async getRoles(): Promise<any[]> {
+    try {
+      const response = await api.get('/usuarios/roles');
+      return response.data;
+    } catch (error) {
+      return [
+        { id_rol: 1, nombre_rol: 'ADMIN', descripcion: 'Administrador total' },
+        { id_rol: 2, nombre_rol: 'OPERADOR', descripcion: 'Operador SGSI' },
+        { id_rol: 3, nombre_rol: 'AUXILIAR', descripcion: 'Auxiliar de Auditoría' },
+        { id_rol: 4, nombre_rol: 'CONSULTOR', descripcion: 'Consultor solo lectura' }
+      ];
+    }
+  },
+
   // Crear un nuevo usuario
-  async createUsuario(data: CreateUsuarioData): Promise<Usuario> {
+  async createUsuario(data: any): Promise<Usuario> {
     const response = await api.post('/usuarios/', data);
     return response.data;
   },
 
   // Actualizar un usuario
-  async updateUsuario(id: number, data: UpdateUsuarioData): Promise<Usuario> {
+  async updateUsuario(id: number, data: any): Promise<Usuario> {
     const response = await api.put(`/usuarios/${id}`, data);
+    return response.data;
+  },
+
+  // Restablecer contraseña por Admin
+  async adminResetPassword(id: number, newPassword?: string): Promise<any> {
+    const response = await api.post(`/usuarios/${id}/reset-password`, { new_password: newPassword });
+    return response.data;
+  },
+
+  // Alternar estado activo / inactivo / desbloquear
+  async toggleStatus(id: number): Promise<any> {
+    const response = await api.post(`/usuarios/${id}/toggle-status`);
     return response.data;
   },
 
@@ -97,5 +126,17 @@ export const usuariosService = {
         usuarios_bloqueados: 0
       };
     }
+  },
+
+  // Solicitar recuperación de contraseña (Forgot Password)
+  async forgotPassword(identifier: string): Promise<any> {
+    const response = await api.post('/auth/forgot-password', { identifier });
+    return response.data;
+  },
+
+  // Restablecer contraseña con token (Reset Password)
+  async resetPasswordWithToken(token: string, newPassword: string): Promise<any> {
+    const response = await api.post('/auth/reset-password', { token, new_password: newPassword });
+    return response.data;
   }
 };

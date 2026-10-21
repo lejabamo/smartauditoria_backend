@@ -47,6 +47,14 @@ import {
   TableChart as ExcelIcon,
   Business as BusinessIcon,
   Assignment as AssignmentIcon,
+  VpnKey as KeyIcon,
+  LockReset as LockResetIcon,
+  Shield as ShieldIcon,
+  CheckCircle as CheckCircleIcon,
+  ContentCopy as CopyIcon,
+  LockOpen as LockOpenIcon,
+  Security as SecurityIcon,
+  Lock as LockIcon,
 } from '@mui/icons-material';
 import { DataGrid } from '@mui/x-data-grid';
 import type { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
@@ -60,6 +68,12 @@ interface CreateUsuarioData {
   email: string;
   puesto: string;
   estado: string;
+  rol: string;
+  id_rol?: number;
+  username?: string;
+  password?: string;
+  activo?: boolean;
+  desbloquear?: boolean;
 }
 
 interface UpdateUsuarioData extends Partial<CreateUsuarioData> {}
@@ -68,32 +82,67 @@ const Usuarios: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [puestoFilter, setPuestoFilter] = useState('');
   const [estadoFilter, setEstadoFilter] = useState('');
+  const [rolFilter, setRolFilter] = useState('');
+  
   const [openDialog, setOpenDialog] = useState(false);
   const [openDetalleDialog, setOpenDetalleDialog] = useState(false);
   const [selectedUsuario, setSelectedUsuario] = useState<Usuario | null>(null);
   const [detalleUsuario, setDetalleUsuario] = useState<any>(null);
   const [loadingDetalle, setLoadingDetalle] = useState(false);
   const [exportando, setExportando] = useState(false);
-  const [editingUsuario, setEditingUsuario] = useState<Usuario | null>(null);
+  const [editingUsuario, setEditingUsuario] = useState<any | null>(null);
+
+  // Estados para Restablecimiento de Contraseña (Admin)
+  const [openResetDialog, setOpenResetDialog] = useState(false);
+  const [selectedUserForReset, setSelectedUserForReset] = useState<any | null>(null);
+  const [resetNewPassword, setResetNewPassword] = useState('');
+  const [resetSuccessResult, setResetSuccessResult] = useState<any | null>(null);
+
   const [formData, setFormData] = useState<CreateUsuarioData>({
     nombre: '',
     email: '',
     puesto: '',
     estado: 'Activo',
+    rol: 'CONSULTOR',
+    id_rol: 4,
+    username: '',
+    password: '',
+    activo: true,
+    desbloquear: false,
   });
 
   const queryClient = useQueryClient();
 
   // Queries
   const { data: usuarios = [], isLoading, error } = useQuery({
-    queryKey: ['usuarios', puestoFilter, estadoFilter],
+    queryKey: ['usuarios', puestoFilter, estadoFilter, rolFilter],
     queryFn: async () => {
       try {
-        const { usuariosService } = await import('../../services/backend');
-        return await usuariosService.getAll();
-      } catch (error) {
-        console.error('Error fetching usuarios:', error);
+        return await usuariosService.getAll({
+          puesto: puestoFilter || undefined,
+          estado: estadoFilter || undefined,
+          rol: rolFilter || undefined,
+        });
+      } catch (err) {
+        console.error('Error fetching usuarios:', err);
         return [];
+      }
+    },
+  });
+
+  // Query de Roles RBAC
+  const { data: roles = [] } = useQuery({
+    queryKey: ['roles-auth'],
+    queryFn: async () => {
+      try {
+        return await usuariosService.getRoles();
+      } catch (err) {
+        return [
+          { id_rol: 1, nombre_rol: 'ADMIN', descripcion: 'Administrador con acceso completo' },
+          { id_rol: 2, nombre_rol: 'OPERADOR', descripcion: 'Operador SGSI (Gestión Activos y Riesgos)' },
+          { id_rol: 3, nombre_rol: 'AUXILIAR', descripcion: 'Auxiliar de Auditoría (Wizard y Evidencias)' },
+          { id_rol: 4, nombre_rol: 'CONSULTOR', descripcion: 'Consultor (Modo Consulta)' },
+        ];
       }
     },
   });
@@ -101,28 +150,28 @@ const Usuarios: React.FC = () => {
   const { data: puestos = [] } = useQuery({
     queryKey: ['puestos-usuario'],
     queryFn: async () => {
-      // Datos mock para puestos
-      return ['Administrador', 'Consultor', 'Analista', 'Gerente', 'Director'];
+      try {
+        return ['TI', 'Seguridad de la Información', 'Auditoría Interna', 'Gestión de Riesgos', 'Operaciones TI', 'Consultor Externo'];
+      } catch {
+        return ['TI', 'Auditoría'];
+      }
     },
   });
 
   const { data: estados = [] } = useQuery({
     queryKey: ['estados-usuario'],
-    queryFn: async () => {
-      // Datos mock para estados
-      return ['Activo', 'Inactivo', 'Bloqueado', 'Pendiente'];
-    },
+    queryFn: async () => ['Activo', 'Inactivo', 'Bloqueado'],
   });
 
   // Mutations
   const createMutation = useMutation({
     mutationFn: async (data: any) => {
-      const { usuariosService } = await import('../../services/backend');
       return await usuariosService.create(data);
     },
-    onSuccess: () => {
+    onSuccess: (data: any) => {
       queryClient.invalidateQueries({ queryKey: ['usuarios'] });
-      toast.success('Usuario creado exitosamente');
+      const passMsg = data?.password_generado ? ` (Clave inicial: ${data.password_generado})` : '';
+      toast.success(`Usuario creado exitosamente${passMsg}`);
       handleCloseDialog();
     },
     onError: (error: any) => {
@@ -131,13 +180,12 @@ const Usuarios: React.FC = () => {
   });
 
   const updateMutation = useMutation({
-    mutationFn: async ({ id, data }: { id: number; data: UpdateUsuarioData }) => {
-      const { usuariosService } = await import('../../services/backend');
+    mutationFn: async ({ id, data }: { id: number; data: any }) => {
       return await usuariosService.update(id, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['usuarios'] });
-      toast.success('Usuario actualizado exitosamente');
+      toast.success('Usuario y permisos actualizados exitosamente');
       handleCloseDialog();
     },
     onError: (error: any) => {
@@ -147,7 +195,6 @@ const Usuarios: React.FC = () => {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
-      const { usuariosService } = await import('../../services/backend');
       return await usuariosService.delete(id);
     },
     onSuccess: () => {
@@ -159,32 +206,69 @@ const Usuarios: React.FC = () => {
     },
   });
 
+  const toggleStatusMutation = useMutation({
+    mutationFn: async (id: number) => {
+      return await usuariosService.toggleStatus(id);
+    },
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries({ queryKey: ['usuarios'] });
+      toast.success(data?.message || 'Estado actualizado');
+    },
+    onError: (error: any) => {
+      toast.error(`Error actualizando estado: ${error.response?.data?.error || error.message}`);
+    },
+  });
+
+  const resetPasswordMutation = useMutation({
+    mutationFn: async ({ id, newPassword }: { id: number; newPassword?: string }) => {
+      return await usuariosService.adminResetPassword(id, newPassword);
+    },
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries({ queryKey: ['usuarios'] });
+      setResetSuccessResult(data);
+      toast.success('Contraseña restablecida exitosamente');
+    },
+    onError: (error: any) => {
+      toast.error(`Error restableciendo contraseña: ${error.response?.data?.error || error.message}`);
+    },
+  });
+
   // Filtered usuarios based on search term and filters
-  const filteredUsuarios = usuarios.filter(usuario => {
-    const rolPuesto = usuario.rol || (usuario as any).puesto || (usuario as any).puesto_organizacion || '';
-    const nombre = usuario.nombre || (usuario as any).nombre_completo || '';
-    const email = usuario.email || (usuario as any).email_institucional || '';
-    const estado = usuario.estado || (usuario as any).estado_usuario || 'Activo';
+  const filteredUsuarios = usuarios.filter((usuario: any) => {
+    const rolPuesto = usuario.rol || usuario.rol_nombre || usuario.puesto || '';
+    const nombre = usuario.nombre || usuario.nombre_completo || '';
+    const email = usuario.email || usuario.email_institucional || '';
+    const username = usuario.username || '';
+    const estado = usuario.estado || usuario.estado_usuario || 'Activo';
 
     const matchesSearch = !searchTerm || 
       nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
       email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      username.toLowerCase().includes(searchTerm.toLowerCase()) ||
       rolPuesto.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesPuesto = !puestoFilter || rolPuesto === puestoFilter;
+    const matchesPuesto = !puestoFilter || (usuario.puesto || usuario.puesto_organizacion) === puestoFilter;
     const matchesEstado = !estadoFilter || estado === estadoFilter;
+    const matchesRol = !rolFilter || rolPuesto.toUpperCase() === rolFilter.toUpperCase();
     
-    return matchesSearch && matchesPuesto && matchesEstado;
+    return matchesSearch && matchesPuesto && matchesEstado && matchesRol;
   });
 
-  const handleOpenDialog = (usuario?: Usuario) => {
+  const handleOpenDialog = (usuario?: any) => {
     if (usuario) {
       setEditingUsuario(usuario);
+      const userRol = usuario.rol || usuario.rol_nombre || 'CONSULTOR';
       setFormData({
-        nombre: usuario.nombre,
-        email: usuario.email,
-        puesto: usuario.rol || '',
-        estado: usuario.estado,
+        nombre: usuario.nombre || usuario.nombre_completo || '',
+        email: usuario.email || usuario.email_institucional || '',
+        puesto: usuario.puesto || usuario.puesto_organizacion || '',
+        estado: usuario.estado || usuario.estado_usuario || 'Activo',
+        rol: userRol,
+        id_rol: usuario.id_rol,
+        username: usuario.username || '',
+        password: '',
+        activo: usuario.activo ?? true,
+        desbloquear: usuario.bloqueado ?? false,
       });
     } else {
       setEditingUsuario(null);
@@ -193,6 +277,12 @@ const Usuarios: React.FC = () => {
         email: '',
         puesto: '',
         estado: 'Activo',
+        rol: 'CONSULTOR',
+        id_rol: 4,
+        username: '',
+        password: '',
+        activo: true,
+        desbloquear: false,
       });
     }
     setOpenDialog(true);
@@ -203,19 +293,55 @@ const Usuarios: React.FC = () => {
     setEditingUsuario(null);
   };
 
+  const handleOpenResetDialog = (usuario: any) => {
+    setSelectedUserForReset(usuario);
+    setResetNewPassword('');
+    setResetSuccessResult(null);
+    setOpenResetDialog(true);
+  };
+
+  const handleCloseResetDialog = () => {
+    setOpenResetDialog(false);
+    setSelectedUserForReset(null);
+    setResetNewPassword('');
+    setResetSuccessResult(null);
+  };
+
+  const handleGenerateRandomPassword = () => {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%&*';
+    let res = '';
+    for (let i = 0; i < 12; i++) {
+      res += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    setResetNewPassword(res);
+  };
+
+  const handleSubmitResetPassword = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedUserForReset) return;
+    resetPasswordMutation.mutate({
+      id: selectedUserForReset.id || selectedUserForReset.id_usuario,
+      newPassword: resetNewPassword || undefined,
+    });
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (editingUsuario) {
-      updateMutation.mutate({ id: editingUsuario.id, data: formData });
+      updateMutation.mutate({ id: editingUsuario.id || editingUsuario.id_usuario, data: formData });
     } else {
       createMutation.mutate(formData);
     }
   };
 
   const handleDelete = (id: number) => {
-    if (window.confirm('Â¿Esta seguro de que desea eliminar este usuario?')) {
+    if (window.confirm('¿Está seguro de que desea eliminar este usuario?')) {
       deleteMutation.mutate(id);
     }
+  };
+
+  const handleToggleStatus = (id: number) => {
+    toggleStatusMutation.mutate(id);
   };
 
   const handleConsultarUsuario = async (usuario: Usuario) => {
@@ -495,29 +621,29 @@ const Usuarios: React.FC = () => {
     { 
       field: 'id', 
       headerName: 'ID', 
-      width: 80,
+      width: 70,
       headerAlign: 'center',
       align: 'center',
     },
     { 
       field: 'nombre', 
       headerName: 'Nombre Completo', 
-      width: 250,
+      width: 220,
       flex: 1,
-      minWidth: 200,
+      minWidth: 180,
       renderCell: (params: GridRenderCellParams) => (
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Avatar sx={{ 
             width: 32, 
             height: 32, 
             background: 'linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%)',
             color: '#FFFFFF',
-            fontSize: '0.875rem',
+            fontSize: '0.8rem',
             fontWeight: 600
           }}>
-            {params.value?.split(' ').map((n: string) => n[0]).join('').toUpperCase()}
+            {params.value?.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase()}
           </Avatar>
-          <Typography variant="body2" className="font-roboto" sx={{ color: '#374151', fontWeight: 500 }}>
+          <Typography variant="body2" className="font-roboto" sx={{ color: '#1F2937', fontWeight: 600 }}>
             {params.value}
           </Typography>
         </Box>
@@ -526,12 +652,60 @@ const Usuarios: React.FC = () => {
     { 
       field: 'email', 
       headerName: 'Email Institucional', 
-      width: 280,
+      width: 220,
       renderCell: (params: GridRenderCellParams) => (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <EmailIcon sx={{ fontSize: 16, color: '#6B7280' }} />
-          <Typography variant="body2" className="font-roboto" sx={{ color: '#6B7280', fontSize: '0.875rem' }}>
+          <EmailIcon sx={{ fontSize: 15, color: '#6B7280' }} />
+          <Typography variant="body2" className="font-roboto" sx={{ color: '#6B7280', fontSize: '0.85rem' }}>
             {params.value}
+          </Typography>
+        </Box>
+      ),
+    },
+    {
+      field: 'rol',
+      headerName: 'Rol del Sistema (RBAC)',
+      width: 150,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params: GridRenderCellParams) => {
+        const rol = (params.value || params.row.rol_nombre || 'CONSULTOR').toUpperCase();
+        let config = { label: 'CONSULTOR', bg: '#FEF3C7', color: '#92400E', icon: <VisibilityIcon sx={{ fontSize: 13 }} /> };
+        if (rol === 'ADMIN' || rol.includes('ADMIN')) {
+          config = { label: 'ADMIN', bg: '#EDE9FE', color: '#6D28D9', icon: <ShieldIcon sx={{ fontSize: 13 }} /> };
+        } else if (rol === 'OPERADOR') {
+          config = { label: 'OPERADOR', bg: '#E0F2FE', color: '#0369A1', icon: <SecurityIcon sx={{ fontSize: 13 }} /> };
+        } else if (rol === 'AUXILIAR' || rol.includes('AUXILIAR')) {
+          config = { label: 'AUXILIAR', bg: '#D1FAE5', color: '#047857', icon: <AssignmentIcon sx={{ fontSize: 13 }} /> };
+        }
+
+        return (
+          <Chip
+            icon={config.icon}
+            label={config.label}
+            size="small"
+            sx={{
+              backgroundColor: config.bg,
+              color: config.color,
+              fontWeight: 700,
+              fontSize: '0.72rem',
+              borderRadius: '8px',
+              border: `1px solid ${config.color}20`,
+              '& .MuiChip-icon': { color: config.color },
+            }}
+          />
+        );
+      },
+    },
+    {
+      field: 'username',
+      headerName: 'Cuenta Auth',
+      width: 140,
+      renderCell: (params: GridRenderCellParams) => (
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+          <KeyIcon sx={{ fontSize: 14, color: '#9CA3AF' }} />
+          <Typography variant="body2" sx={{ fontFamily: 'monospace', fontSize: '0.8rem', color: '#374151', fontWeight: 500 }}>
+            {params.value || `user_${params.row.id}`}
           </Typography>
         </Box>
       ),
@@ -539,13 +713,11 @@ const Usuarios: React.FC = () => {
     { 
       field: 'puesto', 
       headerName: 'Puesto', 
-      width: 180,
-      headerAlign: 'center',
-      align: 'center',
+      width: 150,
       renderCell: (params: GridRenderCellParams) => (
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'center' }}>
-          <WorkIcon sx={{ fontSize: 16, color: '#6B7280' }} />
-          <Typography variant="body2" className="font-roboto" sx={{ color: '#374151', fontSize: '0.875rem' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+          <WorkIcon sx={{ fontSize: 15, color: '#9CA3AF' }} />
+          <Typography variant="body2" sx={{ color: '#4B5563', fontSize: '0.85rem' }}>
             {params.value || 'No especificado'}
           </Typography>
         </Box>
@@ -557,92 +729,104 @@ const Usuarios: React.FC = () => {
       width: 120,
       headerAlign: 'center',
       align: 'center',
-      renderCell: (params: GridRenderCellParams) => (
-        <Box>
+      renderCell: (params: GridRenderCellParams) => {
+        const isBlocked = params.row.bloqueado || params.value === 'Bloqueado';
+        const isActive = params.row.activo !== false && params.value === 'Activo';
+        const label = isBlocked ? 'Bloqueado' : (isActive ? 'Activo' : 'Inactivo');
+        
+        return (
           <Chip
-            label={params.value}
+            label={label}
             size="small"
             sx={{
-              backgroundColor: params.value === 'Activo' ? '#D1FAE5' :
-                             params.value === 'Inactivo' ? '#FEF3C7' :
-                             params.value === 'Bloqueado' ? '#FEE2E2' : '#F3F4F6',
-              color: params.value === 'Activo' ? '#065F46' :
-                     params.value === 'Inactivo' ? '#92400E' :
-                     params.value === 'Bloqueado' ? '#DC2626' : '#6B7280',
-              fontWeight: 500,
-              fontSize: '0.75rem',
+              backgroundColor: isBlocked ? '#FEE2E2' : (isActive ? '#D1FAE5' : '#FEF3C7'),
+              color: isBlocked ? '#DC2626' : (isActive ? '#065F46' : '#92400E'),
+              fontWeight: 600,
+              fontSize: '0.72rem',
+              borderRadius: '8px',
             }}
           />
-        </Box>
-      ),
-    },
-    { 
-      field: 'fecha_creacion_registro', 
-      headerName: 'Fecha Creacion', 
-      width: 160,
-      headerAlign: 'center',
-      align: 'center',
-      renderCell: (params: GridRenderCellParams) => (
-        <Typography variant="body2" className="font-roboto" sx={{ color: '#6B7280', fontSize: '0.875rem' }}>
-          {new Date(params.value).toLocaleDateString('es-ES', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric'
-          })}
-        </Typography>
-      ),
+        );
+      },
     },
     {
       field: 'actions',
-      headerName: 'Acciones',
-      width: 160,
+      headerName: 'Acciones de Gestión',
+      width: 190,
       headerAlign: 'center',
       align: 'center',
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
         <Box sx={{ display: 'flex', gap: 0.5, justifyContent: 'center' }}>
-          <Tooltip title="Consultar detalle del usuario">
+          <Tooltip title="Consultar detalle y activos">
             <IconButton
               size="small"
               onClick={() => handleConsultarUsuario(params.row)}
               sx={{
                 color: '#3B82F6',
-                '&:hover': {
-                  backgroundColor: '#EFF6FF',
-                  color: '#2563EB',
-                },
+                '&:hover': { backgroundColor: '#EFF6FF', color: '#2563EB' },
                 transition: 'all 0.2s ease',
               }}
             >
               <VisibilityIcon fontSize="small" />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Editar usuario">
+          
+          <Tooltip title="Editar perfil y rol">
             <IconButton
               size="small"
               onClick={() => handleOpenDialog(params.row)}
               sx={{
                 color: '#1E3A8A',
-                '&:hover': {
-                  backgroundColor: '#EFF6FF',
-                  color: '#1E40AF',
-                },
+                '&:hover': { backgroundColor: '#EFF6FF', color: '#1E40AF' },
                 transition: 'all 0.2s ease',
               }}
             >
               <EditIcon fontSize="small" />
             </IconButton>
           </Tooltip>
+
+          <Tooltip title="Restablecer Contraseña (Admin)">
+            <IconButton
+              size="small"
+              onClick={() => handleOpenResetDialog(params.row)}
+              sx={{
+                color: '#D97706',
+                '&:hover': { backgroundColor: '#FEF3C7', color: '#B45309' },
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <KeyIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+
+          <Tooltip title={params.row.estado === 'Activo' && !params.row.bloqueado ? 'Desactivar acceso' : 'Activar / Desbloquear'}>
+            <IconButton
+              size="small"
+              onClick={() => handleToggleStatus(params.row.id)}
+              sx={{
+                color: params.row.estado === 'Activo' && !params.row.bloqueado ? '#10B981' : '#EF4444',
+                '&:hover': {
+                  backgroundColor: params.row.estado === 'Activo' && !params.row.bloqueado ? '#D1FAE5' : '#FEE2E2',
+                },
+                transition: 'all 0.2s ease',
+              }}
+            >
+              {params.row.estado === 'Activo' && !params.row.bloqueado ? (
+                <LockOpenIcon fontSize="small" />
+              ) : (
+                <LockResetIcon fontSize="small" />
+              )}
+            </IconButton>
+          </Tooltip>
+
           <Tooltip title="Eliminar usuario">
             <IconButton
               size="small"
               onClick={() => handleDelete(params.row.id)}
               sx={{
-                color: '#EF4444',
-                '&:hover': {
-                  backgroundColor: '#FEF2F2',
-                  color: '#DC2626',
-                },
+                color: '#9CA3AF',
+                '&:hover': { backgroundColor: '#FEF2F2', color: '#DC2626' },
                 transition: 'all 0.2s ease',
               }}
             >
@@ -905,6 +1089,33 @@ const Usuarios: React.FC = () => {
                 ))}
               </Select>
             </FormControl>
+
+            <FormControl sx={{ minWidth: '160px' }}>
+              <InputLabel>Rol (RBAC)</InputLabel>
+              <Select
+                value={rolFilter}
+                onChange={(e) => setRolFilter(e.target.value)}
+                label="Rol (RBAC)"
+                sx={{
+                  borderRadius: '12px',
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#D1D5DB',
+                  },
+                  '&:hover .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#1E3A8A',
+                  },
+                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#1E3A8A',
+                  },
+                }}
+              >
+                <MenuItem value="">Todos los roles</MenuItem>
+                <MenuItem value="ADMIN">ADMIN (Control Total)</MenuItem>
+                <MenuItem value="OPERADOR">OPERADOR (Gestión SGSI)</MenuItem>
+                <MenuItem value="AUXILIAR">AUXILIAR (Auditoría / Wizard)</MenuItem>
+                <MenuItem value="CONSULTOR">CONSULTOR (Solo Lectura)</MenuItem>
+              </Select>
+            </FormControl>
             
             <Tooltip title="Limpiar todos los filtros">
               <Button
@@ -913,6 +1124,7 @@ const Usuarios: React.FC = () => {
                 onClick={() => {
                   setPuestoFilter('');
                   setEstadoFilter('');
+                  setRolFilter('');
                   setSearchTerm('');
                 }}
                 sx={{
@@ -1048,16 +1260,61 @@ const Usuarios: React.FC = () => {
               </Box>
               
               <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                <TextField
-                  sx={{ flex: '1 1 300px' }}
-                  label="Puesto Organizacional"
-                  value={formData.puesto}
-                  onChange={(e) => setFormData({ ...formData, puesto: e.target.value })}
-                  className="input"
-                  InputProps={{
-                    sx: { borderRadius: '12px' }
-                  }}
-                />
+                <FormControl sx={{ flex: '1 1 300px' }}>
+                  <InputLabel>Rol del Sistema (RBAC)</InputLabel>
+                  <Select
+                    value={formData.rol || 'CONSULTOR'}
+                    onChange={(e) => {
+                      const selectedRolName = e.target.value;
+                      const matchedRol = roles.find((r: any) => r.nombre_rol === selectedRolName);
+                      setFormData({
+                        ...formData,
+                        rol: selectedRolName,
+                        id_rol: matchedRol?.id_rol || formData.id_rol
+                      });
+                    }}
+                    label="Rol del Sistema (RBAC)"
+                    sx={{ borderRadius: '12px' }}
+                  >
+                    <MenuItem value="ADMIN">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <ShieldIcon sx={{ color: '#6D28D9', fontSize: 18 }} />
+                        <Box>
+                          <Typography variant="body2" sx={{ fontWeight: 600 }}>ADMIN</Typography>
+                          <Typography variant="caption" sx={{ color: '#6B7280' }}>Control Total y Gestión de Usuarios</Typography>
+                        </Box>
+                      </Box>
+                    </MenuItem>
+                    <MenuItem value="OPERADOR">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <SecurityIcon sx={{ color: '#0369A1', fontSize: 18 }} />
+                        <Box>
+                          <Typography variant="body2" sx={{ fontWeight: 600 }}>OPERADOR</Typography>
+                          <Typography variant="caption" sx={{ color: '#6B7280' }}>Gestión de Activos, Riesgos y Auditorías</Typography>
+                        </Box>
+                      </Box>
+                    </MenuItem>
+                    <MenuItem value="AUXILIAR">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <AssignmentIcon sx={{ color: '#047857', fontSize: 18 }} />
+                        <Box>
+                          <Typography variant="body2" sx={{ fontWeight: 600 }}>AUXILIAR DE AUDITORÍA (HU-003)</Typography>
+                          <Typography variant="caption" sx={{ color: '#6B7280' }}>Ejecución Wizard y Evidencias (Sin Aprobación)</Typography>
+                        </Box>
+                      </Box>
+                    </MenuItem>
+                    <MenuItem value="CONSULTOR">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <VisibilityIcon sx={{ color: '#B45309', fontSize: 18 }} />
+                        <Box>
+                          <Typography variant="body2" sx={{ fontWeight: 600 }}>CONSULTOR</Typography>
+                          <Typography variant="caption" sx={{ color: '#6B7280' }}>Modo Solo Consulta y Reportes</Typography>
+                        </Box>
+                      </Box>
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+
                 <FormControl sx={{ flex: '1 1 200px' }}>
                   <InputLabel>Estado del Usuario</InputLabel>
                   <Select
@@ -1069,10 +1326,104 @@ const Usuarios: React.FC = () => {
                     <MenuItem value="Activo">Activo</MenuItem>
                     <MenuItem value="Inactivo">Inactivo</MenuItem>
                     <MenuItem value="Bloqueado">Bloqueado</MenuItem>
-                    <MenuItem value="Pendiente_Activacion">Pendiente Activacion</MenuItem>
                   </Select>
                 </FormControl>
               </Box>
+
+              <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                <TextField
+                  sx={{ flex: '1 1 300px' }}
+                  label="Puesto Organizacional"
+                  value={formData.puesto}
+                  onChange={(e) => setFormData({ ...formData, puesto: e.target.value })}
+                  placeholder="ej. Auditor TI, Oficial de Seguridad"
+                  className="input"
+                  InputProps={{ sx: { borderRadius: '12px' } }}
+                />
+
+                <TextField
+                  sx={{ flex: '1 1 300px' }}
+                  label="Nombre de Usuario (Login)"
+                  value={formData.username || ''}
+                  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                  placeholder="ej. jperez, aud_auxiliar"
+                  helperText="Identificador único para iniciar sesión"
+                  className="input"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <KeyIcon sx={{ color: '#6B7280', fontSize: 18 }} />
+                      </InputAdornment>
+                    ),
+                    sx: { borderRadius: '12px' }
+                  }}
+                />
+              </Box>
+
+              {!editingUsuario && (
+                <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+                  <TextField
+                    sx={{ flex: 1 }}
+                    label="Contraseña Inicial"
+                    type="password"
+                    value={formData.password || ''}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    placeholder="Mínimo 8 caracteres (opcional)"
+                    helperText="Si se deja vacío, el sistema generará una contraseña temporal segura"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <LockIcon sx={{ color: '#6B7280', fontSize: 18 }} />
+                        </InputAdornment>
+                      ),
+                      sx: { borderRadius: '12px' }
+                    }}
+                  />
+                  <Button
+                    variant="outlined"
+                    onClick={() => {
+                      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%&*';
+                      let res = '';
+                      for (let i = 0; i < 12; i++) {
+                        res += chars.charAt(Math.floor(Math.random() * chars.length));
+                      }
+                      setFormData({ ...formData, password: res });
+                      toast.success(`Clave temporal generada: ${res}`);
+                    }}
+                    sx={{ mt: 1, borderRadius: '10px', textTransform: 'none', py: 1.2 }}
+                  >
+                    Generar Clave
+                  </Button>
+                </Box>
+              )}
+
+              {editingUsuario && (
+                <Box sx={{ p: 2, bgcolor: '#F8FAFC', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: '#334155', mb: 1 }}>
+                    Seguridad de la Cuenta
+                  </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Typography variant="body2" sx={{ color: '#64748B' }}>
+                      {formData.estado === 'Bloqueado'
+                        ? 'La cuenta se encuentra bloqueada por intentos fallidos de inicio de sesión.'
+                        : 'La cuenta se encuentra operativa.'}
+                    </Typography>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      color="warning"
+                      startIcon={<LockResetIcon />}
+                      onClick={() => {
+                        setFormData({ ...formData, estado: 'Activo', desbloquear: true });
+                        toast.success('Cuenta marcada para desbloqueo al guardar');
+                      }}
+                      sx={{ borderRadius: '8px', textTransform: 'none' }}
+                    >
+                      Desbloquear Cuenta
+                    </Button>
+                  </Box>
+                </Box>
+              )}
             </Stack>
           </DialogContent>
           
@@ -1118,6 +1469,142 @@ const Usuarios: React.FC = () => {
             >
               {editingUsuario ? 'Actualizar Usuario' : 'Crear Usuario'}
             </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+
+      {/* Modal de Restablecimiento Directo de Contraseña por Admin (HU-010 / SCRUM-37) */}
+      <Dialog
+        open={openResetDialog}
+        onClose={handleCloseResetDialog}
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{ sx: { borderRadius: '16px', p: 1 } }}
+      >
+        <DialogTitle sx={{ pb: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <Box
+              sx={{
+                width: 40,
+                height: 40,
+                borderRadius: '10px',
+                background: 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#B45309',
+              }}
+            >
+              <KeyIcon />
+            </Box>
+            <Box>
+              <Typography variant="h6" sx={{ fontWeight: 700, color: '#0F172A' }}>
+                Restablecer Contraseña de Usuario
+              </Typography>
+              <Typography variant="caption" sx={{ color: '#64748B' }}>
+                Gestión Administrativa de Credenciales (SCRUM-37)
+              </Typography>
+            </Box>
+          </Box>
+        </DialogTitle>
+
+        <form onSubmit={handleSubmitResetPassword}>
+          <DialogContent sx={{ pt: 2 }}>
+            {selectedUserForReset && (
+              <Box sx={{ mb: 3, p: 2, bgcolor: '#F8FAFC', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+                <Typography variant="body2" sx={{ fontWeight: 600, color: '#1E293B' }}>
+                  {selectedUserForReset.nombre || selectedUserForReset.nombre_completo}
+                </Typography>
+                <Typography variant="caption" sx={{ color: '#64748B', display: 'block' }}>
+                  Usuario: <strong>{selectedUserForReset.username || `user_${selectedUserForReset.id}`}</strong> • Email: {selectedUserForReset.email || selectedUserForReset.email_institucional}
+                </Typography>
+                <Typography variant="caption" sx={{ color: '#64748B', display: 'block' }}>
+                  Rol actual: <strong>{selectedUserForReset.rol || selectedUserForReset.rol_nombre || 'CONSULTOR'}</strong>
+                </Typography>
+              </Box>
+            )}
+
+            {resetSuccessResult ? (
+              <Alert
+                severity="success"
+                sx={{ mb: 2, borderRadius: '12px' }}
+                action={
+                  <IconButton
+                    size="small"
+                    onClick={() => {
+                      navigator.clipboard.writeText(resetSuccessResult.password_temporal || resetNewPassword);
+                      toast.success('Contraseña copiada al portapapeles');
+                    }}
+                  >
+                    <CopyIcon fontSize="small" />
+                  </IconButton>
+                }
+              >
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                  ¡Contraseña restablecida con éxito!
+                </Typography>
+                <Typography variant="body2">
+                  Nueva clave temporal: <code>{resetSuccessResult.password_temporal || resetNewPassword}</code>
+                </Typography>
+                <Typography variant="caption" sx={{ color: '#475569', display: 'block', mt: 0.5 }}>
+                  Comparte esta credencial temporal con el usuario de manera segura.
+                </Typography>
+              </Alert>
+            ) : (
+              <Stack spacing={2.5}>
+                <Typography variant="body2" sx={{ color: '#475569' }}>
+                  Introduce una nueva contraseña para el usuario o presiona "Generar Clave Aleatoria".
+                  Al guardar, se desbloqueará la cuenta automáticamente.
+                </Typography>
+
+                <Box sx={{ display: 'flex', gap: 1.5 }}>
+                  <TextField
+                    fullWidth
+                    label="Nueva Contraseña"
+                    value={resetNewPassword}
+                    onChange={(e) => setResetNewPassword(e.target.value)}
+                    placeholder="Mínimo 8 caracteres"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <LockIcon sx={{ color: '#64748B', fontSize: 18 }} />
+                        </InputAdornment>
+                      ),
+                      sx: { borderRadius: '10px' },
+                    }}
+                  />
+                  <Button
+                    variant="outlined"
+                    onClick={handleGenerateRandomPassword}
+                    sx={{ borderRadius: '10px', textTransform: 'none', px: 2, whiteSpace: 'nowrap' }}
+                  >
+                    Generar Clave
+                  </Button>
+                </Box>
+              </Stack>
+            )}
+          </DialogContent>
+
+          <DialogActions sx={{ p: 3, pt: 1 }}>
+            <Button onClick={handleCloseResetDialog} sx={{ color: '#64748B' }}>
+              {resetSuccessResult ? 'Finalizar' : 'Cancelar'}
+            </Button>
+            {!resetSuccessResult && (
+              <Button
+                type="submit"
+                variant="contained"
+                disabled={resetPasswordMutation.isPending}
+                startIcon={!resetPasswordMutation.isPending && <CheckCircleIcon />}
+                sx={{
+                  background: 'linear-gradient(135deg, #D97706 0%, #B45309 100%)',
+                  borderRadius: '10px',
+                  fontWeight: 600,
+                  textTransform: 'none',
+                }}
+              >
+                {resetPasswordMutation.isPending ? 'Guardando...' : 'Confirmar Restablecimiento'}
+              </Button>
+            )}
           </DialogActions>
         </form>
       </Dialog>

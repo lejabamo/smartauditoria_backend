@@ -4,6 +4,8 @@ export interface User {
   id_rol: number;
   rol_nombre: string;
   activo: boolean;
+  bloqueado?: boolean;
+  intentos_fallidos?: number;
   fecha_creacion: string;
   fecha_ultimo_login: string;
 }
@@ -13,6 +15,49 @@ export interface LoginResponse {
   user: User;
   expires_in: number;
   message: string;
+}
+
+export interface RolInfo {
+  id_rol: number;
+  nombre_rol: string;
+  descripcion: string;
+  permisos: string;
+  activo: boolean;
+}
+
+export interface UsuarioSistemaConAuth {
+  id: number;
+  id_usuario: number;
+  nombre: string;
+  nombre_completo: string;
+  email: string;
+  email_institucional: string;
+  puesto: string;
+  puesto_organizacion: string;
+  rol: string;
+  rol_nombre: string;
+  id_rol?: number;
+  username?: string;
+  tiene_auth: boolean;
+  id_usuario_auth?: number;
+  activo: boolean;
+  bloqueado: boolean;
+  intentos_fallidos: number;
+  estado: string;
+  estado_usuario: string;
+  fecha_creacion?: string;
+  fecha_creacion_registro?: string;
+  fecha_ultimo_login?: string;
+}
+
+export interface ForgotPasswordResponse {
+  message: string;
+  reset_token: string;
+  reset_code: string;
+  username: string;
+  email: string;
+  expires_in: number;
+  instrucciones?: string;
 }
 
 export interface Activo {
@@ -39,4 +84,5 @@ export interface Activo {
   ID_Propietario?: number | null;
 }
 
-export type UserRole = "ADMIN" | "OPERADOR" | "CONSULTOR";
+export type UserRole = "ADMIN" | "OPERADOR" | "CONSULTOR" | "AUXILIAR" | "AUXILIAR_AUDITORIA";
+
