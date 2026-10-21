@@ -112,4 +112,40 @@ Este documento contiene las Historias de Usuario (User Stories) priorizadas y co
   3. Endpoint seguro `POST /api/auth/reset-password` que valida la firma criptográfica del token, actualiza el hash de la contraseña usando bcrypt y desbloquea la cuenta.
   4. Invalidación automática de sesiones previas activas por motivos de seguridad.
   5. Componente interactivo en el frontend (Modal "¿Olvidaste tu contraseña?") con medidor de fortaleza de clave y retroalimentación en tiempo real.
+* **Evidencias Registradas:**
+  - **Commit:** `791b8e8` (`[SCRUM-37][HU-010] feat(auth): implementar autoservicio y recuperacion de contrasena con token seguro`)
+  - **Prueba E2E en VPS:** Aprobada (Pasos 5, 6 y 7 en `e2e_vps_validation.py`).
+
+---
+
+## Épica 5: Identidad Institucional, Experiencia de Usuario y PWA Responsivo
+*Correspondiente a la alineación visual gubernamental, cumplimiento de identidad institucional y experiencia móvil/PWA.*
+
+### HU-011: Alineación Estética e Identidad Institucional Gobernación del Cauca (Jira: SCRUM-38)
+**Como** Usuario y Auditor de la Entidad
+**Quiero** que la plataforma SmartAuditorIA adopte la línea gráfica, colores y elementos visuales oficiales del portal de la Gobernación del Cauca / Secretaría de Educación y Cultura (cauca.gov.co/sedcauca)
+**Para** garantizar coherencia institucional, confianza en el sistema y una experiencia de usuario responsiva en dispositivos móviles y de escritorio.
+* **Criterios de Aceptación (DoD):**
+  1. Franja superior gubernamental oficial GOV.CO en color `#3366CC` con logo SVG vectorizado en blanco puro.
+  2. Encabezado institucional con escudos duales: Escudo de la República de Colombia (`colombia.svg`) y Escudo Oficial de la Gobernación del Cauca (`logoCaucaHorizontal.png`).
+  3. Tipografía jerárquica: *"Secretaría de Educación y Cultura / Gobernación del Cauca"* en Azul Marino Cauca (`#1D3867`).
+  4. Botón de acción principal (*"Acceder al Sistema"*) e indicadores activos del menú lateral en Naranja Cauca Oficial (`#eb6408` degradado a `#f97316`).
+  5. Manifiesto PWA (`manifest.json`) y etiquetas meta en `index.html` con `theme-color: #3366CC`, modo `standalone` e íconos institucionales.
+  6. Menú responsivo tipo Drawer adaptativo con botón toggle para dispositivos móviles y tablets.
+  7. Retención al 100% de la funcionalidad preexistente (RBAC: ADMIN, OPERADOR, CONSULTOR; Wizard; Auditorías; Recuperación de credenciales).
+* **Evidencias Registradas:**
+  - **Commit Git:** `0a3955b` (`[SCRUM-34][SCRUM-35] feat(ui): alinear diseno y paleta institucional con Gobernacion del Cauca`)
+  - **Validación Automatizada E2E:** 8/8 pruebas superadas contra producción (`e2e_vps_validation.py`).
+  - **Verificación Visual:** Capturas en vivo `login_page_institutional_1792618343007.png` y `dashboard_institutional_1792618522546.png`.
+  - **Despliegue Activo en Producción:** [https://riesgosti.tics.sedcauca.gov.co/login](https://riesgosti.tics.sedcauca.gov.co/login)
+
+---
+
+## Protocolo de Registro de Evidencias (Conforme a AGENTS.md)
+Todos los cambios posteriores deben alimentar este documento siguiendo el ciclo:
+1. Declaración o actualización de la HU con Criterios de Aceptación (DoD).
+2. Smart Commit en el repositorio correspondiente (`[TICKET][HU-ID] tipo: mensaje`).
+3. Ejecución de pruebas y validación en VPS.
+4. Registro del hash de commit y artefacto de prueba en la sección de evidencias de la historia.
+
 
