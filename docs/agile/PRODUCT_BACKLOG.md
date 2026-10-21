@@ -105,6 +105,7 @@ Este documento contiene las Historias de Usuario (User Stories) priorizadas y co
   7. **Gestión de Responsables en Activos:** Selector de *Usuario Responsable / Propietario del Activo (SGSI)* en `/activos`, columna en tabla y modal integrado `+ Crear Nuevo Responsable` al vuelo.
   8. **Evaluación Directa de Activos:** Acción `Evaluar Riesgo en Wizard` en tabla y detalle de activo con precarga automática del activo mediante query param (`/wizard?activoId=...`).
 * **Evidencias Registradas:**
+  - **Commit Git:** `73ddbfd` (`[SCRUM-36][HU-009] feat(auth/activos): habilitar panel de gestion de usuarios con 3 roles RBAC y asignacion de responsable en activos`)
   - **Prueba E2E en VPS:** Superada 8/8 flujos en vivo (`e2e_vps_validation.py`).
   - **Verificación Visual:** Capturas `gestion_usuarios_panel_1792620723085.png`, `modal_usuario_rbac_1792620742518.png`, `activos_table_responsable_1792620819383.png`, `modal_activo_responsable_1792620907595.png`, `modal_quick_responsible_1792620941079.png`.
   - **Video Sesión Navegador:** `roles_management_demo_1792620676166.webp`.
