@@ -1,11 +1,44 @@
-Issue Type,Summary,Description,Priority,Epic Name
-Epic,Consolidación Trabajo Integrador 2 (MSIP/MIPG y GLPI),Epic para la Fase 2 del proyecto SmartAuditorIA cubriendo Gobernanza y automatización.,High,Consolidación Integrador 2
-Story,Integración GLPI e Inventario Automatizado,"Como Administrador, quiero sincronizar activos de TI desde la API de GLPI hacia nuestra base de datos para mantener el inventario vivo. Criterios de Aceptación: 1) Job de ingesta funcional. 2) Mapeo a tablas locales de activos.",Medium,Consolidación Integrador 2
-Story,Clasificación MSIP/MIPG de Activos,"Como Auditor, quiero que los activos importados sean clasificados automáticamente bajo los pilares de MSIP/MIPG (C-I-D). Criterios: 1) Etiquetas MSIP en UI. 2) Actualización en DB.",High,Consolidación Integrador 2
-Story,Rol Auxiliar de Auditoría,"Como Administrador, quiero crear el perfil Auxiliar de Auditoría con permisos limitados (solo ejecución, no aprobación). Criterios: 1) Modificación en RBAC. 2) Restricción de botones en el Dashboard.",Medium,Consolidación Integrador 2
-Story,UX Wizard de Evaluación,"Como Auxiliar, quiero una interfaz paso a paso (Wizard) que guíe el registro de auditoría. Criterios: 1) Flujo dividido en pasos. 2) Validaciones por cada paso antes de continuar.",High,Consolidación Integrador 2
-Story,Panel de Reportes y Generación de Evidencias en PDF,"Como Auditor Principal, quiero exportar la trazabilidad completa en formato PDF para evidencia oficial de control. Criterios: 1) Botón Exportar a PDF en UI. 2) PDF contiene log RAG y firmas.",Medium,Consolidación Integrador 2
-Story,Módulo de Gestión de Usuarios y Roles RBAC,"Como Administrador, quiero gestionar las identidades y credenciales de los usuarios vinculados a roles del sistema y asignar responsables de activos. Criterios: 1) CRUD y asignación de roles ADMIN/OPERADOR/CONSULTOR con tarjetas segmentadas. 2) Acciones directas Agregar Operador y Agregar Consultor. 3) Selector y creación rápida de usuario responsable en activos. 4) Acción directa de evaluación de riesgo en wizard. Evidencia: commit y suite E2E en VPS.",High,Consolidación Integrador 2
-Story,Autoservicio de Recuperación de Contraseñas,"Como Usuario, quiero restablecer mi contraseña olvidada de forma autónoma y segura mediante token temporal. Criterios: 1) Solicitud de token con identificador. 2) Formulario de nueva contraseña con medidor de fuerza. 3) Desbloqueo automático al restablecer.",High,Consolidación Integrador 2
-Story,Alineación Estética e Identidad Institucional Gobernación del Cauca,"Como Usuario y Auditor, quiero que el sistema refleje la paleta de colores y branding oficial de la Gobernación del Cauca (Secretaría de Educación y Cultura) manteniendo funcionalidad completa y PWA responsivo. Criterios: 1) Franja superior oficial GOV.CO (#3366CC) y escudos institucionales duales (Colombia y Cauca). 2) Paleta oficial (Azul Marino #1D3867, Naranja Cauca #eb6408, Fondo #F7F8FA). 3) Login y Layout responsivos adaptados a móviles y escritorio. 4) Manifiesto PWA con modo standalone y metadatos. Evidencia: Commit 0a3955b y suite E2E en VPS aprobada.",High,Consolidación Integrador 2
-
+Jira Key,HU ID,Issue Type,Summary,Epic Link,Story Points,Release,Sprint,Status,GitHub Repository,Smart Commit Hash,GitHub Actions Workflow
+SCRUM-5,EP-01,Epic,EP1 – Gestión de Activos de Información e Interoperabilidad GLPI/DAFP,,0,V1.0,Transversal,Done,smartauditoria_backend,724930d,ci.yml
+SCRUM-6,EP-02,Epic,EP2 – Evaluación y Matriz de Riesgos ISO 27005 / DAFP V7,,0,V1.0,Transversal,Done,smartauditoria_backend,a798f19,ci.yml
+SCRUM-7,EP-03,Epic,EP3 – Motor Inteligente RAG/CAG para Sugerencia de Controles ISO 27002,,0,V1.5,Transversal,Done,smartauditoria_engine,06ee676,ci.yml
+SCRUM-8,EP-04,Epic,EP4 – Dashboard Ejecutivo de Riesgos SoA y Reportes Institucionales,,0,V2.0,Transversal,Done,smartauditoria_frontend,5eafd76,ci.yml
+SCRUM-9,EP-05,Epic,EP5 – Infraestructura Cloud Seguridad RBAC/JWT y CI/CD con GitHub Actions,,0,V2.0,Transversal,Done,smartauditoria_backend,3b7c6c2,deploy.yml
+SCRUM-43,EP-06,Epic,EP6 – Homologación Institucional Gobernación del Cauca Formato Oficial (.xlsm) y Ceremonias Ágiles,,0,V3.0,Transversal,Done,smartauditoria_backend,73ddbfd,pr_title_checker.yml
+SCRUM-10,HU-001,Feature,[HU-001] HU1 – Registrar activos de información e integración GLPI en el sistema,SCRUM-5,5,V1.0,Sprint 1,Done,smartauditoria_backend,724930d,ci.yml
+SCRUM-11,HU-002,Feature,[HU-002] HU2 – Calcular nivel de riesgo inherente y residual (Probabilidad x Impacto),SCRUM-6,5,V1.0,Sprint 1,Done,smartauditoria_backend,790fce3,ci.yml
+SCRUM-12,HU-003,Feature,[HU-003] HU3 – Configurar entorno base del sistema (Docker Compose & MariaDB),SCRUM-9,3,V1.0,Sprint 1,Done,smartauditoria_backend,953426d,deploy.yml
+SCRUM-14,HU-004,Feature,[HU-004] HU4 – Implementar matriz de riesgos 5x5 interactiva,SCRUM-6,8,V1.0,Sprint 2,Done,smartauditoria_frontend,68b7cd5,ci.yml
+SCRUM-15,HU-005,Feature,[HU-005] HU5 – Almacenar evaluaciones de riesgo en base de datos relacional,SCRUM-6,5,V1.0,Sprint 2,Done,smartauditoria_backend,5078a8f,ci.yml
+SCRUM-16,HU-006,Feature,[HU-006] HU6 – Clasificar automáticamente el nivel de riesgo MSIP/MIPG (C-I-D),SCRUM-6,3,V1.0,Sprint 2,Done,smartauditoria_backend,790fce3,ci.yml
+SCRUM-17,HU-007,Feature,[HU-007] HU7 – Procesar documentos normativos ISO para extracción de texto,SCRUM-7,5,V1.5,Sprint 3,Done,smartauditoria_engine,0643dd4,ci.yml
+SCRUM-18,HU-008,Feature,[HU-008] HU8 – Configurar base de conocimiento vectorial en ChromaDB,SCRUM-7,8,V1.5,Sprint 3,Done,smartauditoria_engine,15eb3e2,ci.yml
+SCRUM-19,HU-009,Feature,[HU-009] HU9 – Implementar búsqueda semántica de controles ISO 27002:2022,SCRUM-7,8,V1.5,Sprint 3,Done,smartauditoria_engine,0789839,ci.yml
+SCRUM-20,HU-010,Feature,[HU-010] HU10 – Generar sugerencias automáticas de controles ISO con IA (RAG),SCRUM-7,8,V1.5,Sprint 4,Done,smartauditoria_engine,06ee676,ci.yml
+SCRUM-21,HU-011,Feature,[HU-011] HU11 – Generar justificación normativa contextual asistida (CAG),SCRUM-7,5,V1.5,Sprint 4,Done,smartauditoria_engine,099888d,ci.yml
+SCRUM-22,HU-012,Feature,[HU-012] HU12 – Mostrar sugerencias de controles e interfaz Wizard paso a paso,SCRUM-7,5,V1.5,Sprint 4,Done,smartauditoria_frontend,2070132,ci.yml
+SCRUM-23,HU-013,Feature,[HU-013] HU13 – Visualizar riesgos clasificados por nivel en Dashboard,SCRUM-8,5,V2.0,Sprint 5,Done,smartauditoria_frontend,0789839,ci.yml
+SCRUM-24,HU-014,Feature,[HU-014] HU14 – Mostrar indicadores clave de gestión de riesgos (KPIs SGSI),SCRUM-8,5,V2.0,Sprint 5,Done,smartauditoria_frontend,f649ae5,ci.yml
+SCRUM-25,HU-015,Feature,[HU-015] HU15 – Filtrar riesgos por activo de información y criticidad,SCRUM-8,5,V2.0,Sprint 5,Done,smartauditoria_frontend,68b7cd5,ci.yml
+SCRUM-26,HU-016,Feature,[HU-016] HU16 – Implementar autenticación segura con tokens JWT,SCRUM-9,8,V1.0,Sprint 6,Done,smartauditoria_backend,c767e2b,ci.yml
+SCRUM-27,HU-017,Feature,[HU-017] HU17 – Implementar control de acceso basado en roles (RBAC: Admin Operador Consultor),SCRUM-9,5,V1.0,Sprint 6,Done,smartauditoria_backend,375f9f5,ci.yml
+SCRUM-28,HU-018,Feature,[HU-018] HU18 – Configurar pipeline de integración y despliegue continuo (GitHub Actions CI/CD),SCRUM-9,5,V2.0,Sprint 6,Done,smartauditoria_backend,3b7c6c2,ci.yml / deploy.yml
+SCRUM-29,HU-101,Task,[HU-101] Aislamiento Contextual Normativo en Motor RAG (Target Isolation),SCRUM-7,5,V2.0,Sprint 5,Done,smartauditoria_engine,06a808d,ci.yml
+SCRUM-30,HU-102,Task,[HU-102] Trazabilidad Matemática y Forense de Respuestas IA (Data Lineage),SCRUM-7,5,V2.0,Sprint 5,Done,smartauditoria_engine,849cc9f,ci.yml
+SCRUM-31,HU-103,Task,[HU-103] Tolerancia a Fallos Heurísticos y Resiliencia (Fallback SQL),SCRUM-7,3,V2.0,Sprint 5,Done,smartauditoria_backend,d245275,ci.yml
+SCRUM-32,HU-201,Task,[HU-201] Rediseño Tonal de IA Auditora Experta (Auditor Copilot ISO 27002),SCRUM-7,2,V2.0,Sprint 5,Done,smartauditoria_engine,06ee676,ci.yml
+SCRUM-33,HU-202,Task,[HU-202] Validación Human-In-The-Loop con Chips de Acción Interactivos,SCRUM-7,5,V2.0,Sprint 5,Done,smartauditoria_frontend,7df5d51,ci.yml
+SCRUM-34,HU-203,Task,[HU-203] Medición Visual de Certeza y Métricas RAGAS (Confidence Flagging),SCRUM-7,3,V2.0,Sprint 5,Done,smartauditoria_engine,849cc9f,ci.yml
+SCRUM-35,HU-301,Task,[HU-301] Despliegue en Producción VPS Cloud con SSL y Validación E2E,SCRUM-9,5,V2.0,Sprint 6,Done,smartauditoria_backend,6de9c83,deploy.yml
+SCRUM-36,HU-019,Feature,[HU-019] HU19 – Módulo de Gestión de Usuarios Roles RBAC y Responsables de Activos,SCRUM-43,8,V3.0,Sprint 7,Done,smartauditoria_backend,73ddbfd,ci.yml / pr_title_checker.yml
+SCRUM-37,HU-020,Feature,[HU-020] HU20 – Autoservicio y Recuperación Segura de Contraseñas con Token JWT,SCRUM-43,5,V3.0,Sprint 7,Done,smartauditoria_backend,e0c4efa,ci.yml / pr_title_checker.yml
+SCRUM-38,HU-021,Feature,[HU-021] HU21 – Alineación Estética e Identidad Gobernación del Cauca y PWA,SCRUM-43,5,V3.0,Sprint 7,Done,smartauditoria_frontend,0a3955b,ci.yml
+SCRUM-39,HU-022,Feature,[HU-022] HU22 – Armonización de Catálogos Maestros DAFP V7 Ley 1712 y Escala CIA 1-5,SCRUM-43,8,V3.0,Sprint 7,Done,smartauditoria_backend,790fce3,ci.yml
+SCRUM-40,HU-023,Feature,[HU-023] HU23 – Evaluación Multidimensional de Riesgos y Declaración de Aplicabilidad (SoA 93 Controles ISO 27002),SCRUM-43,8,V3.0,Sprint 7,Done,smartauditoria_backend,921dfb0,ci.yml
+SCRUM-41,HU-024,Feature,[HU-024] HU24 – Adaptación del Wizard IA con Auditor Copilot (ISO 27005 & DAFP V7) y Matriz 5x5,SCRUM-43,8,V3.0,Sprint 7,Done,smartauditoria_frontend,a798f19,ci.yml
+SCRUM-42,HU-025,Feature,[HU-025] HU25 – Importación/Exportación Masiva Excel (.xlsm/.xlsx) y Mapa Oficial de Riesgos DAFP V7,SCRUM-43,8,V3.0,Sprint 7,Done,smartauditoria_backend,5eafd76,ci.yml
+SCRUM-44,HU-026,Task,[HU-026] HU26 – Ceremonia de Retrospectiva de Ciclo Ágil (Sprints 1 a 7) Evaluación RAGAS y Plan de Mejora Continua,SCRUM-43,5,V3.0,Sprint 7,Done,smartauditoria_frontend,02d09f2,ci.yml
+SCRUM-45,HU-027,Task,[HU-027] HU27 – Automatización de Trazabilidad GitHub Actions <-> Jira Smart Commits y Showcase Académico,SCRUM-43,5,V3.0,Sprint 7,Done,smartauditoria_backend,db30e2f,pr_title_checker.yml
+SCRUM-46,HU-028,Feature,[HU-028] HU28 – [Mejora Retrospectiva 1] Optimización de Latencia Vectorial (<250ms) y Benchmark en ChromaDB,SCRUM-43,5,V4.0-Backlog,Backlog,Ready,smartauditoria_engine,849cc9f,ci.yml
+SCRUM-47,HU-029,Feature,[HU-029] HU29 – [Mejora Retrospectiva 2] Suite Automatizada de Evaluación Cuantitativa RAGAS en GitHub Actions,SCRUM-43,8,V4.0-Backlog,Backlog,Backlog,smartauditoria_engine,849cc9f,ci.yml
+SCRUM-48,HU-030,Feature,[HU-030] HU30 – [Mejora Retrospectiva 3] Job Programado de Sincronización GLPI en Tiempo Real y Webhooks Jira,SCRUM-43,5,V4.0-Backlog,Backlog,Backlog,smartauditoria_backend,3b7c6c2,ci.yml

@@ -1,0 +1,25 @@
+name: "PR Title Enforcer (Jira Traceability)"
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+
+jobs:
+  check-pr-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify PR Title matches [SCRUM-XX]
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const title = context.payload.pull_request.title;
+            // Regex to check if title starts with [SCRUM-XX] or similar Jira key
+            const regex = /^(\[SCRUM-\d+\]|SCRUM-\d+:).+/i;
+            if (!regex.test(title)) {
+              core.setFailed("🚨 El título del PR debe comenzar con la clave de Jira, ejemplo: '[SCRUM-42] Implementar dashboard' o 'SCRUM-42: Fix login'");
+            } else {
+              console.log("✅ Título del PR validado y trazabilidad asegurada.");
+            }
