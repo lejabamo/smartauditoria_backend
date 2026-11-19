@@ -61,7 +61,7 @@
         .badge.obs { background-color: #e0e7ff; color: #3730a3; }
         .badge.future { background-color: #f3e8ff; color: #6b21a8; }
         .badge.failed { background-color: #fee2e2; color: #b91c1c; }
-        .jira-table td, .jira-table th { font-size: 0.82rem; padding: 0.6rem 0.65rem; }
+        .jira-table td, .jira-table th { font-size: 0.81rem; padding: 0.55rem 0.6rem; vertical-align: top; }
         .jira-table a { color: #1d4ed8; font-weight: 600; text-decoration: none; }
         .jira-table a:hover { text-decoration: underline; color: #cc0000; }
         .kpi-row {
@@ -77,8 +77,8 @@
             border-radius: 8px;
             padding: 1rem 1.15rem;
         }
-        .kpi-box .num { font-size: 1.55rem; font-weight: 800; color: var(--univalle-dark); }
-        .kpi-box .lbl { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+        .kpi-box .num { font-size: 1.5rem; font-weight: 800; color: var(--univalle-dark); }
+        .kpi-box .lbl { font-size: 0.76rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
 
         /* Interactive Slide Deck Styles */
         .deck-wrapper {
@@ -153,7 +153,7 @@
             border: 1px solid #e2e8f0;
             border-top: 5px solid #cc0000;
             border-radius: 14px;
-            padding: 2.75rem 3.25rem;
+            padding: 2.6rem 3.1rem;
             min-height: 500px;
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.07);
             flex-direction: column;
@@ -171,8 +171,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.25rem;
-            padding-bottom: 0.85rem;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.8rem;
             border-bottom: 1px solid #f1f5f9;
         }
         .slide-num {
@@ -187,36 +187,36 @@
             letter-spacing: 0.4px;
         }
         .slide-card h3 {
-            font-size: 1.75rem;
+            font-size: 1.68rem;
             font-weight: 800;
             color: #111827;
-            margin-bottom: 1.35rem;
+            margin-bottom: 1.25rem;
             line-height: 1.3;
         }
         .slide-card ul {
             margin-left: 1.35rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.4rem;
             color: #374151;
-            font-size: 1.03rem;
-            line-height: 1.75;
+            font-size: 1.01rem;
+            line-height: 1.72;
         }
-        .slide-card li { margin-bottom: 0.7rem; }
+        .slide-card li { margin-bottom: 0.65rem; }
         .slide-card ul ul {
-            margin-top: 0.45rem;
-            margin-bottom: 0.5rem;
-            font-size: 0.96rem;
+            margin-top: 0.4rem;
+            margin-bottom: 0.45rem;
+            font-size: 0.94rem;
         }
         .evidence-bar {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
             padding: 0.85rem 1.1rem;
-            font-size: 0.85rem;
+            font-size: 0.84rem;
             display: flex;
             flex-wrap: wrap;
-            gap: 0.65rem;
+            gap: 0.6rem;
             align-items: center;
-            margin-top: 1.25rem;
+            margin-top: 1.2rem;
         }
         .evidence-bar a {
             color: #1d4ed8;
@@ -230,6 +230,18 @@
         .evidence-bar a:hover {
             background: #dbeafe;
             color: #1e3a8a;
+        }
+        .info-callout {
+            background: #f8fafc;
+            border-left: 4px solid #cc0000;
+            border-top: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            border-radius: 0 8px 8px 0;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.75rem;
+            font-size: 0.88rem;
+            color: #334155;
         }
     </style>
 </head>
@@ -283,8 +295,8 @@
 
         <section class="container">
             <div class="kpi-row">
-                <div class="kpi-box"><div class="num">43 Issues</div><div class="lbl">6 Épicas / 28 Historias / 9 Tareas / 0 Subtareas</div></div>
-                <div class="kpi-box"><div class="num">207 SP</div><div class="lbl">189 SP Done (Sprints 1–7) + 18 SP Backlog V4.0</div></div>
+                <div class="kpi-box"><div class="num">6 Épicas</div><div class="lbl">EP-01 a EP-06 (SCRUM-5..9 y SCRUM-43)</div></div>
+                <div class="kpi-box"><div class="num">136 / 53 / 18 SP</div><div class="lbl">136 SP Aceptados (26) + 53 SP Parciales (8) = 189 SP Done + 18 SP Backlog</div></div>
                 <div class="kpi-box"><div class="num">111 Tests</div><div class="lbl">45 Backend + 35 Engine + 31 Frontend (100% Pass Local)</div></div>
                 <div class="kpi-box"><div class="num">P@3 = 13,3%</div><div class="lbl">Benchmark RAG: 32/93 Controles | p50=13,6ms | p95=161,7ms</div></div>
                 <div class="kpi-box"><div class="num">V2.0 / V3.0</div><div class="lbl">V2.0 (2.ª Versión Funcional) | V3.0 (Operativa en VPS)</div></div>
@@ -306,27 +318,27 @@
                 <div class="card">
                     <span class="badge code-found">10 Diapositivas</span>
                     <h3><a href="presentacion.html" style="color:inherit;text-decoration:none;">1. SmartAuditorIA (Presentación) →</a></h3>
-                    <p>Presentación interactiva por diapositivas con enlaces directos hacia Jira Cloud, commits en GitHub, suites de prueba (111 tests locales), resultados del benchmark experimental RAG (<code>Precision@3 = 13,3%</code>, cobertura <code>32/93</code>) y decisiones técnicas derivadas.</p>
+                    <p>Presentación interactiva de 10 diapositivas con gestión Scrum (Sprints 1–7, velocidades y DoR/DoD), balance real entre <strong>136 SP completamente aceptados</strong> y <strong>53 SP con aceptación parcial</strong> dentro de los 189 SP en <code>Done</code>, cadena de trazabilidad <code>HU → Jira → Código → Prueba → Resultado → DoD</code> y validación experimental del motor IA RAG/CAG.</p>
                 </div>
                 <div class="card">
-                    <span class="badge code-found">43 Issues / 207 SP</span>
+                    <span class="badge code-found">EP-01..06 / 28 HU / 9 Tareas</span>
                     <h3><a href="product_backlog.html" style="color:inherit;text-decoration:none;">2. Product Backlog →</a></h3>
-                    <p>Desglose de las 6 Épicas (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-5" target="_blank" rel="noopener">SCRUM-5</a> a <a href="https://smartauditoria.atlassian.net/browse/SCRUM-9" target="_blank" rel="noopener">SCRUM-9</a> y <a href="https://smartauditoria.atlassian.net/browse/SCRUM-43" target="_blank" rel="noopener">SCRUM-43</a>), 28 Historias y 9 Tareas, diferenciando funcionalidades <strong>Aceptadas</strong>, <strong>Parciales</strong> y <strong>Pendientes (<code>TRAZABILIDAD PENDIENTE</code>)</strong>.</p>
+                    <p>Tablas separadas para las <strong>6 Épicas (<code>EP-01</code> a <code>EP-06</code>)</strong>, las <strong>28 Historias Funcionales (<code>HU-001..025</code>, <code>HU-028..030</code> = 169 SP)</strong> y las <strong>9 Tareas Técnicas y Ágiles (<code>HU-101..301</code>, <code>HU-026..027</code> = 38 SP)</strong> con auditoría de pertinencia de commits y resultados de pruebas.</p>
                 </div>
                 <div class="card">
                     <span class="badge code-found">V1.0 a V4.0-Backlog</span>
                     <h3><a href="release_plan.html" style="color:inherit;text-decoration:none;">3. Release Plan →</a></h3>
-                    <p>Fechas históricas reales de cierre (<code>completeDate</code>), Sprint Goals en Jira, identificación de la <strong>2.ª versión funcional (<code>V2.0</code>)</strong> y del <strong>release operativo en VPS (<code>V3.0</code>)</strong>.</p>
+                    <p>Fechas históricas reales de cierre (<code>completeDate</code>), Sprint Goals en Jira, desglose de SP aceptados vs. parciales por release, e identificación de la <strong>2.ª versión funcional (<code>V2.0</code>)</strong> y del <strong>release operativo en VPS (<code>V3.0</code>)</strong>.</p>
                 </div>
                 <div class="card">
                     <span class="badge code-found">Sprints 1 a 7</span>
                     <h3><a href="retrospectiva.html" style="color:inherit;text-decoration:none;">4. Retrospectiva →</a></h3>
-                    <p>Análisis de métricas experimentales de IA, CI/CD y trazabilidad de las 4 acciones de mejora hacia <a href="https://smartauditoria.atlassian.net/browse/SCRUM-46" target="_blank" rel="noopener">SCRUM-46</a> (<code>HU-028</code>), <a href="https://smartauditoria.atlassian.net/browse/SCRUM-47" target="_blank" rel="noopener">SCRUM-47</a> (<code>HU-029</code>) y <a href="https://smartauditoria.atlassian.net/browse/SCRUM-48" target="_blank" rel="noopener">SCRUM-48</a> (<code>HU-030</code>).</p>
+                    <p>Análisis de métricas experimentales de IA, diagnóstico de CI/CD y trazabilidad de las 4 acciones de mejora hacia <a href="https://smartauditoria.atlassian.net/browse/SCRUM-46" target="_blank" rel="noopener">HU-028 (SCRUM-46)</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-47" target="_blank" rel="noopener">HU-029 (SCRUM-47)</a> y <a href="https://smartauditoria.atlassian.net/browse/SCRUM-48" target="_blank" rel="noopener">HU-030 (SCRUM-48)</a>.</p>
                 </div>
                 <div class="card">
-                    <span class="badge code-found">Trazabilidad</span>
-                    <h3><a href="trazabilidad.html" style="color:inherit;text-decoration:none;">5. Matriz Jira ↔ GitHub ↔ Pruebas →</a></h3>
-                    <p>Tabla maestra navegable con enlaces a cada ticket de Jira y a cada commit en <code>backend</code>, <code>frontend</code> y <code>engine</code>, archivos de prueba ejecutados y estado DoD.</p>
+                    <span class="badge code-found">Trazabilidad Forense</span>
+                    <h3><a href="trazabilidad.html" style="color:inherit;text-decoration:none;">5. Matriz de Correspondencia y Trazabilidad →</a></h3>
+                    <p>Matriz completa con <code>Identificador HU | Clave Jira | Épica | Sprint | Release (SP) | Estado de Aceptación | Auditoría Forense de Commit | Pruebas y Resultado | DoD</code>.</p>
                 </div>
             </div>
         </section>

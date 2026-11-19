@@ -22,7 +22,7 @@ A continuación se documentan los **9 contenedores de Sprint registrados en Jira
 | `45` | `S6 – Seguridad` | `closed` | `2026-04-24` | `2026-05-08` | `2026-04-25` | `SCRUM-26`..`28` (`HU16`–`HU18`) | **18 SP** | *Goal:* *"Implementar autenticación segura, control de roles y pipeline básico de despliegue continuo."* |
 | `112` | `S7 – Homologación Institucional, Gobernanza RBAC & Cierre` | `active` | `2026-05-09` | `2026-11-15` | *En curso* | `SCRUM-36`..`42`, `44`, `45` (`HU19`–`HU27`) | **60 SP** | *Goal:* *"Completar la homologación institucional con Gobernación del Cauca, gestión de usuarios RBAC, SoA 93 controles ISO 27002, Mapa Oficial DAFP V7, interoperabilidad Excel (.xlsm), trazabilidad GitHub Actions y Retrospectiva del Ciclo."* |
 | `-` | `Backlog` *(Sin sprint asignado)* | `future` | `2026-11-13` | `2026-12-15` | *Pendiente* | `SCRUM-46`..`48` (`HU28`–`HU30`) | **18 SP** | Historias de mejora continua post-retrospectiva (`V4.0-Backlog`). |
-| **TOTAL** | **37 Ítems Estimados (28 HU + 9 Tareas)** | - | - | - | - | **SCRUM-10 a SCRUM-48** | **207 SP** | **189 SP en Sprints 1–7 (`Done`) + 18 SP en Backlog (`Ready`/`Backlog`)** |
+| **TOTAL** | **37 Ítems Estimados (28 HU + 9 Tareas)** | - | - | - | - | **SCRUM-10 a SCRUM-48** | **207 SP** | **189 SP en Sprints 1–7 (`Done`: 136 SP Completamente Aceptados [26 ítems] + 53 SP con Aceptación Parcial [8 ítems]) + 18 SP en Backlog (`Ready`/`Backlog` [3 ítems])** |
 
 ---
 
@@ -90,7 +90,7 @@ A continuación se documentan los **9 contenedores de Sprint registrados en Jira
   - [`SCRUM-41`](https://smartauditoria.atlassian.net/browse/SCRUM-41) (`HU-024` | 8 SP | [`frontend/a798f19`](https://github.com/lejabamo/smartauditoria_frontend/commit/a798f19)): Wizard IA con Auditor Copilot ISO 27005 & DAFP V7 (**Parcial:** selector multi-tupla N:M desde catálogo `.xlsm` con `TRAZABILIDAD PENDIENTE`).
   - [`SCRUM-42`](https://smartauditoria.atlassian.net/browse/SCRUM-42) (`HU-025` | 8 SP | [`backend/5eafd76`](https://github.com/lejabamo/smartauditoria_backend/commit/5eafd76) y [`backend/b82261c`](https://github.com/lejabamo/smartauditoria_backend/commit/b82261c)): Carga masiva (`/api/activos/bulk-upload`) y exportación Mapa DAFP V7 (`test_reportes_mapa_api.py` `3 passed`, `test_activos_bulk_api.py` `2 passed` — **Parcial:** rutas literales `/api/activos/import-excel` y `/api/riesgos/export-excel` para macros `.xlsm` con `TRAZABILIDAD PENDIENTE`).
   - [`SCRUM-44`](https://smartauditoria.atlassian.net/browse/SCRUM-44) (`HU-026` | 5 SP | [`frontend/02d09f2`](https://github.com/lejabamo/smartauditoria_frontend/commit/02d09f2)): Retrospectiva de Ciclo Ágil (`RETROSPECTIVA_PROYECTO.md` y `20260320_Retrospectiva_Ciclo.html` — **Aceptada**).
-  - [`SCRUM-45`](https://smartauditoria.atlassian.net/browse/SCRUM-45) (`HU-027` | 5 SP | [`backend/db30e2f`](https://github.com/lejabamo/smartauditoria_backend/commit/db30e2f)): Regla `AGENTS.md` en remoto; workflow `pr_title_checker.yml` en commit local `30bb249` (**Parcial: pendiente de push**).
+  - [`SCRUM-45`](https://smartauditoria.atlassian.net/browse/SCRUM-45) (`HU-027` | 5 SP | [`backend/db30e2f`](https://github.com/lejabamo/smartauditoria_backend/commit/db30e2f) y [`frontend/dd9126d`](https://github.com/lejabamo/smartauditoria_frontend/commit/dd9126d)): Regla `AGENTS.md`, workflow `pr_title_checker.yml` y portal académico en `gh-pages` (**Aceptada**).
 
 ---
 

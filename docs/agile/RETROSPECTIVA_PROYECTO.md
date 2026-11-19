@@ -21,7 +21,7 @@
 | **Sprint 6** (`id 45`) | `S6 – Seguridad` | `2026-04-24` → `2026-05-08` | `2026-04-25` | `SCRUM-26` (HU16), `SCRUM-27` (HU17), `SCRUM-28` (HU18) | **18 SP** | **Histórico** |
 | **Sprint 7** (`id 112`) | `S7 – Homologación Institucional, Gobernanza RBAC & Cierre` | `2026-05-09` → `2026-11-15` | *Activo (Consolidado 2026-11-12)* | `SCRUM-36`..`42` (HU19–25), `SCRUM-44` (HU26), `SCRUM-45` (HU27) | **60 SP** | **Actualización Sprint 7** *(homologación institucional + cierre documental)* |
 | **Backlog** (`V4.0`) | `Product Backlog (Post-Retrospectiva)` | `2026-11-13` → `2026-12-15` | *Pendiente* | `SCRUM-46` (HU28), `SCRUM-47` (HU29), `SCRUM-48` (HU30) | **18 SP** | **Propuesta Futura (`TRAZABILIDAD PENDIENTE`)** |
-| **TOTAL** | **37 Ítems Estimados (28 HU + 9 Tareas)** | - | - | `SCRUM-10` a `SCRUM-48` (sin `SCRUM-13`) | **207 SP** | **189 SP en Sprints 1–7 + 18 SP en Backlog** |
+| **TOTAL** | **37 Ítems Estimados (28 HU + 9 Tareas)** | - | - | `SCRUM-10` a `SCRUM-48` (sin `SCRUM-13`) | **207 SP** | **189 SP en Sprints 1–7 (`Done`: 136 SP Completamente Aceptados [26 ítems] + 53 SP con Aceptación Parcial [8 ítems]) + 18 SP en Backlog [3 ítems]** |
 
 ---
 

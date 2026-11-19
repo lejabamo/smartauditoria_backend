@@ -61,7 +61,7 @@
         .badge.obs { background-color: #e0e7ff; color: #3730a3; }
         .badge.future { background-color: #f3e8ff; color: #6b21a8; }
         .badge.failed { background-color: #fee2e2; color: #b91c1c; }
-        .jira-table td, .jira-table th { font-size: 0.82rem; padding: 0.6rem 0.65rem; }
+        .jira-table td, .jira-table th { font-size: 0.81rem; padding: 0.55rem 0.6rem; vertical-align: top; }
         .jira-table a { color: #1d4ed8; font-weight: 600; text-decoration: none; }
         .jira-table a:hover { text-decoration: underline; color: #cc0000; }
         .kpi-row {
@@ -77,8 +77,8 @@
             border-radius: 8px;
             padding: 1rem 1.15rem;
         }
-        .kpi-box .num { font-size: 1.55rem; font-weight: 800; color: var(--univalle-dark); }
-        .kpi-box .lbl { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+        .kpi-box .num { font-size: 1.5rem; font-weight: 800; color: var(--univalle-dark); }
+        .kpi-box .lbl { font-size: 0.76rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
 
         /* Interactive Slide Deck Styles */
         .deck-wrapper {
@@ -153,7 +153,7 @@
             border: 1px solid #e2e8f0;
             border-top: 5px solid #cc0000;
             border-radius: 14px;
-            padding: 2.75rem 3.25rem;
+            padding: 2.6rem 3.1rem;
             min-height: 500px;
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.07);
             flex-direction: column;
@@ -171,8 +171,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.25rem;
-            padding-bottom: 0.85rem;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.8rem;
             border-bottom: 1px solid #f1f5f9;
         }
         .slide-num {
@@ -187,36 +187,36 @@
             letter-spacing: 0.4px;
         }
         .slide-card h3 {
-            font-size: 1.75rem;
+            font-size: 1.68rem;
             font-weight: 800;
             color: #111827;
-            margin-bottom: 1.35rem;
+            margin-bottom: 1.25rem;
             line-height: 1.3;
         }
         .slide-card ul {
             margin-left: 1.35rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.4rem;
             color: #374151;
-            font-size: 1.03rem;
-            line-height: 1.75;
+            font-size: 1.01rem;
+            line-height: 1.72;
         }
-        .slide-card li { margin-bottom: 0.7rem; }
+        .slide-card li { margin-bottom: 0.65rem; }
         .slide-card ul ul {
-            margin-top: 0.45rem;
-            margin-bottom: 0.5rem;
-            font-size: 0.96rem;
+            margin-top: 0.4rem;
+            margin-bottom: 0.45rem;
+            font-size: 0.94rem;
         }
         .evidence-bar {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
             padding: 0.85rem 1.1rem;
-            font-size: 0.85rem;
+            font-size: 0.84rem;
             display: flex;
             flex-wrap: wrap;
-            gap: 0.65rem;
+            gap: 0.6rem;
             align-items: center;
-            margin-top: 1.25rem;
+            margin-top: 1.2rem;
         }
         .evidence-bar a {
             color: #1d4ed8;
@@ -230,6 +230,18 @@
         .evidence-bar a:hover {
             background: #dbeafe;
             color: #1e3a8a;
+        }
+        .info-callout {
+            background: #f8fafc;
+            border-left: 4px solid #cc0000;
+            border-top: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            border-radius: 0 8px 8px 0;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.75rem;
+            font-size: 0.88rem;
+            color: #334155;
         }
     </style>
 </head>
@@ -277,14 +289,14 @@
         <section class="container">
             <h2 class="section-title">Retrospectiva del Ciclo Ágil (Sprints 1 a 7), Resultados Experimentales e Impedimentos</h2>
             <p style="margin-bottom:1.5rem;color:var(--text-muted);">
-                Ticket en Jira: <a href="https://smartauditoria.atlassian.net/browse/SCRUM-44" target="_blank" rel="noopener">SCRUM-44</a> (<code>HU-026</code>, commit <a href="https://github.com/lejabamo/smartauditoria_frontend/commit/02d09f2" target="_blank" rel="noopener"><code>frontend/02d09f2</code></a>). La retrospectiva histórica de corte intermedio se preserva en <a href="historical/20260320_Retrospectiva_Ciclo.html">historical/20260320_Retrospectiva_Ciclo.html</a>.
+                Tarea Ágil en Jira: <code>HU-026</code> (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-44" target="_blank" rel="noopener">SCRUM-44</a>, Épica <a href="https://smartauditoria.atlassian.net/browse/SCRUM-43" target="_blank" rel="noopener"><strong>EP-06</strong> (SCRUM-43)</a>, commit <a href="https://github.com/lejabamo/smartauditoria_frontend/commit/02d09f2" target="_blank" rel="noopener"><code>frontend/02d09f2</code></a>). La retrospectiva histórica de corte intermedio se preserva en <a href="historical/20260320_Retrospectiva_Ciclo.html">historical/20260320_Retrospectiva_Ciclo.html</a>.
             </p>
 
             <div class="card-grid" style="margin-bottom:2rem;">
                 <div class="card">
                     <span class="badge code-found">Logros Verificados</span>
-                    <h3>111 Pruebas Locales Aprobadas (100%) y VPS Activo</h3>
-                    <p>Se verificaron localmente <strong>45 tests en Backend</strong> (<code>8,14 s</code>), <strong>35 tests en Engine IA</strong> (<code>7,81 s</code>) y <strong>31 tests Vitest en Frontend</strong> (<code>10,65 s</code>), junto con la operación en vivo de <code>https://riesgosti.tics.sedcauca.gov.co</code>.</p>
+                    <h3>136 SP Aceptados al 100%, 111 Tests Locales y VPS Activo</h3>
+                    <p>Se verificaron localmente <strong>45 tests en Backend</strong> (<code>8,14 s</code>), <strong>35 tests en Engine IA</strong> (<code>7,81 s</code>) y <strong>31 tests Vitest en Frontend</strong> (<code>10,65 s</code>), junto con la operación en vivo de <code>https://riesgosti.tics.sedcauca.gov.co</code> y 26 ítems (136 SP) con DoD cumplido al 100%.</p>
                 </div>
                 <div class="card">
                     <span class="badge partial">Diagnóstico Experimental RAG</span>
@@ -294,11 +306,11 @@
                 <div class="card">
                     <span class="badge obs">Decisión Técnica Derivada</span>
                     <h3>Fallback Determinístico y Validación HITL</h3>
-                    <p>Para mitigar la cobertura parcial del vector store (34,4%), la arquitectura aplica el <strong>Fallback Determinístico (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-31" target="_blank" rel="noopener">SCRUM-31</a>, <a href="https://github.com/lejabamo/smartauditoria_backend/commit/d245275" target="_blank" rel="noopener"><code>backend/d245275</code></a>)</strong> sobre el catálogo JSON completo de 93 controles y exige confirmación <strong>Human-In-The-Loop (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-33" target="_blank" rel="noopener">SCRUM-33</a>, <a href="https://github.com/lejabamo/smartauditoria_frontend/commit/7df5d51" target="_blank" rel="noopener"><code>frontend/7df5d51</code></a>)</strong>.</p>
+                    <p>Para mitigar la cobertura parcial del vector store (34,4%), la arquitectura aplica el <strong>Fallback Determinístico (<code>HU-103</code>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-31" target="_blank" rel="noopener">SCRUM-31</a>, <a href="https://github.com/lejabamo/smartauditoria_engine/commit/0643dd4" target="_blank" rel="noopener"><code>engine/0643dd4</code></a>)</strong> sobre el catálogo JSON completo de 93 controles y exige confirmación <strong>Human-In-The-Loop (<code>HU-202</code>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-33" target="_blank" rel="noopener">SCRUM-33</a>, <a href="https://github.com/lejabamo/smartauditoria_frontend/commit/7df5d51" target="_blank" rel="noopener"><code>frontend/7df5d51</code></a>)</strong>.</p>
                 </div>
             </div>
 
-            <h3 style="margin-bottom:0.75rem;">Las 4 Acciones de Mejora y su Trazabilidad hacia el Backlog V4.0</h3>
+            <h3 style="margin-bottom:0.75rem;">Las 4 Acciones de Mejora y su Trazabilidad hacia las Historias Funcionales del Backlog V4.0 (HU-028 a HU-030)</h3>
             <div style="overflow-x:auto;">
                 <table class="jira-table">
                     <thead>
@@ -315,33 +327,33 @@
                         <tr>
                             <td><strong>Acción 1</strong></td>
                             <td>Re-indexación de los 93 controles ISO 27002:2022 y Benchmark en ChromaDB</td>
-                            <td>Cobertura <code>32/93</code> (34,4%), <code>Precision@3 = 13,3%</code>, $p_{50} = 13,60\text{ ms}$, $p_{95} = 161,68\text{ ms}$.</td>
+                            <td>Cobertura <code>32/93</code> (34,4%), <code>Precision@3 = 13,3%</code>, $p_{50} = 13,60\text{ ms}$, $p_{95} = 161,68\text{ ms}$ (brecha de <code>HU-008</code> / <a href="https://smartauditoria.atlassian.net/browse/SCRUM-18" target="_blank" rel="noopener">SCRUM-18</a>).</td>
                             <td>Cobertura <code>93/93</code> (100%), <code>Precision@3 &gt;= 0,70</code> y latencia $p_{95} &lt; 250\text{ ms}$.</td>
-                            <td><a href="https://smartauditoria.atlassian.net/browse/SCRUM-46" target="_blank" rel="noopener">SCRUM-46</a> (<code>HU-028</code> — 5 SP)</td>
+                            <td><code>HU-028</code> (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-46" target="_blank" rel="noopener">SCRUM-46</a> — 5 SP, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-43" target="_blank" rel="noopener"><strong>EP-06</strong> (SCRUM-43)</a>)</td>
                             <td><span class="badge future">Ready (TRAZABILIDAD PENDIENTE)</span></td>
                         </tr>
                         <tr>
                             <td><strong>Acción 2</strong></td>
                             <td>Suite Automatizada de Evaluación Cuantitativa <code>ragas</code> en Python</td>
-                            <td>Badge visual de certeza en UI (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-34" target="_blank" rel="noopener">SCRUM-34</a>, <a href="https://github.com/lejabamo/smartauditoria_frontend/commit/849cc9f" target="_blank" rel="noopener"><code>frontend/849cc9f</code></a>); sin librería <code>ragas</code> en Python.</td>
+                            <td>Badge visual de certeza en UI (<code>HU-203</code>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-34" target="_blank" rel="noopener">SCRUM-34</a>, <a href="https://github.com/lejabamo/smartauditoria_frontend/commit/849cc9f" target="_blank" rel="noopener"><code>frontend/849cc9f</code></a>); sin librería <code>ragas</code> en Python.</td>
                             <td><em>Faithfulness</em> &gt; 0,85 y <em>Context Precision</em> &gt; 0,80 sobre Golden Dataset en CI.</td>
-                            <td><a href="https://smartauditoria.atlassian.net/browse/SCRUM-47" target="_blank" rel="noopener">SCRUM-47</a> (<code>HU-029</code> — 8 SP)</td>
+                            <td><code>HU-029</code> (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-47" target="_blank" rel="noopener">SCRUM-47</a> — 8 SP, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-43" target="_blank" rel="noopener"><strong>EP-06</strong> (SCRUM-43)</a>)</td>
                             <td><span class="badge future">Backlog (TRAZABILIDAD PENDIENTE)</span></td>
                         </tr>
                         <tr>
                             <td><strong>Acción 3</strong></td>
                             <td>Estabilización de Pipelines CI/CD (&lt; 4 min, 100% verde) y Webhooks Jira</td>
-                            <td>111 tests pasan localmente; <code>ci.yml</code> falló 7/7 en runners de <code>backend</code> y <code>engine</code> (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-28" target="_blank" rel="noopener">SCRUM-28</a>).</td>
+                            <td>111 tests pasan localmente; <code>ci.yml</code> falló 7/7 en runners de <code>backend</code> y <code>engine</code> (brecha de <code>HU-018</code>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-28" target="_blank" rel="noopener">SCRUM-28</a>).</td>
                             <td>Ejecución <code>conclusion: success</code> en <code>ci.yml</code> de los 3 repositorios y validación de PRs.</td>
-                            <td><a href="https://smartauditoria.atlassian.net/browse/SCRUM-48" target="_blank" rel="noopener">SCRUM-48</a> (<code>HU-030</code>, Parte A) + <a href="https://smartauditoria.atlassian.net/browse/SCRUM-45" target="_blank" rel="noopener">SCRUM-45</a> (<code>HU-027</code>)</td>
+                            <td><code>HU-030</code> (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-48" target="_blank" rel="noopener">SCRUM-48</a>, Parte A) + <code>HU-027</code> (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-45" target="_blank" rel="noopener">SCRUM-45</a>)</td>
                             <td><span class="badge future">Backlog (TRAZABILIDAD PENDIENTE)</span></td>
                         </tr>
                         <tr>
                             <td><strong>Acción 4</strong></td>
                             <td>Conector de Sincronización Periódica REST con GLPI</td>
-                            <td>Columna pasiva <code>id_externo_glpi</code> en BD (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-10" target="_blank" rel="noopener">SCRUM-10</a>, <a href="https://github.com/lejabamo/smartauditoria_backend/commit/724930d" target="_blank" rel="noopener"><code>backend/724930d</code></a>).</td>
+                            <td>Columna pasiva <code>id_externo_glpi</code> en BD (brecha de <code>HU-001</code>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-10" target="_blank" rel="noopener">SCRUM-10</a>, <a href="https://github.com/lejabamo/smartauditoria_backend/commit/724930d" target="_blank" rel="noopener"><code>backend/724930d</code></a>).</td>
                             <td>Respuesta HTTP 200 en <code>/api/activos/sync-glpi</code> con mapeo CIA.</td>
-                            <td><a href="https://smartauditoria.atlassian.net/browse/SCRUM-48" target="_blank" rel="noopener">SCRUM-48</a> (<code>HU-030</code>, Parte B — 5 SP unificados)</td>
+                            <td><code>HU-030</code> (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-48" target="_blank" rel="noopener">SCRUM-48</a>, Parte B — 5 SP unificados)</td>
                             <td><span class="badge future">Backlog (TRAZABILIDAD PENDIENTE)</span></td>
                         </tr>
                     </tbody>

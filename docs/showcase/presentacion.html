@@ -61,7 +61,7 @@
         .badge.obs { background-color: #e0e7ff; color: #3730a3; }
         .badge.future { background-color: #f3e8ff; color: #6b21a8; }
         .badge.failed { background-color: #fee2e2; color: #b91c1c; }
-        .jira-table td, .jira-table th { font-size: 0.82rem; padding: 0.6rem 0.65rem; }
+        .jira-table td, .jira-table th { font-size: 0.81rem; padding: 0.55rem 0.6rem; vertical-align: top; }
         .jira-table a { color: #1d4ed8; font-weight: 600; text-decoration: none; }
         .jira-table a:hover { text-decoration: underline; color: #cc0000; }
         .kpi-row {
@@ -77,8 +77,8 @@
             border-radius: 8px;
             padding: 1rem 1.15rem;
         }
-        .kpi-box .num { font-size: 1.55rem; font-weight: 800; color: var(--univalle-dark); }
-        .kpi-box .lbl { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+        .kpi-box .num { font-size: 1.5rem; font-weight: 800; color: var(--univalle-dark); }
+        .kpi-box .lbl { font-size: 0.76rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
 
         /* Interactive Slide Deck Styles */
         .deck-wrapper {
@@ -153,7 +153,7 @@
             border: 1px solid #e2e8f0;
             border-top: 5px solid #cc0000;
             border-radius: 14px;
-            padding: 2.75rem 3.25rem;
+            padding: 2.6rem 3.1rem;
             min-height: 500px;
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.07);
             flex-direction: column;
@@ -171,8 +171,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.25rem;
-            padding-bottom: 0.85rem;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.8rem;
             border-bottom: 1px solid #f1f5f9;
         }
         .slide-num {
@@ -187,36 +187,36 @@
             letter-spacing: 0.4px;
         }
         .slide-card h3 {
-            font-size: 1.75rem;
+            font-size: 1.68rem;
             font-weight: 800;
             color: #111827;
-            margin-bottom: 1.35rem;
+            margin-bottom: 1.25rem;
             line-height: 1.3;
         }
         .slide-card ul {
             margin-left: 1.35rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.4rem;
             color: #374151;
-            font-size: 1.03rem;
-            line-height: 1.75;
+            font-size: 1.01rem;
+            line-height: 1.72;
         }
-        .slide-card li { margin-bottom: 0.7rem; }
+        .slide-card li { margin-bottom: 0.65rem; }
         .slide-card ul ul {
-            margin-top: 0.45rem;
-            margin-bottom: 0.5rem;
-            font-size: 0.96rem;
+            margin-top: 0.4rem;
+            margin-bottom: 0.45rem;
+            font-size: 0.94rem;
         }
         .evidence-bar {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
             padding: 0.85rem 1.1rem;
-            font-size: 0.85rem;
+            font-size: 0.84rem;
             display: flex;
             flex-wrap: wrap;
-            gap: 0.65rem;
+            gap: 0.6rem;
             align-items: center;
-            margin-top: 1.25rem;
+            margin-top: 1.2rem;
         }
         .evidence-bar a {
             color: #1d4ed8;
@@ -230,6 +230,18 @@
         .evidence-bar a:hover {
             background: #dbeafe;
             color: #1e3a8a;
+        }
+        .info-callout {
+            background: #f8fafc;
+            border-left: 4px solid #cc0000;
+            border-top: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            border-radius: 0 8px 8px 0;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.75rem;
+            font-size: 0.88rem;
+            color: #334155;
         }
     </style>
 </head>
@@ -302,20 +314,21 @@
                 <div class="slide-card active" data-slide="0">
                     <div>
                         <div class="slide-header">
-                            <span class="slide-num">Diapositiva 1 de 10 • Marco Institucional</span>
+                            <span class="slide-num">Diapositiva 1 de 10 • Marco Institucional y Problema</span>
                         </div>
-                        <h3>Contexto Institucional, Problema y Marco Metodológico</h3>
+                        <h3>Contexto Institucional, Problema y Alcance Normativo</h3>
                         <ul>
                             <li><strong>Programa Académico:</strong> Maestría en Computación para el Desarrollo de Aplicaciones Inteligentes — Universidad del Valle (Trabajo Integrador 2, Ing. Leonardo Javier Bastidas Moreno).</li>
-                            <li><strong>Caso de Estudio Real:</strong> Gestión de activos de información y evaluación de riesgos de seguridad digital en la Secretaría de Educación y Cultura / Gobernación del Cauca bajo <strong>ISO/IEC 27001:2022, ISO/IEC 27002:2022 (93 controles), ISO/IEC 27005, DAFP V7 / MIPG y Ley 1712 de 2014</strong>.</li>
-                            <li><strong>Enfoque Metodológico:</strong> Scrum Híbrido + Modelo en Espiral + CRISP-DM (adaptación individual desempeñando los roles de Product Owner, Arquitecto, Desarrollador Fullstack, Ingeniero MLOps y Auditor).</li>
+                            <li><strong>Problema Abordado:</strong> En entidades públicas territoriales (caso Secretaría de Educación y Cultura / Gobernación del Cauca), el levantamiento de activos de información, la valoración de riesgos y el cruce contra los 93 controles de ISO/IEC 27002:2022 se realizaban en hojas de cálculo aisladas (<code>.xlsm</code>), sin trazabilidad forense ni asistencia experta para justificar la aplicabilidad normativa.</li>
+                            <li><strong>Solución Implementada (SmartAuditorIA — SGSRI):</strong> Plataforma web desacoplada con asistencia híbrida de Inteligencia Artificial (RAG + CAG + Fallback Determinístico), alineada con <strong>ISO/IEC 27001:2022, ISO/IEC 27002:2022 (93 controles), ISO/IEC 27005, Guía DAFP V7 / MIPG y Ley 1712 de 2014</strong>.</li>
                         </ul>
                     </div>
                     <div class="evidence-bar">
                         <strong>Evidencia Navegable:</strong>
-                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-43" target="_blank" rel="noopener">Épica Institucional SCRUM-43</a>
-                        <a href="https://riesgosti.tics.sedcauca.gov.co/login" target="_blank" rel="noopener">App Desplegada en VPS (Login)</a>
-                        <a href="https://riesgosti.tics.sedcauca.gov.co/api/health" target="_blank" rel="noopener">Healthcheck API VPS</a>
+                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-43" target="_blank" rel="noopener"><strong>EP-06</strong> (SCRUM-43)</a>
+                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-38" target="_blank" rel="noopener">HU-021 (SCRUM-38 Identidad Cauca)</a>
+                        <a href="https://riesgosti.tics.sedcauca.gov.co/login" target="_blank" rel="noopener">App Producción VPS (Login)</a>
+                        <a href="https://riesgosti.tics.sedcauca.gov.co/api/health" target="_blank" rel="noopener">Healthcheck API VPS (HTTP 200)</a>
                     </div>
                 </div>
 
@@ -327,98 +340,118 @@
                         </div>
                         <h3>Arquitectura Desacoplada en Tres Repositorios Oficiales</h3>
                         <ul>
-                            <li><strong>Frontend (<code>smartauditoria_frontend</code>):</strong> SPA/PWA en React 18 + TypeScript + Vite con identidad institucional Gobernación del Cauca / GOV.CO.</li>
-                            <li><strong>Backend Transaccional (<code>smartauditoria_backend</code>):</strong> API REST Flask + SQLAlchemy + MariaDB 10.11 para inventario de activos, cálculo de riesgos, SoA de 93 controles, RBAC y reportes DAFP V7.</li>
-                            <li><strong>Engine IA (<code>smartauditoria_engine</code>):</strong> Microservicio FastAPI + ChromaDB + SentenceTransformers (<code>all-MiniLM-L6-v2</code>) + Google Gemini API para recuperación semántica y generación contextual (RAG/CAG).</li>
-                            <li><strong>Decisión Arquitectónica:</strong> El aislamiento del motor IA en un contenedor independiente evita que la carga de memoria de embeddings o la latencia del LLM bloqueen las operaciones transaccionales del SGSRI.</li>
+                            <li><strong>Frontend (<code>smartauditoria_frontend</code>):</strong> SPA/PWA en React 18 + TypeScript + Vite con Matriz 5x5 interactiva, Wizard conversacional con chips <em>Human-In-The-Loop</em>, Panel SoA de 93 controles y módulo administrativo RBAC.</li>
+                            <li><strong>Backend Transaccional (<code>smartauditoria_backend</code>):</strong> API REST Flask + SQLAlchemy + MariaDB 10.11 bajo arquitectura limpia (<code>domain/</code>, <code>application/</code>, <code>routes/</code>) para inventario DAFP V7 Cap. V, cálculo $RI = P \times I$, SoA y exportación Excel del Mapa Oficial de Riesgos.</li>
+                            <li><strong>Engine IA (<code>smartauditoria_engine</code>):</strong> Microservicio FastAPI + ChromaDB (<code>chroma.sqlite3</code>) + SentenceTransformers (<code>all-MiniLM-L6-v2</code>) + Google Gemini API para recuperación semántica y generación asistida (RAG/CAG).</li>
+                            <li><strong>Decisión Arquitectónica:</strong> Aislar el motor IA en su propio servicio permite mantener el núcleo transaccional del SGSRI disponible al 100% incluso ante latencias del LLM externo o ausencia de cobertura en la base vectorial.</li>
                         </ul>
                     </div>
                     <div class="evidence-bar">
                         <strong>Evidencia Navegable:</strong>
-                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-12" target="_blank" rel="noopener">SCRUM-12 (HU-003 Docker)</a>
+                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-12" target="_blank" rel="noopener">HU-003 (SCRUM-12 Docker)</a>
                         <a href="https://github.com/lejabamo/smartauditoria_backend/commit/953426d" target="_blank" rel="noopener"><code>backend/953426d</code></a>
                         <a href="https://github.com/lejabamo/smartauditoria_backend" target="_blank" rel="noopener">Repo Backend</a>
                         <a href="https://github.com/lejabamo/smartauditoria_frontend" target="_blank" rel="noopener">Repo Frontend</a>
-                        <a href="https://github.com/lejabamo/smartauditoria_engine" target="_blank" rel="noopener">Repo Engine</a>
+                        <a href="https://github.com/lejabamo/smartauditoria_engine" target="_blank" rel="noopener">Repo Engine IA</a>
                     </div>
                 </div>
 
-                <!-- SLIDE 3 -->
+                <!-- SLIDE 3 (REDESIGNED PER ITEM 7: SCRUM MANAGEMENT, NOT JUST ADMINISTRATIVE INVENTORY) -->
                 <div class="slide-card" data-slide="2">
                     <div>
                         <div class="slide-header">
-                            <span class="slide-num">Diapositiva 3 de 10 • Gestión Ágil en Jira Cloud</span>
+                            <span class="slide-num">Diapositiva 3 de 10 • Gestión Ágil Scrum del Proyecto</span>
                         </div>
-                        <h3>Gobernanza Ágil en Jira Cloud y Conciliación del Backlog</h3>
+                        <h3>Gestión Scrum: Ciclo de Sprints, Cadencia, Ceremonias y Gobernanza del Backlog</h3>
                         <ul>
-                            <li><strong>Inventario en Jira Cloud:</strong> <strong>43 issues reales</strong> entre <code>SCRUM-5</code> y <code>SCRUM-48</code> (las claves <code>SCRUM-1..4</code> y <code>SCRUM-13</code> fueron eliminadas el <code>2026-02-21</code> durante la configuración inicial).</li>
-                            <li><strong>Distribución por Tipo:</strong> <strong>6 Épicas</strong> (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-5" target="_blank" rel="noopener">SCRUM-5</a> a <a href="https://smartauditoria.atlassian.net/browse/SCRUM-9" target="_blank" rel="noopener">SCRUM-9</a> y <a href="https://smartauditoria.atlassian.net/browse/SCRUM-43" target="_blank" rel="noopener">SCRUM-43</a>), <strong>28 Historias (<code>Feature</code> = 169 SP)</strong>, <strong>9 Tareas (<code>Task</code> = 38 SP)</strong> y <strong>0 Subtareas</strong> (criterios gestionados como DoD dentro de cada historia).</li>
-                            <li><strong>Esfuerzo Total Sin Duplicación:</strong> <strong>207 Story Points</strong> (<strong>189 SP en estado <code>Done</code></strong> a lo largo de los Sprints 1 a 7 + <strong>18 SP en <code>V4.0-Backlog</code></strong>).</li>
-                            <li><strong>Trazabilidad Histórica:</strong> Los Sprints 1 a 6 (<code>id: 40..45, 78</code>) fueron creados entre febrero y abril de 2026 y cerrados hasta el <code>2026-05-05</code>; las historias <code>SCRUM-36..42</code> se crearon el <code>2026-10-27</code> y las tarjetas de cierre/mejora <code>SCRUM-43..48</code> se consolidaron el <code>2026-11-12</code>.</li>
+                            <li><strong>Marco Metodológico Adaptado (Scrum + Espiral + CRISP-DM):</strong> Ejecución en <strong>7 Sprints iterativos</strong> en Jira Cloud con descuento explícito del <strong>15% de capacidad para ceremonias Scrum</strong> (Sprint Planning, refinamiento continuo, Sprint Review y Retrospectiva consolidada en <a href="https://smartauditoria.atlassian.net/browse/SCRUM-44" target="_blank" rel="noopener">HU-026 / SCRUM-44</a>).</li>
+                            <li><strong>Evolución de Sprint Goals y Gestión de Arrastres (Rollovers Reales en Jira):</strong>
+                                <ul>
+                                    <li><strong>Sprints 1 y 2 (Fundación y Riesgos — V1.0, 29 SP):</strong> Dominio de activos (<code>HU-001..003</code>) y Matriz 5x5 (<code>HU-004..006</code>). Los arrastres registrados en <code>customfield_10020</code> hacia S3/S4 reflejan el cierre formal de criterios tras integrar la capa de persistencia y seguridad.</li>
+                                    <li><strong>Sprints 3 y 4 (Motor e Integración RAG — V1.5, 39 SP):</strong> Ciclo CRISP-DM de ingesta PDF ISO (<code>HU-007</code>), base vectorial ChromaDB (<code>HU-008</code>), búsqueda Top-K (<code>HU-009</code>), API de sugerencias (<code>HU-010</code>), CAG Gemini (<code>HU-011</code>) y Wizard UI (<code>HU-012</code>).</li>
+                                    <li><strong>Sprints 5 y 6 (Dashboard, Hardening MLOps y Seguridad — V2.0, 61 SP):</strong> Dashboard (<code>HU-013..015</code>), 7 tareas técnicas de Hardening MLOps y despliegue VPS (<code>HU-101..301</code>) y seguridad JWT/RBAC/CI (<code>HU-016..018</code>).</li>
+                                    <li><strong>Sprint 7 (Homologación Institucional y Cierre — V3.0, 60 SP):</strong> Gobernanza de usuarios (<code>HU-019..021</code>), DAFP V7, SoA 93 controles y Mapa Excel (<code>HU-022..025</code>), Retrospectiva (<code>HU-026</code>) y regla de trazabilidad (<code>HU-027</code>).</li>
+                                </ul>
+                            </li>
+                            <li><strong>Estructuración del Backlog (6 Épicas Consecutivas <code>EP-01</code> a <code>EP-06</code>):</strong>
+                                <a href="https://smartauditoria.atlassian.net/browse/SCRUM-5" target="_blank" rel="noopener"><strong>EP-01</strong> (SCRUM-5)</a> Activos •
+                                <a href="https://smartauditoria.atlassian.net/browse/SCRUM-6" target="_blank" rel="noopener"><strong>EP-02</strong> (SCRUM-6)</a> Riesgos •
+                                <a href="https://smartauditoria.atlassian.net/browse/SCRUM-7" target="_blank" rel="noopener"><strong>EP-03</strong> (SCRUM-7)</a> Motor RAG •
+                                <a href="https://smartauditoria.atlassian.net/browse/SCRUM-8" target="_blank" rel="noopener"><strong>EP-04</strong> (SCRUM-8)</a> Dashboard •
+                                <a href="https://smartauditoria.atlassian.net/browse/SCRUM-9" target="_blank" rel="noopener"><strong>EP-05</strong> (SCRUM-9)</a> Seguridad/Cloud •
+                                <a href="https://smartauditoria.atlassian.net/browse/SCRUM-43" target="_blank" rel="noopener"><strong>EP-06</strong> (SCRUM-43)</a> Homologación Cauca, separando <strong>28 Historias Funcionales (169 SP)</strong> de <strong>9 Tareas Técnicas/Ágiles (38 SP)</strong>.
+                            </li>
                         </ul>
                     </div>
                     <div class="evidence-bar">
                         <strong>Evidencia Navegable:</strong>
                         <a href="https://smartauditoria.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog" target="_blank" rel="noopener">Backlog en Jira Cloud</a>
-                        <a href="https://smartauditoria.atlassian.net/jira/software/projects/SCRUM/summary" target="_blank" rel="noopener">Resumen Jira Cloud</a>
-                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-45" target="_blank" rel="noopener">SCRUM-45 (HU-027 Trazabilidad)</a>
-                        <a href="https://github.com/lejabamo/smartauditoria_backend/commit/db30e2f" target="_blank" rel="noopener"><code>backend/db30e2f (AGENTS.md)</code></a>
+                        <a href="https://smartauditoria.atlassian.net/jira/software/projects/SCRUM/boards/1/reports" target="_blank" rel="noopener">Sprint Reports Jira</a>
+                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-44" target="_blank" rel="noopener">HU-026 (SCRUM-44 Retrospectiva)</a>
+                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-45" target="_blank" rel="noopener">HU-027 (SCRUM-45 Regla DoD)</a>
                         <a href="product_backlog.html">Ver Product Backlog →</a>
                     </div>
                 </div>
 
-                <!-- SLIDE 4 -->
+                <!-- SLIDE 4 (EXPLICIT DISTINCTION: 189 SP IN DONE VS 136 SP COMPLETELY ACCEPTED + 53 SP PARTIAL) -->
                 <div class="slide-card" data-slide="3">
                     <div>
                         <div class="slide-header">
-                            <span class="slide-num">Diapositiva 4 de 10 • Plan de Entregas y Versiones</span>
+                            <span class="slide-num">Diapositiva 4 de 10 • Release Plan y Balance Real de Aceptación</span>
                         </div>
-                        <h3>Evolución del Release Plan: Segunda Versión Funcional (V2.0) vs. Release Operativo (V3.0)</h3>
+                        <h3>Release Plan (V1.0 a V4.0) y Distinción entre Story Points en Done vs. Completamente Aceptados</h3>
                         <ul>
-                            <li><strong>Release V1.0 (Baseline — 42 SP, <code>2026-03-18</code>) &amp; V1.5 (Intelligence — 39 SP, <code>2026-04-25</code>):</strong> Activos, cálculo $RI = P \times I$, Matriz 5x5, Docker/MariaDB, ingesta ISO, ChromaDB, motor RAG/CAG y Wizard React.</li>
-                            <li><strong>Segunda Versión Funcional — Release V2.0 (Compliance &amp; Cloud — 48 SP nuevos / 129 SP acumulados, <code>2026-05-08</code>):</strong> Dashboard Ejecutivo (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-23" target="_blank" rel="noopener">SCRUM-23</a> a <a href="https://smartauditoria.atlassian.net/browse/SCRUM-25" target="_blank" rel="noopener">SCRUM-25</a>), Hardening MLOps (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-29" target="_blank" rel="noopener">SCRUM-29</a> a <a href="https://smartauditoria.atlassian.net/browse/SCRUM-34" target="_blank" rel="noopener">SCRUM-34</a>) y despliegue inicial en VPS (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-35" target="_blank" rel="noopener">SCRUM-35</a>). Línea base en ramas <code>main</code> (<a href="https://github.com/lejabamo/smartauditoria_backend/commit/e6a764d" target="_blank" rel="noopener"><code>backend/e6a764d</code></a>, <a href="https://github.com/lejabamo/smartauditoria_frontend/commit/9421a34" target="_blank" rel="noopener"><code>frontend/9421a34</code></a>, <a href="https://github.com/lejabamo/smartauditoria_engine/commit/bf30f33" target="_blank" rel="noopener"><code>engine/bf30f33</code></a>).</li>
-                            <li><strong>Versión Operativa en el VPS — Release V3.0 (Homologación Gobernación del Cauca — 60 SP adicionales / 189 SP acumulados):</strong> Ramas <code>master</code> (<a href="https://github.com/lejabamo/smartauditoria_backend/commit/b14a243" target="_blank" rel="noopener"><code>backend/b14a243</code></a>, <a href="https://github.com/lejabamo/smartauditoria_frontend/commit/c11814f" target="_blank" rel="noopener"><code>frontend/c11814f</code></a>, <a href="https://github.com/lejabamo/smartauditoria_engine/commit/182a901" target="_blank" rel="noopener"><code>engine/182a901</code></a>) más entregas de Sprint 7 (<a href="https://github.com/lejabamo/smartauditoria_backend/commit/921dfb0" target="_blank" rel="noopener"><code>backend/921dfb0</code></a>, <a href="https://github.com/lejabamo/smartauditoria_backend/commit/5eafd76" target="_blank" rel="noopener"><code>backend/5eafd76</code></a>, <a href="https://github.com/lejabamo/smartauditoria_backend/commit/73ddbfd" target="_blank" rel="noopener"><code>backend/73ddbfd</code></a>, <a href="https://github.com/lejabamo/smartauditoria_backend/commit/e0c4efa" target="_blank" rel="noopener"><code>backend/e0c4efa</code></a>).</li>
-                            <li><strong>Trazabilidad de Despliegue:</strong> El workflow <code>deploy.yml</code> tuvo ejecuciones exitosas en <code>frontend</code> (<code>4/5</code> runs) y <code>engine</code> (<code>2/4</code> runs); en <code>backend</code> la actualización al VPS se realizó mediante scripts SSH directos y se verificó vía endpoints HTTPS en vivo.</li>
-                        </ul>
-                    </div>
-                    <div class="evidence-bar">
-                        <strong>Evidencia Navegable:</strong>
-                        <a href="https://smartauditoria.atlassian.net/jira/software/projects/SCRUM/boards/1/reports" target="_blank" rel="noopener">Sprint Reports en Jira</a>
-                        <a href="https://github.com/lejabamo/smartauditoria_backend/commit/b14a243" target="_blank" rel="noopener"><code>backend/b14a243</code></a>
-                        <a href="https://github.com/lejabamo/smartauditoria_frontend/commit/c11814f" target="_blank" rel="noopener"><code>frontend/c11814f</code></a>
-                        <a href="https://github.com/lejabamo/smartauditoria_engine/commit/182a901" target="_blank" rel="noopener"><code>engine/182a901</code></a>
-                        <a href="release_plan.html">Ver Release Plan →</a>
-                    </div>
-                </div>
-
-                <!-- SLIDE 5 -->
-                <div class="slide-card" data-slide="4">
-                    <div>
-                        <div class="slide-header">
-                            <span class="slide-num">Diapositiva 5 de 10 • Criterios de Aceptación y DoD</span>
-                        </div>
-                        <h3>Matriz de Aceptación: Funcionalidades Aceptadas, Parciales y Pendientes</h3>
-                        <ul>
-                            <li><strong>Criterio de Auditoría:</strong> Una historia solo se declara <strong>Aceptada</strong> si cumple todos sus criterios obligatorios con código y pruebas verificadas.</li>
-                            <li><strong>Historias Completamente Aceptadas (25 de 34 ítems en <code>Done</code>):</strong> <a href="https://smartauditoria.atlassian.net/browse/SCRUM-11" target="_blank" rel="noopener">SCRUM-11</a> ($P \times I$), <a href="https://smartauditoria.atlassian.net/browse/SCRUM-12" target="_blank" rel="noopener">SCRUM-12</a> (Docker/MariaDB), <a href="https://smartauditoria.atlassian.net/browse/SCRUM-14" target="_blank" rel="noopener">SCRUM-14</a> (Matriz 5x5), <a href="https://smartauditoria.atlassian.net/browse/SCRUM-17" target="_blank" rel="noopener">SCRUM-17</a> (Loader ISO), <a href="https://smartauditoria.atlassian.net/browse/SCRUM-19" target="_blank" rel="noopener">SCRUM-19</a> a <a href="https://smartauditoria.atlassian.net/browse/SCRUM-22" target="_blank" rel="noopener">SCRUM-22</a> (RAG/CAG y Wizard), <a href="https://smartauditoria.atlassian.net/browse/SCRUM-23" target="_blank" rel="noopener">SCRUM-23</a> a <a href="https://smartauditoria.atlassian.net/browse/SCRUM-25" target="_blank" rel="noopener">SCRUM-25</a> (Dashboard), <a href="https://smartauditoria.atlassian.net/browse/SCRUM-26" target="_blank" rel="noopener">SCRUM-26</a> y <a href="https://smartauditoria.atlassian.net/browse/SCRUM-27" target="_blank" rel="noopener">SCRUM-27</a> (JWT/RBAC), <a href="https://smartauditoria.atlassian.net/browse/SCRUM-29" target="_blank" rel="noopener">SCRUM-29</a> a <a href="https://smartauditoria.atlassian.net/browse/SCRUM-33" target="_blank" rel="noopener">SCRUM-33</a> (Hardening MLOps/HITL), <a href="https://smartauditoria.atlassian.net/browse/SCRUM-35" target="_blank" rel="noopener">SCRUM-35</a> (VPS), <a href="https://smartauditoria.atlassian.net/browse/SCRUM-36" target="_blank" rel="noopener">SCRUM-36</a> a <a href="https://smartauditoria.atlassian.net/browse/SCRUM-38" target="_blank" rel="noopener">SCRUM-38</a> (Usuarios RBAC, Reset Password, UI Gobernación) y <a href="https://smartauditoria.atlassian.net/browse/SCRUM-44" target="_blank" rel="noopener">SCRUM-44</a> (Retrospectiva).</li>
-                            <li><strong>Historias con Alcance Parcial (sub-criterios en <code>TRAZABILIDAD PENDIENTE</code>):</strong>
+                            <li><strong>No Confundir Estado <code>Done</code> en Jira con Aceptación Total del DoD:</strong> De los <strong>207 SP totales</strong> del proyecto (37 ítems estimados), <strong>189 SP (34 ítems)</strong> figuran en estado <code>Done</code> en Jira al cierre del Sprint 7, pero la auditoría técnica contra código y pruebas los separa rigurosamente en:
                                 <ul>
-                                    <li><a href="https://smartauditoria.atlassian.net/browse/SCRUM-10" target="_blank" rel="noopener">SCRUM-10</a> (<code>HU-001</code>): CRUD activos y columna <code>id_externo_glpi</code> listos; cliente REST activo GLPI diferido a <a href="https://smartauditoria.atlassian.net/browse/SCRUM-48" target="_blank" rel="noopener">SCRUM-48</a>.</li>
-                                    <li><a href="https://smartauditoria.atlassian.net/browse/SCRUM-18" target="_blank" rel="noopener">SCRUM-18</a> (<code>HU-008</code>): ChromaDB persiste 85 chunks con <strong>32/93 controles ISO 27002 (34,4%)</strong>; re-indexación completa en <a href="https://smartauditoria.atlassian.net/browse/SCRUM-46" target="_blank" rel="noopener">SCRUM-46</a>.</li>
-                                    <li><a href="https://smartauditoria.atlassian.net/browse/SCRUM-28" target="_blank" rel="noopener">SCRUM-28</a> (<code>HU-018</code>): <code>deploy.yml</code> exitoso en frontend/engine; <code>ci.yml</code> falló en runners remotos (→ <a href="https://smartauditoria.atlassian.net/browse/SCRUM-48" target="_blank" rel="noopener">SCRUM-48</a>).</li>
-                                    <li><a href="https://smartauditoria.atlassian.net/browse/SCRUM-34" target="_blank" rel="noopener">SCRUM-34</a> (<code>HU-203</code>): Badge visual de certeza en UI listo; suite Python <code>ragas</code> diferida a <a href="https://smartauditoria.atlassian.net/browse/SCRUM-47" target="_blank" rel="noopener">SCRUM-47</a>.</li>
-                                    <li><a href="https://smartauditoria.atlassian.net/browse/SCRUM-39" target="_blank" rel="noopener">SCRUM-39</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-40" target="_blank" rel="noopener">SCRUM-40</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-41" target="_blank" rel="noopener">SCRUM-41</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-42" target="_blank" rel="noopener">SCRUM-42</a>: Operan DAFP V7, Ley 1712, SoA 93 controles (<code>/api/auditorias/soa</code>), <code>/bulk-upload</code> y exportación Mapa DAFP; pendientes tablas 57/64 hoja <code>BÁSICOS</code> y rutas literales <code>.xlsm</code>.</li>
+                                    <li><strong>Completamente Aceptados (100% DoD verificado con código y tests): <code>136 SP</code> (26 ítems = 72,0% de lo entregado)</strong> → <strong>18 Historias Funcionales (101 SP)</strong> + <strong>8 Tareas Técnicas/Ágiles (35 SP)</strong>.</li>
+                                    <li><strong>En <code>Done</code> en Jira con Aceptación Parcial (brechas documentadas): <code>53 SP</code> (8 ítems = 28,0% de lo entregado)</strong> → <strong>7 Historias Funcionales (50 SP:</strong> <code>HU-001</code> [5], <code>HU-008</code> [8], <code>HU-018</code> [5], <code>HU-022</code> [8], <code>HU-023</code> [8], <code>HU-024</code> [8], <code>HU-025</code> [8]<strong>)</strong> + <strong>1 Tarea Técnica (3 SP:</strong> <code>HU-203</code> [3]<strong>)</strong>.</li>
+                                    <li><strong>Trabajo Futuro en <code>V4.0-Backlog</code> (<code>Ready</code> / <code>Backlog</code>): <code>18 SP</code> (3 Historias Funcionales:</strong> <code>HU-028</code> [5], <code>HU-029</code> [8], <code>HU-030</code> [5]<strong>)</strong> que cierran las brechas parciales identificadas.</li>
+                                </ul>
+                            </li>
+                            <li><strong>Identificación de Versiones (<code>V2.0</code> vs. <code>V3.0</code>) y Mecanismo Real de Despliegue:</strong>
+                                <ul>
+                                    <li><strong>Segunda Versión Funcional (<code>Release V2.0</code> — 48 SP nuevos / 129 SP acumulados, <code>2026-05-08</code>):</strong> Dashboard (<code>HU-013..015</code>), Hardening MLOps (<code>HU-101..203</code>) y despliegue inicial en VPS (<code>HU-301</code>).</li>
+                                    <li><strong>Versión Operativa en VPS (<code>Release V3.0</code> — 60 SP nuevos / 189 SP acumulados en <code>Done</code>):</strong> Homologación Gobernación del Cauca (<code>HU-019..027</code>). En GitHub Actions, <code>deploy.yml</code> desplegó <code>frontend</code> (<a href="https://github.com/lejabamo/smartauditoria_frontend/commit/c11814f" target="_blank" rel="noopener"><code>frontend/c11814f</code></a>) y <code>engine</code> (<a href="https://github.com/lejabamo/smartauditoria_engine/commit/182a901" target="_blank" rel="noopener"><code>engine/182a901</code></a>), mientras que <code>backend</code> (<a href="https://github.com/lejabamo/smartauditoria_backend/commit/b14a243" target="_blank" rel="noopener"><code>backend/b14a243</code></a>) se sincronizó al VPS por SSH directo y se validó con <code>e2e_vps_validation.py</code>.</li>
                                 </ul>
                             </li>
                         </ul>
                     </div>
                     <div class="evidence-bar">
                         <strong>Evidencia Navegable:</strong>
-                        <a href="trazabilidad.html">Ver Matriz Completa Jira ↔ GitHub ↔ Pruebas →</a>
-                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-10" target="_blank" rel="noopener">SCRUM-10</a>
-                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-28" target="_blank" rel="noopener">SCRUM-28</a>
-                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-34" target="_blank" rel="noopener">SCRUM-34</a>
-                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-40" target="_blank" rel="noopener">SCRUM-40</a>
+                        <a href="release_plan.html">Ver Release Plan Detallado →</a>
+                        <a href="https://github.com/lejabamo/smartauditoria_backend/commit/b14a243" target="_blank" rel="noopener"><code>backend/b14a243</code></a>
+                        <a href="https://github.com/lejabamo/smartauditoria_frontend/commit/c11814f" target="_blank" rel="noopener"><code>frontend/c11814f</code></a>
+                        <a href="https://github.com/lejabamo/smartauditoria_engine/commit/182a901" target="_blank" rel="noopener"><code>engine/182a901</code></a>
+                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-35" target="_blank" rel="noopener">HU-301 (SCRUM-35 Deploy VPS)</a>
+                    </div>
+                </div>
+
+                <!-- SLIDE 5 (DEDICATED TRACEABILITY SLIDE PER ITEM 8: HU -> JIRA -> CODIGO -> PRUEBA -> RESULTADO -> DOD) -->
+                <div class="slide-card" data-slide="4">
+                    <div>
+                        <div class="slide-header">
+                            <span class="slide-num">Diapositiva 5 de 10 • Trazabilidad End-to-End y Auditoría de Commits</span>
+                        </div>
+                        <h3>Cadena de Trazabilidad Verificable: HU → Jira → Código → Prueba → Resultado → DoD</h3>
+                        <ul>
+                            <li><strong>Regla de Auditoría Forense:</strong> Un código <code>HTTP 200</code> en GitHub no basta para dar por implementada una historia. Se inspeccionó el <em>diff</em> real (<code>git show --stat</code>) de cada commit vinculado en Jira y en los 3 repositorios:
+                                <ul>
+                                    <li><strong>Caso Aceptado 1 (<code>HU-020</code> → <a href="https://smartauditoria.atlassian.net/browse/SCRUM-37" target="_blank" rel="noopener">SCRUM-37</a>):</strong> Commit atómico <a href="https://github.com/lejabamo/smartauditoria_backend/commit/e0c4efa" target="_blank" rel="noopener"><code>backend/e0c4efa</code></a> implementa <code>/api/auth/forgot-password</code> y <code>/api/auth/reset-password</code> en <code>app/auth/routes.py</code> → Prueba <code>tests/test_usuarios_flow.py</code> → Resultado: <strong>1 passed (flujo E2E login + reset JWT 1h)</strong> → <strong>DoD: 100% Aceptada (5 SP)</strong>.</li>
+                                    <li><strong>Caso Aceptado 2 (<code>HU-202</code> → <a href="https://smartauditoria.atlassian.net/browse/SCRUM-33" target="_blank" rel="noopener">SCRUM-33</a>):</strong> En Jira el enlace apuntaba por error a <code>engine/7df5d51</code> (<code>HTTP 404</code>); la auditoría localizó el commit real en <a href="https://github.com/lejabamo/smartauditoria_frontend/commit/7df5d51" target="_blank" rel="noopener"><code>frontend/7df5d51</code></a> (<code>ConversationalAuditor.tsx</code>) → Prueba <code>ConversationalAuditor.test.tsx</code> → Resultado: <strong>8 passed</strong> → <strong>DoD: 100% Aceptada (5 SP)</strong>.</li>
+                                    <li><strong>Caso Parcial Detectado 1 (<code>HU-023</code> → <a href="https://smartauditoria.atlassian.net/browse/SCRUM-40" target="_blank" rel="noopener">SCRUM-40</a>):</strong> Commit <a href="https://github.com/lejabamo/smartauditoria_backend/commit/921dfb0" target="_blank" rel="noopener"><code>backend/921dfb0</code></a> implementa <code>soa_service.py</code> y <code>/api/auditorias/soa</code> (93 controles ISO 27002) → Pruebas <code>test_soa_service.py</code> (<strong>4 passed</strong>) y <code>test_soa_api.py</code> (<strong>2 passed</strong>) → Falta sub-criterio N:M <code>/evaluaciones-matriz</code> → <strong>DoD: Aceptación Parcial (8 SP, <code>TRAZABILIDAD PENDIENTE</code>)</strong>.</li>
+                                    <li><strong>Caso Parcial Detectado 2 (<code>HU-203</code> → <a href="https://smartauditoria.atlassian.net/browse/SCRUM-34" target="_blank" rel="noopener">SCRUM-34</a>):</strong> El commit <a href="https://github.com/lejabamo/smartauditoria_frontend/commit/849cc9f" target="_blank" rel="noopener"><code>frontend/849cc9f</code></a> citado en Jira solo modifica <code>wireframe_rag_tecnico.html</code> en <code>gh-pages</code>; existe el badge en UI pero no el script Python <code>ragas</code> → <strong>DoD: Aceptación Parcial (3 SP → diferido a <code>HU-029</code> / <a href="https://smartauditoria.atlassian.net/browse/SCRUM-47" target="_blank" rel="noopener">SCRUM-47</a>)</strong>.</li>
+                                </ul>
+                            </li>
+                            <li><strong>Hallazgo sobre Enlaces en Jira Cloud:</strong> Se detectaron <strong>9 enlaces en Jira Cloud que devuelven <code>HTTP 404</code></strong> porque apuntan a hashes pre-<em>subtree split</em> en <code>smartauditoria_engine</code> o a commits genéricos (<code>06a808d</code> solo creó <code>deploy.yml</code>; <code>6de9c83</code> solo editó markdown). Todos fueron conciliados en la Matriz de Trazabilidad local.</li>
+                        </ul>
+                    </div>
+                    <div class="evidence-bar">
+                        <strong>Evidencia Navegable:</strong>
+                        <a href="trazabilidad.html">Abrir Matriz Completa HU → Jira → Código → Prueba → DoD →</a>
+                        <a href="https://github.com/lejabamo/smartauditoria_backend/commit/e0c4efa" target="_blank" rel="noopener"><code>backend/e0c4efa</code></a>
+                        <a href="https://github.com/lejabamo/smartauditoria_frontend/commit/7df5d51" target="_blank" rel="noopener"><code>frontend/7df5d51</code></a>
+                        <a href="https://github.com/lejabamo/smartauditoria_backend/commit/921dfb0" target="_blank" rel="noopener"><code>backend/921dfb0</code></a>
+                        <a href="https://github.com/lejabamo/smartauditoria_backend/commit/db30e2f" target="_blank" rel="noopener"><code>backend/db30e2f (AGENTS.md)</code></a>
                     </div>
                 </div>
 
@@ -428,16 +461,16 @@
                         <div class="slide-header">
                             <span class="slide-num">Diapositiva 6 de 10 • Seguridad y Gobernanza RBAC</span>
                         </div>
-                        <h3>Seguridad JWT, Control de Acceso RBAC y Gestión de Usuarios</h3>
+                        <h3>Seguridad JWT, Control de Acceso RBAC y Gestión Administrativa de Usuarios</h3>
                         <ul>
-                            <li><strong>Autenticación y Protección de Cuentas (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-26" target="_blank" rel="noopener">SCRUM-26</a>):</strong> Emisión de tokens Bearer JWT firmados con expiración controlada, hashing de contraseñas con Werkzeug y bloqueo preventivo tras intentos fallidos en <code>app/auth/routes.py</code> y <code>app/auth/models.py</code>.</li>
-                            <li><strong>Control de Acceso Basado en Roles (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-27" target="_blank" rel="noopener">SCRUM-27</a>):</strong> Decoradores <code>@require_auth</code> y validación de los 3 roles oficiales (<code>ADMIN</code>, <code>OPERADOR</code>, <code>CONSULTOR</code>) en <code>app/auth/decorators.py</code>, bloqueando mutaciones no autorizadas con <code>HTTP 403</code>.</li>
-                            <li><strong>Gobernanza de Usuarios y Autoservicio de Contraseñas (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-36" target="_blank" rel="noopener">SCRUM-36</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-37" target="_blank" rel="noopener">SCRUM-37</a>):</strong> Panel administrativo CRUD de usuarios (<code>app/routes/usuarios.py</code> y <code>src/pages/admin/Usuarios.tsx</code>), asignación de responsables en activos y recuperación de clave con token JWT temporal de 1 hora (<code>/api/auth/forgot-password</code> y <code>/api/auth/reset-password</code>).</li>
+                            <li><strong>Autenticación y Protección de Cuentas (<code>HU-016</code> / <a href="https://smartauditoria.atlassian.net/browse/SCRUM-26" target="_blank" rel="noopener">SCRUM-26</a> — Aceptada, 8 SP):</strong> Emisión de tokens Bearer JWT firmados con expiración controlada, hashing de contraseñas con Werkzeug y bloqueo preventivo tras intentos fallidos en <code>app/auth/routes.py</code> y <code>app/auth/models.py</code> (<a href="https://github.com/lejabamo/smartauditoria_backend/commit/c767e2b" target="_blank" rel="noopener"><code>backend/c767e2b</code></a>).</li>
+                            <li><strong>Control de Acceso Basado en Roles (<code>HU-017</code> / <a href="https://smartauditoria.atlassian.net/browse/SCRUM-27" target="_blank" rel="noopener">SCRUM-27</a> — Aceptada, 5 SP):</strong> Decoradores <code>@require_auth</code> y validación de los 3 roles oficiales (<code>ADMIN</code>, <code>OPERADOR</code>, <code>CONSULTOR</code>) en <code>app/auth/decorators.py</code> (<a href="https://github.com/lejabamo/smartauditoria_backend/commit/375f9f5" target="_blank" rel="noopener"><code>backend/375f9f5</code></a>), bloqueando mutaciones no autorizadas con <code>HTTP 403</code>.</li>
+                            <li><strong>CRUD Administrativo de Usuarios y Autoservicio JWT (<code>HU-019</code> / <a href="https://smartauditoria.atlassian.net/browse/SCRUM-36" target="_blank" rel="noopener">SCRUM-36</a> — Aceptada, 8 SP; <code>HU-020</code> / <a href="https://smartauditoria.atlassian.net/browse/SCRUM-37" target="_blank" rel="noopener">SCRUM-37</a> — Aceptada, 5 SP):</strong> Gestión integral de usuarios en <code>app/routes/usuarios.py</code> y <code>src/pages/admin/Usuarios.tsx</code> (<a href="https://github.com/lejabamo/smartauditoria_backend/commit/73ddbfd" target="_blank" rel="noopener"><code>backend/73ddbfd</code></a>), vinculación de responsables a activos y recuperación de clave con token temporal de 1 hora (<a href="https://github.com/lejabamo/smartauditoria_backend/commit/e0c4efa" target="_blank" rel="noopener"><code>backend/e0c4efa</code></a>).</li>
                         </ul>
                     </div>
                     <div class="evidence-bar">
                         <strong>Evidencia Navegable:</strong>
-                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-26" target="_blank" rel="noopener">SCRUM-26</a> <a href="https://smartauditoria.atlassian.net/browse/SCRUM-27" target="_blank" rel="noopener">SCRUM-27</a> <a href="https://smartauditoria.atlassian.net/browse/SCRUM-36" target="_blank" rel="noopener">SCRUM-36</a> <a href="https://smartauditoria.atlassian.net/browse/SCRUM-37" target="_blank" rel="noopener">SCRUM-37</a>
+                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-26" target="_blank" rel="noopener">HU-016 (SCRUM-26)</a> <a href="https://smartauditoria.atlassian.net/browse/SCRUM-27" target="_blank" rel="noopener">HU-017 (SCRUM-27)</a> <a href="https://smartauditoria.atlassian.net/browse/SCRUM-36" target="_blank" rel="noopener">HU-019 (SCRUM-36)</a> <a href="https://smartauditoria.atlassian.net/browse/SCRUM-37" target="_blank" rel="noopener">HU-020 (SCRUM-37)</a>
                         <a href="https://github.com/lejabamo/smartauditoria_backend/commit/c767e2b" target="_blank" rel="noopener"><code>backend/c767e2b</code></a>
                         <a href="https://github.com/lejabamo/smartauditoria_backend/commit/375f9f5" target="_blank" rel="noopener"><code>backend/375f9f5</code></a>
                         <a href="https://github.com/lejabamo/smartauditoria_backend/commit/73ddbfd" target="_blank" rel="noopener"><code>backend/73ddbfd</code></a>
@@ -451,57 +484,64 @@
                 <div class="slide-card" data-slide="6">
                     <div>
                         <div class="slide-header">
-                            <span class="slide-num">Diapositiva 7 de 10 • Riesgos DAFP V7 y SoA ISO 27002</span>
+                            <span class="slide-num">Diapositiva 7 de 10 • Dominio de Riesgos DAFP V7 y SoA ISO 27002</span>
                         </div>
-                        <h3>Evaluación de Riesgos DAFP V7, Matriz 5x5 y SoA de 93 Controles</h3>
+                        <h3>Evaluación de Riesgos DAFP V7, Matriz 5x5 y Declaración de Aplicabilidad (SoA)</h3>
                         <ul>
-                            <li><strong>Dominio de Activos y Riesgos (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-11" target="_blank" rel="noopener">SCRUM-11</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-16" target="_blank" rel="noopener">SCRUM-16</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-39" target="_blank" rel="noopener">SCRUM-39</a>):</strong> Cálculo matemático de riesgo inherente y residual ($RI = P \times I$), clasificación C-I-D según Función Pública DAFP V7 Cap. V y Ley 1712 de 2014 (<code>app/domain/services/activo_funcion_publica_service.py</code>).</li>
-                            <li><strong>Declaración de Aplicabilidad SoA (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-40" target="_blank" rel="noopener">SCRUM-40</a>):</strong> Implementación completa de los <strong>93 controles de ISO/IEC 27002:2022</strong> distribuidos en sus 4 dominios (37 Organizacionales, 8 Personas, 14 Físicos, 34 Tecnológicos) en <code>/api/auditorias/soa</code> (<code>app/application/services/soa_service.py</code> y <code>src/components/auditoria/SoAPanel.tsx</code>).</li>
-                            <li><strong>Carga Masiva y Mapa Oficial de Riesgos (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-42" target="_blank" rel="noopener">SCRUM-42</a>):</strong> Carga inteligente de activos con enriquecimiento Copilot (<code>/api/activos/bulk-upload</code>) y exportación del Mapa Oficial DAFP V7 a Excel (<code>/api/reportes/mapa-riesgos-dafp/export/excel</code>).</li>
+                            <li><strong>Cálculo de Riesgo y Valoración C-I-D (<code>HU-002</code> / <a href="https://smartauditoria.atlassian.net/browse/SCRUM-11" target="_blank" rel="noopener">SCRUM-11</a>, <code>HU-006</code> / <a href="https://smartauditoria.atlassian.net/browse/SCRUM-16" target="_blank" rel="noopener">SCRUM-16</a> — Aceptadas; <code>HU-022</code> / <a href="https://smartauditoria.atlassian.net/browse/SCRUM-39" target="_blank" rel="noopener">SCRUM-39</a> — Parcial):</strong> Motor matemático de riesgo inherente y residual ($RI = P \times I$), clasificación tridimensional C-I-D según Función Pública DAFP V7 Cap. V y Ley 1712 de 2014 en <code>activo_funcion_publica_service.py</code> (<a href="https://github.com/lejabamo/smartauditoria_backend/commit/790fce3" target="_blank" rel="noopener"><code>backend/790fce3</code></a>, verificado con <strong>25 tests unitarios e integración</strong>).</li>
+                            <li><strong>Declaración de Aplicabilidad SoA (<code>HU-023</code> / <a href="https://smartauditoria.atlassian.net/browse/SCRUM-40" target="_blank" rel="noopener">SCRUM-40</a> — Parcial):</strong> Implementación y persistencia de los <strong>93 controles de ISO/IEC 27002:2022</strong> en sus 4 dominios (37 Organizacionales, 8 Personas, 14 Físicos, 34 Tecnológicos) en <code>/api/auditorias/soa</code> y <code>SoAPanel.tsx</code> (<a href="https://github.com/lejabamo/smartauditoria_backend/commit/921dfb0" target="_blank" rel="noopener"><code>backend/921dfb0</code></a>, verificado con <strong>6 tests</strong>).</li>
+                            <li><strong>Carga Masiva y Exportación Excel del Mapa DAFP V7 (<code>HU-025</code> / <a href="https://smartauditoria.atlassian.net/browse/SCRUM-42" target="_blank" rel="noopener">SCRUM-42</a> — Parcial):</strong> Endpoints operativos <code>/api/activos/bulk-upload</code> y <code>/api/reportes/mapa-riesgos-dafp/export/excel</code> (<a href="https://github.com/lejabamo/smartauditoria_backend/commit/5eafd76" target="_blank" rel="noopener"><code>backend/5eafd76</code></a>, <a href="https://github.com/lejabamo/smartauditoria_backend/commit/b82261c" target="_blank" rel="noopener"><code>backend/b82261c</code></a>, verificados con <strong>5 tests</strong>). Quedan documentadas como pendientes las tablas semilla 57/64 de la hoja <code>BÁSICOS</code> y las rutas literales con macros <code>.xlsm</code>.</li>
                         </ul>
                     </div>
                     <div class="evidence-bar">
                         <strong>Evidencia Navegable:</strong>
-                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-11" target="_blank" rel="noopener">SCRUM-11</a> <a href="https://smartauditoria.atlassian.net/browse/SCRUM-40" target="_blank" rel="noopener">SCRUM-40</a> <a href="https://smartauditoria.atlassian.net/browse/SCRUM-42" target="_blank" rel="noopener">SCRUM-42</a>
+                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-11" target="_blank" rel="noopener">HU-002 (SCRUM-11)</a> <a href="https://smartauditoria.atlassian.net/browse/SCRUM-40" target="_blank" rel="noopener">HU-023 (SCRUM-40)</a> <a href="https://smartauditoria.atlassian.net/browse/SCRUM-42" target="_blank" rel="noopener">HU-025 (SCRUM-42)</a>
                         <a href="https://github.com/lejabamo/smartauditoria_backend/commit/790fce3" target="_blank" rel="noopener"><code>backend/790fce3</code></a>
                         <a href="https://github.com/lejabamo/smartauditoria_backend/commit/921dfb0" target="_blank" rel="noopener"><code>backend/921dfb0</code></a>
                         <a href="https://github.com/lejabamo/smartauditoria_backend/commit/5eafd76" target="_blank" rel="noopener"><code>backend/5eafd76</code></a>
-                        <a href="https://github.com/lejabamo/smartauditoria_backend/commit/b82261c" target="_blank" rel="noopener"><code>backend/b82261c</code></a>
                         <a href="https://github.com/lejabamo/smartauditoria_backend/blob/feature/github-pages-showcase/smartauditoria_backend/tests/unit/domain/test_entities.py" target="_blank" rel="noopener"><code>test_entities.py (12 passed)</code></a>
                         <a href="https://github.com/lejabamo/smartauditoria_backend/blob/feature/github-pages-showcase/smartauditoria_backend/tests/integration/test_soa_api.py" target="_blank" rel="noopener"><code>test_soa_api.py (2 passed)</code></a>
                         <a href="https://github.com/lejabamo/smartauditoria_backend/blob/feature/github-pages-showcase/smartauditoria_backend/tests/integration/test_reportes_mapa_api.py" target="_blank" rel="noopener"><code>test_reportes_mapa_api.py (3 passed)</code></a>
                     </div>
                 </div>
 
-                <!-- SLIDE 8 -->
+                <!-- SLIDE 8 (DEDICATED AI VALIDATION SLIDE PER ITEM 9: REAL METRICS, LIMITATIONS & IMPROVEMENT DECISIONS) -->
                 <div class="slide-card" data-slide="7">
                     <div>
                         <div class="slide-header">
-                            <span class="slide-num">Diapositiva 8 de 10 • Evaluación Experimental IA</span>
+                            <span class="slide-num">Diapositiva 8 de 10 • Validación Experimental del Motor IA (RAG/CAG)</span>
                         </div>
-                        <h3>Benchmark Experimental del Motor RAG: Resultados e Interpretación</h3>
+                        <h3>Validación de IA: Métricas Reales, Limitaciones Identificadas y Decisiones de Mejora</h3>
                         <ul>
-                            <li><strong>Auditoría de la Base Vectorial ChromaDB (<code>chroma.sqlite3</code>):</strong> La colección activa <code>langchain</code> contiene <strong>85 chunks</strong> extraídos de <code>ISO_27001_2022_Espa_.pdf.pdf</code> (requisitos y Anexo A resumido). Al cruzarlos contra el catálogo oficial de 93 controles (<code>iso_27002_2022_catalog.json</code>), <strong>32 controles (34,4%) están presentes</strong> en los chunks y <strong>61 controles (65,6%) están ausentes</strong>.</li>
-                            <li><strong>Benchmark Reproducible Offline (5 Casos Normativos <code>TC-RAG-01</code> a <code>TC-RAG-05</code> con <code>sentence-transformers/all-MiniLM-L6-v2</code>):</strong>
+                            <li><strong>Métricas Reales del Benchmark Vectorial Reproducible (<code>chroma.sqlite3</code> + <code>all-MiniLM-L6-v2</code>):</strong>
                                 <ul>
-                                    <li><code>TC-RAG-01</code> (MariaDB / Autenticación <code>A.5.17</code>, <code>A.8.5</code>): Recuperó <code>A.7.10</code> → <strong>Precision@3 = 0,0000</strong> (<code>161,68 ms</code>).</li>
-                                    <li><code>TC-RAG-02</code> (Portal Web / Codificación segura <code>A.8.28</code>, <code>A.8.26</code>): Recuperó <code>A.8.28</code>, <code>A.8.23</code>, <code>A.8.30</code> → <strong>Precision@3 = 0,3333</strong> (<code>14,66 ms</code>).</li>
-                                    <li><code>TC-RAG-03</code> (Backups / Criptografía y Soportes <code>A.8.24</code>, <code>A.7.10</code>): Recuperó <code>A.7.10</code>, <code>A.7.12</code>, <code>A.7.13</code> → <strong>Precision@3 = 0,3333</strong> (<code>13,60 ms</code>).</li>
-                                    <li><code>TC-RAG-04</code> (Red Wi-Fi / Redes <code>A.8.20</code>, <code>A.8.22</code>): Recuperó controles adyacentes <code>A.8.21</code>, <code>A.8.23</code> → <strong>Precision@3 = 0,0000</strong> (<code>13,05 ms</code>).</li>
-                                    <li><code>TC-RAG-05</code> (SoA / Políticas <code>A.5.1</code>): Recuperó cláusulas sin código de control → <strong>Precision@3 = 0,0000</strong> (<code>13,02 ms</code>).</li>
+                                    <li><strong>Cobertura Normativa en Vector Store:</strong> La colección <code>langchain</code> contiene <strong>85 chunks</strong> de <code>ISO_27001_2022_Espa_.pdf.pdf</code> (Anexo A resumido), cubriendo <strong>32 de los 93 controles ISO/IEC 27002:2022 (34,4%)</strong>; 61 controles (65,6%) no están en el archivo SQLite vectorial.</li>
+                                    <li><strong>Desempeño en 5 Casos de Prueba (<code>TC-RAG-01</code> a <code>TC-RAG-05</code>):</strong> <strong>Precision@3 Promedio = 0,1333 (13,3%)</strong> (aciertos en <code>TC-RAG-02</code> [<code>A.8.28</code>, P@3=0,33] y <code>TC-RAG-03</code> [<code>A.7.10</code>, P@3=0,33]; 0,00 en los otros 3 casos por ausencia del control o vecindad léxica) | <strong>Latencia $p_{50} = 13,60\text{ ms}$</strong> | <strong>Latencia $p_{95} = 161,68\text{ ms}$</strong> | <strong>Fallos = 0,0%</strong> | <strong>35 tests unitarios/integración aprobados</strong> en <code>smartauditoria_engine/tests</code>.</li>
                                 </ul>
                             </li>
-                            <li><strong>Métricas Agregadas:</strong> <strong>Precision@3 Promedio = 0,1333 (13,3%)</strong> | <strong>Latencia Mediana $p_{50} = 13,60\text{ ms}$</strong> | <strong>Latencia $p_{95} = 161,68\text{ ms}$</strong> | <strong>Tasa de fallos = 0,0%</strong>.</li>
+                            <li><strong>Limitaciones Reconocidas con Transparencia Académica:</strong>
+                                (1) El PDF ingerido en ChromaDB fue la norma ISO 27001 (resumen Anexo A) y no la guía extensa ISO 27002:2022 completa;
+                                (2) No está instalada la librería Python <code>ragas</code> para evaluar automáticamente con juez LLM la fidelidad generativa (<em>Faithfulness</em>) de Gemini en CI/CD.
+                            </li>
+                            <li><strong>Decisiones Arquitectónicas Implementadas y Plan V4.0:</strong>
+                                <ul>
+                                    <li><em>Mitigación en Producción:</em> <strong>Fallback Determinístico (<code>HU-103</code> / <a href="https://smartauditoria.atlassian.net/browse/SCRUM-31" target="_blank" rel="noopener">SCRUM-31</a>)</strong> sobre el catálogo JSON completo de 93 controles (<code>iso_27002_2022_catalog.json</code>) cuando el score RAG es bajo, más validación <strong>Human-In-The-Loop (<code>HU-202</code> / <a href="https://smartauditoria.atlassian.net/browse/SCRUM-33" target="_blank" rel="noopener">SCRUM-33</a>)</strong> en el Wizard.</li>
+                                    <li><em>Corrección Estructural en V4.0:</em> Re-indexar los 93 controles completos en ChromaDB para superar <code>P@3 &gt;= 0,70</code> (<code>HU-028</code> / <a href="https://smartauditoria.atlassian.net/browse/SCRUM-46" target="_blank" rel="noopener">SCRUM-46</a>) e integrar la suite Python <code>ragas</code> en GitHub Actions (<code>HU-029</code> / <a href="https://smartauditoria.atlassian.net/browse/SCRUM-47" target="_blank" rel="noopener">SCRUM-47</a>).</li>
+                                </ul>
+                            </li>
                         </ul>
                     </div>
                     <div class="evidence-bar">
                         <strong>Evidencia Navegable:</strong>
-                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-18" target="_blank" rel="noopener">SCRUM-18</a> <a href="https://smartauditoria.atlassian.net/browse/SCRUM-19" target="_blank" rel="noopener">SCRUM-19</a> <a href="https://smartauditoria.atlassian.net/browse/SCRUM-20" target="_blank" rel="noopener">SCRUM-20</a> <a href="https://smartauditoria.atlassian.net/browse/SCRUM-21" target="_blank" rel="noopener">SCRUM-21</a>
+                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-18" target="_blank" rel="noopener">HU-008 (SCRUM-18 ChromaDB)</a>
+                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-31" target="_blank" rel="noopener">HU-103 (SCRUM-31 Fallback 93 Controles)</a>
+                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-33" target="_blank" rel="noopener">HU-202 (SCRUM-33 HITL)</a>
+                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-46" target="_blank" rel="noopener">HU-028 (SCRUM-46 Re-indexación)</a>
                         <a href="https://github.com/lejabamo/smartauditoria_engine/commit/0643dd4" target="_blank" rel="noopener"><code>engine/0643dd4</code></a>
-                        <a href="https://github.com/lejabamo/smartauditoria_engine/commit/15eb3e2" target="_blank" rel="noopener"><code>engine/15eb3e2</code></a>
                         <a href="https://github.com/lejabamo/smartauditoria_engine/commit/8e9669c" target="_blank" rel="noopener"><code>engine/8e9669c</code></a>
-                        <a href="https://github.com/lejabamo/smartauditoria_engine/commit/4889a77" target="_blank" rel="noopener"><code>engine/4889a77</code></a>
-                        <a href="https://github.com/lejabamo/smartauditoria_engine/blob/master/app/core/vector_store/chroma_adapter.py" target="_blank" rel="noopener"><code>chroma_adapter.py</code></a>
+                        <a href="https://github.com/lejabamo/smartauditoria_frontend/commit/7df5d51" target="_blank" rel="noopener"><code>frontend/7df5d51</code></a>
+                        <a href="https://github.com/lejabamo/smartauditoria_engine/blob/master/tests/unit/test_rag_retriever.py" target="_blank" rel="noopener"><code>test_rag_retriever.py (4 passed)</code></a>
+                        <a href="https://github.com/lejabamo/smartauditoria_engine/blob/master/tests/test_copilot_asset_assistant.py" target="_blank" rel="noopener"><code>test_copilot_asset_assistant.py (8 passed)</code></a>
                     </div>
                 </div>
 
@@ -509,29 +549,28 @@
                 <div class="slide-card" data-slide="8">
                     <div>
                         <div class="slide-header">
-                            <span class="slide-num">Diapositiva 9 de 10 • Decisiones Técnicas y Pruebas</span>
+                            <span class="slide-num">Diapositiva 9 de 10 • Verificación de Calidad (111 Tests y CI/CD)</span>
                         </div>
-                        <h3>Decisiones Técnicas Derivadas y Suite de 111 Pruebas Automatizadas</h3>
+                        <h3>Suite de 111 Pruebas Automatizadas Locales, Validación en VPS y Estado de GitHub Actions</h3>
                         <ul>
-                            <li><strong>Decisión Técnica 1 — Fallback Determinístico sobre el Catálogo Maestro de 93 Controles (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-31" target="_blank" rel="noopener">SCRUM-31</a>):</strong> El resultado experimental (<code>Precision@3 = 13,3%</code> por cobertura vectorial del <code>34,4%</code>) fundamenta por qué el sistema no depende exclusivamente de ChromaDB: cuando el score semántico es inferior al umbral (<code>0,75</code>) o falta un control en el vector store, <code>iso_suggestions_service.py</code> y <code>gemini_cag_service.py</code> activan el fallback determinístico sobre el catálogo JSON completo de 93 controles (<code>iso_27002_2022_catalog.json</code>).</li>
-                            <li><strong>Decisión Técnica 2 — Validación Human-In-The-Loop (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-33" target="_blank" rel="noopener">SCRUM-33</a>):</strong> El componente <code>ConversationalAuditor.tsx</code> presenta chips de acción interactivos para que el auditor apruebe o descarte cada control sugerido antes de persistirlo.</li>
-                            <li><strong>Suite de 111 Pruebas Automatizadas Locales (100% Aprobadas):</strong>
+                            <li><strong>Ejecución Real de las 3 Suites Locales (111 Pruebas Automatizadas = 100% Pass, 0 Fallos):</strong>
                                 <ul>
-                                    <li><strong>Backend (<code>pytest smartauditoria_backend/tests</code>):</strong> <strong>45 passed, 0 failed</strong> en <code>8,14 s</code> (12 archivos unitarios y de integración).</li>
-                                    <li><strong>Engine IA (<code>pytest smartauditoria_engine/tests</code>):</strong> <strong>35 passed, 0 failed</strong> en <code>7,81 s</code> (6 archivos: loader ISO, sanitizador, retriever, pipeline, API y Copilot).</li>
+                                    <li><strong>Backend (<code>pytest smartauditoria_backend/tests</code>):</strong> <strong>45 passed, 0 failed</strong> en <code>8,14 s</code> (12 archivos: entidades de dominio [12], Función Pública DAFP V7 [13], casos de uso de activos [9], SoA 93 controles [6], Mapa DAFP Excel [3], carga masiva [2], RBAC/auditorías [3], flujo usuarios/reset JWT [1], salud/producción [4]).</li>
+                                    <li><strong>Engine IA (<code>pytest smartauditoria_engine/tests</code>):</strong> <strong>35 passed, 0 failed</strong> en <code>7,81 s</code> (6 archivos: loader ISO [7], sanitizador [5], retriever RAG [4], pipeline [5], endpoints FastAPI [6] y asistente Copilot [8]).</li>
                                     <li><strong>Frontend (<code>npx vitest run</code>):</strong> <strong>31 passed, 0 failed</strong> en <code>10,65 s</code> (3 archivos: <code>WizardAIMessageService.test.ts</code> [18], <code>useWizardAI.test.ts</code> [5], <code>ConversationalAuditor.test.tsx</code> [8]).</li>
                                 </ul>
                             </li>
+                            <li><strong>Contraste Transparente con Runners Remotos de GitHub Actions (<code>HU-018</code> / <a href="https://smartauditoria.atlassian.net/browse/SCRUM-28" target="_blank" rel="noopener">SCRUM-28</a>):</strong> De 31 ejecuciones remotas auditadas, los workflows de despliegue (<code>deploy.yml</code> y <code>pages-build-deployment</code>) operaron con éxito en <code>frontend</code> (<code>8/9</code> runs) y <code>engine</code> (<code>2/4</code> runs de deploy), mientras que <code>ci.yml</code> falló en <code>backend</code> (<code>7/7</code>) y <code>engine</code> (<code>7/7</code>) por variables de entorno y dependencias de sistema en los runners de Ubuntu (brecha asignada a <code>HU-030</code> / <a href="https://smartauditoria.atlassian.net/browse/SCRUM-48" target="_blank" rel="noopener">SCRUM-48</a>).</li>
                         </ul>
                     </div>
                     <div class="evidence-bar">
                         <strong>Evidencia Navegable:</strong>
-                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-31" target="_blank" rel="noopener">SCRUM-31</a> <a href="https://smartauditoria.atlassian.net/browse/SCRUM-32" target="_blank" rel="noopener">SCRUM-32</a> <a href="https://smartauditoria.atlassian.net/browse/SCRUM-33" target="_blank" rel="noopener">SCRUM-33</a>
-                        <a href="https://github.com/lejabamo/smartauditoria_backend/commit/d245275" target="_blank" rel="noopener"><code>backend/d245275</code></a>
-                        <a href="https://github.com/lejabamo/smartauditoria_engine/commit/182a901" target="_blank" rel="noopener"><code>engine/182a901</code></a>
-                        <a href="https://github.com/lejabamo/smartauditoria_frontend/commit/7df5d51" target="_blank" rel="noopener"><code>frontend/7df5d51</code></a>
-                        <a href="https://github.com/lejabamo/smartauditoria_engine/blob/master/tests/unit/test_rag_retriever.py" target="_blank" rel="noopener"><code>test_rag_retriever.py (4 passed)</code></a>
-                        <a href="https://github.com/lejabamo/smartauditoria_engine/blob/master/tests/test_copilot_asset_assistant.py" target="_blank" rel="noopener"><code>test_copilot_asset_assistant.py (8 passed)</code></a>
+                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-28" target="_blank" rel="noopener">HU-018 (SCRUM-28 CI/CD)</a>
+                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-35" target="_blank" rel="noopener">HU-301 (SCRUM-35 VPS)</a>
+                        <a href="https://github.com/lejabamo/smartauditoria_backend/commit/3b7c6c2" target="_blank" rel="noopener"><code>backend/3b7c6c2</code></a>
+                        <a href="https://github.com/lejabamo/smartauditoria_frontend/actions" target="_blank" rel="noopener">Actions Frontend</a>
+                        <a href="https://github.com/lejabamo/smartauditoria_backend/actions" target="_blank" rel="noopener">Actions Backend</a>
+                        <a href="https://github.com/lejabamo/smartauditoria_engine/actions" target="_blank" rel="noopener">Actions Engine</a>
                     </div>
                 </div>
 
@@ -539,23 +578,23 @@
                 <div class="slide-card" data-slide="9">
                     <div>
                         <div class="slide-header">
-                            <span class="slide-num">Diapositiva 10 de 10 • Retrospectiva y Mejora Continua</span>
+                            <span class="slide-num">Diapositiva 10 de 10 • Retrospectiva y Plan de Mejora Continua</span>
                         </div>
-                        <h3>Retrospectiva del Ciclo (Sprints 1–7) y Plan de Mejora Continua (Backlog V4.0)</h3>
+                        <h3>Retrospectiva del Ciclo (Sprints 1–7) y Cierre de Brechas en el Backlog V4.0</h3>
                         <ul>
-                            <li><strong>Diagnóstico de CI/CD en GitHub Actions (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-28" target="_blank" rel="noopener">SCRUM-28</a>):</strong> De 31 ejecuciones remotas auditadas, <code>deploy.yml</code> y <code>pages-build-deployment</code> tuvieron éxito en <code>frontend</code> (<code>8/9</code> runs) y <code>engine</code> (<code>2/4</code> runs de deploy), mientras que <code>ci.yml</code> falló en los runners remotos de <code>backend</code> (<code>7/7</code>) y <code>engine</code> (<code>7/7</code>) por configuración de variables de entorno en GitHub Actions.</li>
+                            <li><strong>Balance Académico y Técnico del Ciclo (<code>HU-026</code> / <a href="https://smartauditoria.atlassian.net/browse/SCRUM-44" target="_blank" rel="noopener">SCRUM-44</a>):</strong> Se consolidó una plataforma funcional en producción para la Gobernación del Cauca con <strong>136 SP verificados al 100%</strong>, <strong>53 SP con alcance parcial transparente</strong>, <strong>111 pruebas automatizadas locales en verde</strong> y un diagnóstico experimental honesto del motor RAG.</li>
                             <li><strong>Las 4 Acciones de Mejora Formalizadas en el Product Backlog (<code>Release V4.0-Backlog</code> — 18 SP, estado <code>TRAZABILIDAD PENDIENTE</code>):</strong>
                                 <ul>
-                                    <li><strong>Acción 1 → <a href="https://smartauditoria.atlassian.net/browse/SCRUM-46" target="_blank" rel="noopener">SCRUM-46</a> (<code>HU-028</code>, 5 SP, <code>Ready</code>):</strong> Re-indexar los 93 controles completos de ISO/IEC 27002:2022 en ChromaDB para elevar la cobertura del <code>34,4%</code> al <code>100%</code> y superar <code>Precision@3 &gt;= 0,70</code> manteniendo latencia $p_{95} &lt; 250\text{ ms}$.</li>
-                                    <li><strong>Acción 2 → <a href="https://smartauditoria.atlassian.net/browse/SCRUM-47" target="_blank" rel="noopener">SCRUM-47</a> (<code>HU-029</code>, 8 SP, <code>Backlog</code>):</strong> Implementar el paquete Python <code>ragas</code> en CI/CD para medir automáticamente <em>Faithfulness</em> ($&gt; 0,85$) y <em>Context Precision</em> ($&gt; 0,80$).</li>
-                                    <li><strong>Acciones 3 y 4 → <a href="https://smartauditoria.atlassian.net/browse/SCRUM-48" target="_blank" rel="noopener">SCRUM-48</a> (<code>HU-030</code>, 5 SP, <code>Backlog</code>):</strong> Estabilizar los workflows <code>ci.yml</code> en GitHub Actions ($&lt; 4\text{ min}$, 100% verdes), conectar Webhooks con Jira y desarrollar el servicio REST programado <code>/api/activos/sync-glpi</code>.</li>
+                                    <li><strong>Acción 1 → <code>HU-028</code> (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-46" target="_blank" rel="noopener">SCRUM-46</a>, 5 SP, <code>Ready</code>):</strong> Re-indexar los 93 controles completos de ISO/IEC 27002:2022 en ChromaDB para elevar la cobertura vectorial del <code>34,4%</code> al <code>100%</code> y superar <code>Precision@3 &gt;= 0,70</code> con latencia $p_{95} &lt; 250\text{ ms}$.</li>
+                                    <li><strong>Acción 2 → <code>HU-029</code> (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-47" target="_blank" rel="noopener">SCRUM-47</a>, 8 SP, <code>Backlog</code>):</strong> Integrar el paquete Python <code>ragas</code> en GitHub Actions para certificar automáticamente <em>Faithfulness</em> ($&gt; 0,85$) y <em>Context Precision</em> ($&gt; 0,80$).</li>
+                                    <li><strong>Acciones 3 y 4 → <code>HU-030</code> (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-48" target="_blank" rel="noopener">SCRUM-48</a>, 5 SP, <code>Backlog</code>):</strong> Estabilizar los workflows <code>ci.yml</code> en GitHub Actions ($&lt; 4\text{ min}$, 100% verdes), activar Webhooks con Jira y desarrollar el conector REST <code>/api/activos/sync-glpi</code>.</li>
                                 </ul>
                             </li>
                         </ul>
                     </div>
                     <div class="evidence-bar">
                         <strong>Evidencia Navegable:</strong>
-                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-44" target="_blank" rel="noopener">SCRUM-44</a> <a href="https://smartauditoria.atlassian.net/browse/SCRUM-46" target="_blank" rel="noopener">SCRUM-46</a> <a href="https://smartauditoria.atlassian.net/browse/SCRUM-47" target="_blank" rel="noopener">SCRUM-47</a> <a href="https://smartauditoria.atlassian.net/browse/SCRUM-48" target="_blank" rel="noopener">SCRUM-48</a>
+                        <a href="https://smartauditoria.atlassian.net/browse/SCRUM-44" target="_blank" rel="noopener">HU-026 (SCRUM-44)</a> <a href="https://smartauditoria.atlassian.net/browse/SCRUM-46" target="_blank" rel="noopener">HU-028 (SCRUM-46)</a> <a href="https://smartauditoria.atlassian.net/browse/SCRUM-47" target="_blank" rel="noopener">HU-029 (SCRUM-47)</a> <a href="https://smartauditoria.atlassian.net/browse/SCRUM-48" target="_blank" rel="noopener">HU-030 (SCRUM-48)</a>
                         <a href="https://github.com/lejabamo/smartauditoria_frontend/commit/02d09f2" target="_blank" rel="noopener"><code>frontend/02d09f2</code></a>
                         <a href="retrospectiva.html">Ver Retrospectiva Consolidada Sprints 1–7 →</a>
                     </div>

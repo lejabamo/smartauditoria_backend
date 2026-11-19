@@ -61,7 +61,7 @@
         .badge.obs { background-color: #e0e7ff; color: #3730a3; }
         .badge.future { background-color: #f3e8ff; color: #6b21a8; }
         .badge.failed { background-color: #fee2e2; color: #b91c1c; }
-        .jira-table td, .jira-table th { font-size: 0.82rem; padding: 0.6rem 0.65rem; }
+        .jira-table td, .jira-table th { font-size: 0.81rem; padding: 0.55rem 0.6rem; vertical-align: top; }
         .jira-table a { color: #1d4ed8; font-weight: 600; text-decoration: none; }
         .jira-table a:hover { text-decoration: underline; color: #cc0000; }
         .kpi-row {
@@ -77,8 +77,8 @@
             border-radius: 8px;
             padding: 1rem 1.15rem;
         }
-        .kpi-box .num { font-size: 1.55rem; font-weight: 800; color: var(--univalle-dark); }
-        .kpi-box .lbl { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+        .kpi-box .num { font-size: 1.5rem; font-weight: 800; color: var(--univalle-dark); }
+        .kpi-box .lbl { font-size: 0.76rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
 
         /* Interactive Slide Deck Styles */
         .deck-wrapper {
@@ -153,7 +153,7 @@
             border: 1px solid #e2e8f0;
             border-top: 5px solid #cc0000;
             border-radius: 14px;
-            padding: 2.75rem 3.25rem;
+            padding: 2.6rem 3.1rem;
             min-height: 500px;
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.07);
             flex-direction: column;
@@ -171,8 +171,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.25rem;
-            padding-bottom: 0.85rem;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.8rem;
             border-bottom: 1px solid #f1f5f9;
         }
         .slide-num {
@@ -187,36 +187,36 @@
             letter-spacing: 0.4px;
         }
         .slide-card h3 {
-            font-size: 1.75rem;
+            font-size: 1.68rem;
             font-weight: 800;
             color: #111827;
-            margin-bottom: 1.35rem;
+            margin-bottom: 1.25rem;
             line-height: 1.3;
         }
         .slide-card ul {
             margin-left: 1.35rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.4rem;
             color: #374151;
-            font-size: 1.03rem;
-            line-height: 1.75;
+            font-size: 1.01rem;
+            line-height: 1.72;
         }
-        .slide-card li { margin-bottom: 0.7rem; }
+        .slide-card li { margin-bottom: 0.65rem; }
         .slide-card ul ul {
-            margin-top: 0.45rem;
-            margin-bottom: 0.5rem;
-            font-size: 0.96rem;
+            margin-top: 0.4rem;
+            margin-bottom: 0.45rem;
+            font-size: 0.94rem;
         }
         .evidence-bar {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
             padding: 0.85rem 1.1rem;
-            font-size: 0.85rem;
+            font-size: 0.84rem;
             display: flex;
             flex-wrap: wrap;
-            gap: 0.65rem;
+            gap: 0.6rem;
             align-items: center;
-            margin-top: 1.25rem;
+            margin-top: 1.2rem;
         }
         .evidence-bar a {
             color: #1d4ed8;
@@ -230,6 +230,18 @@
         .evidence-bar a:hover {
             background: #dbeafe;
             color: #1e3a8a;
+        }
+        .info-callout {
+            background: #f8fafc;
+            border-left: 4px solid #cc0000;
+            border-top: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            border-radius: 0 8px 8px 0;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.75rem;
+            font-size: 0.88rem;
+            color: #334155;
         }
     </style>
 </head>
@@ -275,9 +287,9 @@
 
     <main>
         <section class="container">
-            <h2 class="section-title">Release Plan, Sprints Reales y Trazabilidad de Despliegue (V1.0 a V4.0-Backlog)</h2>
+            <h2 class="section-title">Release Plan, Sprints Reales y Balance de Story Points (Aceptados vs. Parciales)</h2>
             <p style="margin-bottom:1.5rem;color:var(--text-muted);">
-                Correspondencia exacta con los registros <code>customfield_10020</code> (Sprint), <code>goal</code> (Sprint Goal) y <code>fixVersions</code> (Release) en Jira Cloud, sin duplicar Story Points de historias que fueron arrastradas administrativamente entre sprints.
+                Correspondencia exacta con los registros <code>customfield_10020</code> (Sprint), <code>goal</code> (Sprint Goal) y <code>fixVersions</code> (Release) en Jira Cloud, desglosando para cada Sprint y Release cuántos Story Points están <strong>Completamente Aceptados (136 SP)</strong> y cuántos tienen <strong>Aceptación Parcial (53 SP)</strong> dentro de los <strong>189 SP en estado <code>Done</code></strong>.
             </p>
             <div style="overflow-x:auto;margin-bottom:2.5rem;">
                 <table class="jira-table">
@@ -288,21 +300,21 @@
                             <th>Inicio Plan</th>
                             <th>Cierre Real (completeDate)</th>
                             <th>Sprint Goal Oficial en Jira</th>
-                            <th>Historias de Origen Único</th>
-                            <th>SP Únicos</th>
+                            <th>Historias / Tareas de Origen Único</th>
+                            <th>SP en Done (Aceptados / Parciales)</th>
                             <th>Release</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td><strong>Sprint 1 – Fund del Sistema</strong> (40)</td><td>Cerrado</td><td>2026-02-22</td><td>2026-03-18</td><td>Configurar la base técnica del sistema e implementar el registro inicial de activos y la estructura de evaluación de riesgos.</td><td><a href="https://smartauditoria.atlassian.net/browse/SCRUM-10" target="_blank" rel="noopener">SCRUM-10</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-11" target="_blank" rel="noopener">SCRUM-11</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-12" target="_blank" rel="noopener">SCRUM-12</a></td><td>13 SP</td><td>V1.0</td></tr>
-                        <tr><td><strong>Sprint 2 Riesgos</strong> (41)</td><td>Cerrado</td><td>2026-03-18</td><td>2026-03-18</td><td>Implementar la matriz de riesgos y automatizar el cálculo y clasificación del nivel de riesgo.</td><td><a href="https://smartauditoria.atlassian.net/browse/SCRUM-14" target="_blank" rel="noopener">SCRUM-14</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-15" target="_blank" rel="noopener">SCRUM-15</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-16" target="_blank" rel="noopener">SCRUM-16</a></td><td>16 SP</td><td>V1.0</td></tr>
-                        <tr><td><strong>Sprint 3 RAG</strong> (42)</td><td>Cerrado</td><td>2026-03-18</td><td>2026-04-24</td><td>Implementar la base técnica del motor RAG incluyendo procesamiento de documentos ISO y configuración de base vectorial.</td><td><a href="https://smartauditoria.atlassian.net/browse/SCRUM-17" target="_blank" rel="noopener">SCRUM-17</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-18" target="_blank" rel="noopener">SCRUM-18</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-19" target="_blank" rel="noopener">SCRUM-19</a></td><td>21 SP</td><td>V1.5</td></tr>
-                        <tr><td><strong>S4 – Integración RAG</strong> (43)</td><td>Cerrado</td><td>2026-04-25</td><td>2026-04-25</td><td>Integrar el motor RAG con el módulo de evaluación de riesgos para generar sugerencias automáticas de controles ISO.</td><td><a href="https://smartauditoria.atlassian.net/browse/SCRUM-20" target="_blank" rel="noopener">SCRUM-20</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-21" target="_blank" rel="noopener">SCRUM-21</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-22" target="_blank" rel="noopener">SCRUM-22</a></td><td>18 SP</td><td>V1.5</td></tr>
-                        <tr><td><strong>S5 – Dashboard</strong> (44 / 111)</td><td>Cerrado</td><td>2026-04-25</td><td>2026-05-05</td><td>Desarrollar el dashboard ejecutivo para visualización estratégica de riesgos y controles.</td><td><a href="https://smartauditoria.atlassian.net/browse/SCRUM-23" target="_blank" rel="noopener">SCRUM-23</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-24" target="_blank" rel="noopener">SCRUM-24</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-25" target="_blank" rel="noopener">SCRUM-25</a></td><td>15 SP</td><td>V2.0</td></tr>
-                        <tr><td><strong>S5 – Hardening MLOps &amp; Interfa</strong> (78)</td><td>Cerrado</td><td>2026-04-25</td><td>2026-05-05</td><td>Consolidar la arquitectura inteligente mediante trazabilidad forense (Data Lineage), métricas de certeza RAG y validación Human-In-The-Loop.</td><td><a href="https://smartauditoria.atlassian.net/browse/SCRUM-29" target="_blank" rel="noopener">SCRUM-29</a>..<a href="https://smartauditoria.atlassian.net/browse/SCRUM-35" target="_blank" rel="noopener">SCRUM-35</a> (7 Tasks)</td><td>28 SP</td><td>V2.0</td></tr>
-                        <tr><td><strong>S6 – Seguridad</strong> (45)</td><td>Cerrado</td><td>2026-04-24</td><td>2026-04-25</td><td>Implementar autenticación segura, control de roles y pipeline básico de despliegue continuo.</td><td><a href="https://smartauditoria.atlassian.net/browse/SCRUM-26" target="_blank" rel="noopener">SCRUM-26</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-27" target="_blank" rel="noopener">SCRUM-27</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-28" target="_blank" rel="noopener">SCRUM-28</a></td><td>18 SP</td><td>V1.0 / V2.0</td></tr>
-                        <tr><td><strong>S7 – Homologación Institucional, Gobernanza RBAC &amp; Cierre</strong> (112)</td><td>Activo</td><td>2026-05-09</td><td>En curso</td><td>Completar la homologación institucional con Gobernación del Cauca, usuarios RBAC, SoA 93 controles ISO 27002, Mapa DAFP V7 y Retrospectiva.</td><td><a href="https://smartauditoria.atlassian.net/browse/SCRUM-36" target="_blank" rel="noopener">SCRUM-36</a>..<a href="https://smartauditoria.atlassian.net/browse/SCRUM-42" target="_blank" rel="noopener">SCRUM-42</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-44" target="_blank" rel="noopener">SCRUM-44</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-45" target="_blank" rel="noopener">SCRUM-45</a></td><td>60 SP</td><td>V3.0</td></tr>
-                        <tr><td><strong>Product Backlog (Futuro)</strong></td><td>Backlog</td><td>2026-11-13</td><td>Pendiente</td><td>Mejora continua post-retrospectiva para consolidación de Tesis de Maestría.</td><td><a href="https://smartauditoria.atlassian.net/browse/SCRUM-46" target="_blank" rel="noopener">SCRUM-46</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-47" target="_blank" rel="noopener">SCRUM-47</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-48" target="_blank" rel="noopener">SCRUM-48</a></td><td>18 SP</td><td>V4.0-Backlog</td></tr>
+                        <tr><td><strong>Sprint 1 – Fund del Sistema</strong> (40)</td><td>Cerrado</td><td>2026-02-22</td><td>2026-03-18</td><td>Configurar la base técnica del sistema e implementar el registro inicial de activos y la estructura de evaluación de riesgos.</td><td><code>HU-001..003</code> (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-10" target="_blank" rel="noopener">SCRUM-10</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-11" target="_blank" rel="noopener">SCRUM-11</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-12" target="_blank" rel="noopener">SCRUM-12</a>)</td><td><strong>13 SP</strong> (8 SP Aceptados / 5 SP Parciales: <code>HU-001</code>)</td><td>V1.0</td></tr>
+                        <tr><td><strong>Sprint 2 Riesgos</strong> (41)</td><td>Cerrado</td><td>2026-03-18</td><td>2026-03-18</td><td>Implementar la matriz de riesgos y automatizar el cálculo y clasificación del nivel de riesgo.</td><td><code>HU-004..006</code> (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-14" target="_blank" rel="noopener">SCRUM-14</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-15" target="_blank" rel="noopener">SCRUM-15</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-16" target="_blank" rel="noopener">SCRUM-16</a>)</td><td><strong>16 SP</strong> (16 SP Aceptados / 0 SP Parciales)</td><td>V1.0</td></tr>
+                        <tr><td><strong>Sprint 3 RAG</strong> (42)</td><td>Cerrado</td><td>2026-03-18</td><td>2026-04-24</td><td>Implementar la base técnica del motor RAG incluyendo procesamiento de documentos ISO y configuración de base vectorial.</td><td><code>HU-007..009</code> (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-17" target="_blank" rel="noopener">SCRUM-17</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-18" target="_blank" rel="noopener">SCRUM-18</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-19" target="_blank" rel="noopener">SCRUM-19</a>)</td><td><strong>21 SP</strong> (13 SP Aceptados / 8 SP Parciales: <code>HU-008</code>)</td><td>V1.5</td></tr>
+                        <tr><td><strong>S4 – Integración RAG</strong> (43)</td><td>Cerrado</td><td>2026-04-25</td><td>2026-04-25</td><td>Integrar el motor RAG con el módulo de evaluación de riesgos para generar sugerencias automáticas de controles ISO.</td><td><code>HU-010..012</code> (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-20" target="_blank" rel="noopener">SCRUM-20</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-21" target="_blank" rel="noopener">SCRUM-21</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-22" target="_blank" rel="noopener">SCRUM-22</a>)</td><td><strong>18 SP</strong> (18 SP Aceptados / 0 SP Parciales)</td><td>V1.5</td></tr>
+                        <tr><td><strong>S5 – Dashboard</strong> (44 / 111)</td><td>Cerrado</td><td>2026-04-25</td><td>2026-05-05</td><td>Desarrollar el dashboard ejecutivo para visualización estratégica de riesgos y controles.</td><td><code>HU-013..015</code> (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-23" target="_blank" rel="noopener">SCRUM-23</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-24" target="_blank" rel="noopener">SCRUM-24</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-25" target="_blank" rel="noopener">SCRUM-25</a>)</td><td><strong>15 SP</strong> (15 SP Aceptados / 0 SP Parciales)</td><td>V2.0</td></tr>
+                        <tr><td><strong>S5 – Hardening MLOps &amp; Interfa</strong> (78)</td><td>Cerrado</td><td>2026-04-25</td><td>2026-05-05</td><td>Consolidar la arquitectura inteligente mediante trazabilidad forense (Data Lineage), métricas de certeza RAG y validación Human-In-The-Loop.</td><td><code>HU-101..301</code> (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-29" target="_blank" rel="noopener">SCRUM-29</a>..<a href="https://smartauditoria.atlassian.net/browse/SCRUM-35" target="_blank" rel="noopener">SCRUM-35</a>)</td><td><strong>28 SP</strong> (25 SP Aceptados / 3 SP Parciales: <code>HU-203</code>)</td><td>V2.0</td></tr>
+                        <tr><td><strong>S6 – Seguridad</strong> (45)</td><td>Cerrado</td><td>2026-04-24</td><td>2026-04-25</td><td>Implementar autenticación segura, control de roles y pipeline básico de despliegue continuo.</td><td><code>HU-016..018</code> (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-26" target="_blank" rel="noopener">SCRUM-26</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-27" target="_blank" rel="noopener">SCRUM-27</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-28" target="_blank" rel="noopener">SCRUM-28</a>)</td><td><strong>18 SP</strong> (13 SP Aceptados / 5 SP Parciales: <code>HU-018</code>)</td><td>V1.0 / V2.0</td></tr>
+                        <tr><td><strong>S7 – Homologación Institucional, Gobernanza RBAC &amp; Cierre</strong> (112)</td><td>Activo (Done)</td><td>2026-05-09</td><td>En curso</td><td>Completar la homologación institucional con Gobernación del Cauca, usuarios RBAC, SoA 93 controles ISO 27002, Mapa DAFP V7 y Retrospectiva.</td><td><code>HU-019..025</code> (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-36" target="_blank" rel="noopener">SCRUM-36</a>..<a href="https://smartauditoria.atlassian.net/browse/SCRUM-42" target="_blank" rel="noopener">SCRUM-42</a>) + <code>HU-026..027</code> (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-44" target="_blank" rel="noopener">SCRUM-44</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-45" target="_blank" rel="noopener">SCRUM-45</a>)</td><td><strong>60 SP</strong> (28 SP Aceptados / 32 SP Parciales: <code>HU-022..025</code>)</td><td>V3.0</td></tr>
+                        <tr><td><strong>Product Backlog (Futuro)</strong></td><td>Backlog</td><td>2026-11-13</td><td>Pendiente</td><td>Mejora continua post-retrospectiva para consolidación de Tesis de Maestría.</td><td><code>HU-028..030</code> (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-46" target="_blank" rel="noopener">SCRUM-46</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-47" target="_blank" rel="noopener">SCRUM-47</a>, <a href="https://smartauditoria.atlassian.net/browse/SCRUM-48" target="_blank" rel="noopener">SCRUM-48</a>)</td><td><strong>18 SP Pendientes</strong> (en <code>Ready</code> / <code>Backlog</code>)</td><td>V4.0-Backlog</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -311,13 +323,13 @@
             <div class="card-grid">
                 <div class="card">
                     <span class="badge configured">Segunda Versión Funcional</span>
-                    <h3>Release V2.0 (48 SP nuevos / 129 SP acumulados)</h3>
-                    <p>Cerrada al finalizar los Sprints 5 y 6. Integró el Dashboard Ejecutivo (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-23" target="_blank" rel="noopener">SCRUM-23</a>..<a href="https://smartauditoria.atlassian.net/browse/SCRUM-25" target="_blank" rel="noopener">SCRUM-25</a>), el Hardening MLOps (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-29" target="_blank" rel="noopener">SCRUM-29</a>..<a href="https://smartauditoria.atlassian.net/browse/SCRUM-34" target="_blank" rel="noopener">SCRUM-34</a>) y el despliegue en VPS (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-35" target="_blank" rel="noopener">SCRUM-35</a>). Sus commits de corte en las ramas <code>main</code> son <a href="https://github.com/lejabamo/smartauditoria_backend/commit/e6a764d" target="_blank" rel="noopener"><code>backend/e6a764d</code></a>, <a href="https://github.com/lejabamo/smartauditoria_frontend/commit/9421a34" target="_blank" rel="noopener"><code>frontend/9421a34</code></a> y <a href="https://github.com/lejabamo/smartauditoria_engine/commit/bf30f33" target="_blank" rel="noopener"><code>engine/bf30f33</code></a>.</p>
+                    <h3>Release V2.0 (48 SP nuevos: 40 SP Aceptados + 8 SP Parciales)</h3>
+                    <p>Cerrada al finalizar los Sprints 5 y 6 (129 SP acumulados en <code>Done</code>: 108 SP completamente aceptados + 21 SP con aceptación parcial). Integró el Dashboard Ejecutivo (<code>HU-013..015</code> / <a href="https://smartauditoria.atlassian.net/browse/SCRUM-23" target="_blank" rel="noopener">SCRUM-23</a>..<a href="https://smartauditoria.atlassian.net/browse/SCRUM-25" target="_blank" rel="noopener">SCRUM-25</a>), las tareas de Hardening MLOps (<code>HU-101..203</code> / <a href="https://smartauditoria.atlassian.net/browse/SCRUM-29" target="_blank" rel="noopener">SCRUM-29</a>..<a href="https://smartauditoria.atlassian.net/browse/SCRUM-34" target="_blank" rel="noopener">SCRUM-34</a>) y el despliegue en VPS (<code>HU-301</code> / <a href="https://smartauditoria.atlassian.net/browse/SCRUM-35" target="_blank" rel="noopener">SCRUM-35</a>). Sus commits de corte en las ramas <code>main</code> son <a href="https://github.com/lejabamo/smartauditoria_backend/commit/e6a764d" target="_blank" rel="noopener"><code>backend/e6a764d</code></a>, <a href="https://github.com/lejabamo/smartauditoria_frontend/commit/9421a34" target="_blank" rel="noopener"><code>frontend/9421a34</code></a> y <a href="https://github.com/lejabamo/smartauditoria_engine/commit/bf30f33" target="_blank" rel="noopener"><code>engine/bf30f33</code></a>.</p>
                 </div>
                 <div class="card">
                     <span class="badge code-found">Versión Operativa en VPS</span>
-                    <h3>Release V3.0 (60 SP adicionales / 189 SP acumulados)</h3>
-                    <p>Incorpora la homologación con la Gobernación del Cauca (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-36" target="_blank" rel="noopener">SCRUM-36</a>..<a href="https://smartauditoria.atlassian.net/browse/SCRUM-42" target="_blank" rel="noopener">SCRUM-42</a>: usuarios RBAC, recuperación de clave, SoA 93 controles ISO 27002:2022 y exportación Excel del Mapa DAFP V7). En GitHub Actions, <code>deploy.yml</code> se ejecutó con éxito en <code>frontend</code> (<a href="https://github.com/lejabamo/smartauditoria_frontend/commit/c11814f" target="_blank" rel="noopener"><code>frontend/c11814f</code></a>) y <code>engine</code> (<a href="https://github.com/lejabamo/smartauditoria_engine/commit/182a901" target="_blank" rel="noopener"><code>engine/182a901</code></a>), mientras que el backend (<a href="https://github.com/lejabamo/smartauditoria_backend/commit/b14a243" target="_blank" rel="noopener"><code>backend/b14a243</code></a> / <a href="https://github.com/lejabamo/smartauditoria_backend/commit/73ddbfd" target="_blank" rel="noopener"><code>backend/73ddbfd</code></a>) fue sincronizado al VPS por SSH manual y verificado mediante pruebas E2E.</p>
+                    <h3>Release V3.0 (60 SP adicionales: 28 SP Aceptados + 32 SP Parciales)</h3>
+                    <p>Eleva el acumulado en estado <code>Done</code> a 189 SP (<strong>136 SP completamente aceptados + 53 SP con aceptación parcial</strong>). Incorpora la homologación con la Gobernación del Cauca (<code>HU-019..027</code> / <a href="https://smartauditoria.atlassian.net/browse/SCRUM-36" target="_blank" rel="noopener">SCRUM-36</a>..<a href="https://smartauditoria.atlassian.net/browse/SCRUM-45" target="_blank" rel="noopener">SCRUM-45</a>). En GitHub Actions, <code>deploy.yml</code> se ejecutó con éxito en <code>frontend</code> (<a href="https://github.com/lejabamo/smartauditoria_frontend/commit/c11814f" target="_blank" rel="noopener"><code>frontend/c11814f</code></a>) y <code>engine</code> (<a href="https://github.com/lejabamo/smartauditoria_engine/commit/182a901" target="_blank" rel="noopener"><code>engine/182a901</code></a>), mientras que el backend (<a href="https://github.com/lejabamo/smartauditoria_backend/commit/b14a243" target="_blank" rel="noopener"><code>backend/b14a243</code></a> / <a href="https://github.com/lejabamo/smartauditoria_backend/commit/73ddbfd" target="_blank" rel="noopener"><code>backend/73ddbfd</code></a>) fue sincronizado al VPS por SSH manual y verificado mediante pruebas E2E.</p>
                 </div>
             </div>
         </section>
