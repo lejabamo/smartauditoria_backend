@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentación SGSRI - SmartAuditorIA | Universidad del Valle</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --univalle-red: #aa1916;
+            --univalle-red-dark: #881311;
+            --univalle-red-light: #fef2f2;
+            --univalle-red-border: #fecaca;
+            --dark: #111827;
+            --dark-secondary: #1f2937;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+            --text-subtle: #6b7280;
+            --bg-page: #f3f4f6;
+            --bg-card: #ffffff;
+            --border: #e5e7eb;
+            --border-hover: #d1d5db;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --blue: #2563eb;
+            --blue-light: #eff6ff;
+            --green: #16a34a;
+            --green-light: #f0fdf4;
+            --amber: #d97706;
+            --amber-light: #fffbeb;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            padding: 10px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .univalle-logo {
+            height: 38px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .brand-text h1 {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--dark);
+            line-height: 1.2;
+        }
+
+        .brand-text h1 span {
+            color: var(--univalle-red);
+        }
+
+        .brand-text p {
+            font-size: 0.75rem;
+            color: var(--text-subtle);
+            font-weight: 500;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-link:hover {
+            color: var(--univalle-red);
+            background: var(--univalle-red-light);
+        }
+
+        .nav-link.active-link {
+            color: var(--univalle-red);
+            background: var(--univalle-red-light);
+            border: 1px solid var(--univalle-red-border);
+        }
+
+        /* Slide Area */
+        .presentation {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: #f9fafb;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            width: 90%;
+            max-width: 1100px;
+            max-height: calc(100vh - 160px);
+            min-height: 480px;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 40px 48px;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            transform: scale(0.97) translateY(15px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: auto;
+        }
+
+        .slide-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--univalle-red);
+            background: var(--univalle-red-light);
+            border: 1px solid var(--univalle-red-border);
+            padding: 4px 10px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            align-self: flex-start;
+        }
+
+        .title {
+            font-size: 2.15rem;
+            font-weight: 800;
+            color: var(--dark);
+            line-height: 1.25;
+            margin-bottom: 16px;
+        }
+
+        .title span {
+            color: var(--univalle-red);
+        }
+
+        .content {
+            font-size: 1.05rem;
+            color: var(--text-main);
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .card-box {
+            background: #f9fafb;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .card-box h4 {
+            color: var(--dark);
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-box h4 i {
+            color: var(--univalle-red);
+        }
+
+        .content ul {
+            list-style: none;
+        }
+
+        .content li {
+            margin-bottom: 10px;
+            padding-left: 22px;
+            position: relative;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .content li::before {
+            content: "✓";
+            color: var(--univalle-red);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-done { background: var(--green-light); color: var(--green); border: 1px solid #bbf7d0; }
+        .badge-dev { background: var(--amber-light); color: var(--amber); border: 1px solid #fde68a; }
+
+        /* Controls */
+        .controls {
+            position: fixed;
+            bottom: 24px;
+            right: 32px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .btn-ctrl {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            color: var(--dark);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-ctrl:hover:not(:disabled) {
+            background: var(--univalle-red);
+            color: white;
+            border-color: var(--univalle-red);
+        }
+
+        .btn-ctrl:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .progress {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+            z-index: 100;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--univalle-red);
+            width: 12.5%;
+            transition: width 0.3s ease;
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 24px;
+            left: 32px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            background: #ffffff;
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            z-index: 100;
+        }
+
+        @media (max-width: 768px) {
+            .top-bar { padding: 8px 16px; }
+            .brand-text p { display: none; }
+            .nav-link span { display: none; }
+            .slide {
+                width: 95%;
+                padding: 24px 20px;
+                max-height: calc(100vh - 130px);
+                border-radius: 12px;
+            }
+            .title { font-size: 1.5rem; margin-bottom: 12px; }
+            .grid-2 { grid-template-columns: 1fr; gap: 12px; }
+            .controls { bottom: 12px; right: 12px; }
+            .slide-counter { bottom: 12px; left: 12px; font-size: 0.75rem; padding: 6px 10px; }
+            .progress { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation Bar -->
+    <header class="top-bar">
+        <a href="index.html" class="brand-container">
+            <img src="logoUV_Oficial_Rojo.jpg" alt="Universidad del Valle" class="univalle-logo">
+            <div class="brand-text">
+                <h1>Smart<span>AuditorIA</span></h1>
+                <p>Universidad del Valle • Maestría en Computación e IA</p>
+            </div>
+        </a>
+        <nav class="nav-links">
+            <a href="index.html" class="nav-link"><i data-lucide="home" style="width: 15px;"></i> <span>Inicio</span></a>
+            <a href="20260320_Presentacion_SGSRI.html" class="nav-link active-link"><i data-lucide="presentation" style="width: 15px;"></i> <span>Presentación</span></a>
+            <a href="20260320_Retrospectiva_Ciclo.html" class="nav-link"><i data-lucide="history" style="width: 15px;"></i> <span>Retrospectiva</span></a>
+            <a href="https://smartauditoria.atlassian.net/jira/software/projects/SCRUM/summary" target="_blank" class="nav-link"><i data-lucide="trello" style="width: 15px;"></i> <span>Jira</span></a>
+        </nav>
+    </header>
+
+    <div class="presentation">
+        <div class="slide-counter" id="counter">1 / 8</div>
+
+        <!-- SLIDE 1: PORTADA -->
+        <div class="slide active">
+            <span class="slide-tag">Trabajo Integrador 2 • Maestría en Computación e IA</span>
+            <h2 class="title">SmartAuditorIA <span>(SGSRI)</span></h2>
+            <div class="content">
+                <p style="font-size: 1.15rem; color: var(--text-muted); font-weight: 500; margin-bottom: 20px;">
+                    Sistema de Gestión de Seguridad y Riesgos de Información con Asistencia de Inteligencia Artificial
+                </p>
+                <div class="grid-2">
+                    <div class="card-box" style="border-left: 4px solid var(--univalle-red);">
+                        <h4><i data-lucide="user"></i> Autor del Proyecto</h4>
+                        <p><strong>Ing. Leonardo Javier Bastidas Moreno</strong></p>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 6px;">
+                            Desarrollo individual adaptando roles de Arquitecto de Software, Desarrollador Fullstack y Auditor de Seguridad.
+                        </p>
+                    </div>
+                    <div class="card-box" style="border-left: 4px solid var(--dark);">
+                        <h4><i data-lucide="award"></i> Institución y Marco Normativo</h4>
+                        <p><strong>Universidad del Valle</strong> — Facultad de Ingeniería</p>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 6px;">
+                            Alineación con normas <strong>ISO/IEC 27001:2022</strong>, <strong>ISO 27005:2022</strong> y marco <strong>DAFP V7 / MIPG</strong>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: PROBLEMA Y PROPÓSITO -->
+        <div class="slide">
+            <span class="slide-tag">Definición Estratégica</span>
+            <h2 class="title">Problema y <span>Propósito del Sistema</span></h2>
+            <div class="content">
+                <div class="grid-2">
+                    <div class="card-box">
+                        <h4><i data-lucide="alert-triangle"></i> Problemática en Entidades Públicas</h4>
+                        <ul>
+                            <li><strong>Inventarios Dispersos:</strong> Activos de información gestionados manualmente en hojas de cálculo desactualizadas.</li>
+                            <li><strong>Valoración Subjetiva:</strong> Evaluaciones de impacto y probabilidad sin criterios unificados ni respaldo técnico.</li>
+                            <li><strong>Brecha Normativa:</strong> Desconexión entre el inventario tecnológico y los requerimientos DAFP V7 y MIPG.</li>
+                        </ul>
+                    </div>
+                    <div class="card-box">
+                        <h4><i data-lucide="target"></i> Propósito de SmartAuditorIA</h4>
+                        <ul>
+                            <li><strong>Centralización:</strong> Gobierno estructurado de activos con clasificación de Confidencialidad, Integridad y Disponibilidad (CIA).</li>
+                            <li><strong>Asistencia Inteligente:</strong> Sugerencia de controles ISO/IEC 27002 contextualizados a las amenazas evaluadas.</li>
+                            <li><strong>Generación Oficial:</strong> Matrices dinámicas 5x5 y reportes listos para auditorías institucionales de control interno.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: ARQUITECTURA DE LA SOLUCIÓN -->
+        <div class="slide">
+            <span class="slide-tag">Ingeniería de Software</span>
+            <h2 class="title">Arquitectura y <span>Repositorios GitHub</span></h2>
+            <div class="content">
+                <p style="color: var(--text-muted); margin-bottom: 12px;">Ecosistema modular desacoplado en tres repositorios oficiales independientes:</p>
+                <div class="grid-2">
+                    <div class="card-box">
+                        <h4><i data-lucide="layout"></i> Frontend & Backend</h4>
+                        <ul>
+                            <li><strong>Frontend SPA:</strong> React 18, TypeScript, Vite, Material UI y Wizard guiado. <br><a href="https://github.com/lejabamo/smartauditoria_frontend" target="_blank" style="color: var(--univalle-red); font-weight: 600;">github.com/lejabamo/smartauditoria_frontend</a></li>
+                            <li><strong>Backend API:</strong> Python Flask, SQLAlchemy, base de datos MariaDB y seguridad JWT. <br><a href="https://github.com/lejabamo/smartauditoria_backend" target="_blank" style="color: var(--univalle-red); font-weight: 600;">github.com/lejabamo/smartauditoria_backend</a></li>
+                        </ul>
+                    </div>
+                    <div class="card-box">
+                        <h4><i data-lucide="cpu"></i> Motor Inteligente & Seguridad</h4>
+                        <ul>
+                            <li><strong>Engine IA (RAG):</strong> FastAPI, pipeline de recuperación contextual y catálogo ISO 27002. <br><a href="https://github.com/lejabamo/smartauditoria_engine" target="_blank" style="color: var(--univalle-red); font-weight: 600;">github.com/lejabamo/smartauditoria_engine</a></li>
+                            <li><strong>Infraestructura:</strong> Proxy inverso Nginx con SSL Let's Encrypt sobre servidor VPS OVH Cloud.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: LAS CINCO ÉPICAS -->
+        <div class="slide">
+            <span class="slide-tag">Alcance Funcional</span>
+            <h2 class="title">Las Cinco Épicas del <span>Proyecto</span></h2>
+            <div class="content">
+                <div class="grid-2">
+                    <div class="card-box">
+                        <h4>1. Gestión de Activos</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">Inventario, categorización (Software, Hardware, Datos) y cálculo de criticidad CIA según lineamientos DAFP V7.</p>
+                        <h4 style="margin-top: 14px;">2. Matriz de Riesgos ISO</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">Cálculo automático de riesgo inherente y residual (Probabilidad × Impacto) con mapa de calor 5x5 (ISO 27005).</p>
+                    </div>
+                    <div class="card-box">
+                        <h4>3. Motor Inteligente RAG</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">Recuperación aumentada por contexto para sugerencia asistida de controles ISO/IEC 27002:2022.</p>
+                        <h4 style="margin-top: 14px;">4. Dashboard y 5. Despliegue</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">Monitoreo de criticidad institucional, exportación de reportes y despliegue robusto con HTTPS en la nube.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: METODOLOGÍA Y JIRA -->
+        <div class="slide">
+            <span class="slide-tag">Gestión del Proyecto</span>
+            <h2 class="title">Product Backlog en <span>Jira Software</span></h2>
+            <div class="content">
+                <div class="card-box" style="margin-bottom: 16px; border-left: 4px solid var(--blue);">
+                    <p style="font-size: 0.95rem;">
+                        <strong>Seguimiento en Tablero Jira:</strong> El backlog se gestiona en Jira Software bajo el proyecto <strong>SCRUM</strong> (<a href="https://smartauditoria.atlassian.net/jira/software/projects/SCRUM/summary" target="_blank" style="color: var(--blue); font-weight: 600;">smartauditoria.atlassian.net/.../summary</a>), con historias estructuradas desde SCRUM-12 hasta SCRUM-35.
+                    </p>
+                    <p style="font-size: 0.85rem; color: var(--text-subtle); margin-top: 6px;">
+                        * <em>Nota técnica:</em> El proyecto se administra directamente en Jira; no se cuenta con integración automática por webhooks hacia GitHub en esta fase.
+                    </p>
+                </div>
+                <div class="grid-2">
+                    <div class="card-box">
+                        <h4><i data-lucide="check-circle"></i> Historias Clave Implementadas</h4>
+                        <ul>
+                            <li><strong>SCRUM-12:</strong> Ingesta y sincronización de inventario.</li>
+                            <li><strong>SCRUM-13:</strong> Clasificación MSIP/MIPG de activos.</li>
+                            <li><strong>SCRUM-14:</strong> Roles de usuario y permisos RBAC.</li>
+                            <li><strong>SCRUM-18:</strong> Wizard interactivo de evaluación.</li>
+                        </ul>
+                    </div>
+                    <div class="card-box">
+                        <h4><i data-lucide="clock"></i> Épica de Investigación (Tesis)</h4>
+                        <ul>
+                            <li><strong>SCRUM-15:</strong> Base vectorial histórica con ChromaDB.</li>
+                            <li><strong>SCRUM-16:</strong> Motor de sugerencias RAG ISO 27002.</li>
+                            <li><strong>SCRUM-17:</strong> Generación asistida de justificaciones.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: ESTADO REAL -->
+        <div class="slide">
+            <span class="slide-tag">Verificación Técnica</span>
+            <h2 class="title">Estado Real de <span>Implementación</span></h2>
+            <div class="content">
+                <div class="grid-2">
+                    <div class="card-box">
+                        <h4><span class="status-badge badge-done">Terminado y Operativo</span></h4>
+                        <ul>
+                            <li><strong>Release 1.0:</strong> Backend Flask API, modelo relacional MariaDB, sistema de autenticación JWT y roles RBAC.</li>
+                            <li><strong>Release 2.0:</strong> Frontend SPA en React, Wizard guiado y despliegue cloud en producción.</li>
+                            <li><strong>Infraestructura:</strong> Dominio institucional con certificado SSL/TLS activo.</li>
+                        </ul>
+                    </div>
+                    <div class="card-box">
+                        <h4><span class="status-badge badge-dev">En Desarrollo / Foco de Tesis</span></h4>
+                        <ul>
+                            <li><strong>Motor RAG v2:</strong> Persistencia en ChromaDB y embeddings semánticos para los 93 controles ISO 27002.</li>
+                            <li><strong>Evaluación RAGAS:</strong> Marco de métricas cuantitativas (Fidelidad, Relevancia) para la sustentación.</li>
+                            <li><strong>Conector GLPI:</strong> Sincronización continua de tickets y activos vía API.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: EVIDENCIAS TÉCNICAS -->
+        <div class="slide">
+            <span class="slide-tag">Sustento Empírico</span>
+            <h2 class="title">Evidencias Técnicas <span>Demostrables</span></h2>
+            <div class="content">
+                <div class="grid-2">
+                    <div class="card-box">
+                        <h4><i data-lucide="server"></i> Plataforma en Producción (Cloud VPS)</h4>
+                        <p style="font-size: 0.95rem;">
+                            <strong>URL:</strong> <a href="https://riesgosti.tics.sedcauca.gov.co/login" target="_blank" style="color: var(--univalle-red); font-weight: 600;">riesgosti.tics.sedcauca.gov.co</a>
+                        </p>
+                        <ul style="margin-top: 10px;">
+                            <li>Servidor VPS OVH Cloud (IP 51.79.35.88).</li>
+                            <li>Contenedores Docker (Frontend Nginx, Backend Gunicorn, MariaDB).</li>
+                            <li>Certificado SSL/TLS emitido por Let's Encrypt.</li>
+                        </ul>
+                    </div>
+                    <div class="card-box">
+                        <h4><i data-lucide="check-square"></i> Pruebas y Trazabilidad</h4>
+                        <ul>
+                            <li><strong>Prueba E2E:</strong> Script automatizado <code>test_production.py</code> con validación de endpoints y sesión.</li>
+                            <li><strong>Pytest:</strong> Batería de pruebas unitarias sobre lógica de criticidad y autenticación.</li>
+                            <li><strong>GitHub Pages:</strong> Portafolio documental público en <code>lejabamo.github.io/smartauditoria_frontend</code>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: CONCLUSIONES Y PRÓXIMOS PASOS -->
+        <div class="slide">
+            <span class="slide-tag">Cierre Académico</span>
+            <h2 class="title">Limitaciones y <span>Próximos Pasos</span></h2>
+            <div class="content">
+                <div class="grid-2">
+                    <div class="card-box">
+                        <h4><i data-lucide="alert-circle"></i> Limitaciones Técnicas Actuales</h4>
+                        <ul>
+                            <li>La base de conocimiento RAG actual opera en modo estructurado; la base vectorial requiere persistencia dedicada.</li>
+                            <li>La ingesta de activos opera mediante carga estructurada; la integración GLPI requiere configuración de webhooks.</li>
+                        </ul>
+                    </div>
+                    <div class="card-box">
+                        <h4><i data-lucide="arrow-right-circle"></i> Próximos Pasos para la Tesis</h4>
+                        <ul>
+                            <li>Despliegue del cluster de ChromaDB con embeddings densos en servidor dedicado.</li>
+                            <li>Batería formal de evaluación cuantitativa con framework RAGAS.</li>
+                            <li>Automatización del pipeline de CI/CD vía GitHub Actions para despliegue sin intervención manual.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="btn-ctrl" id="prevBtn" onclick="prevSlide()" disabled>← Anterior</button>
+            <button class="btn-ctrl" id="nextBtn" onclick="nextSlide()">Siguiente →</button>
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar" id="progress"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+        const counter = document.getElementById('counter');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function updateProgress() {
+            const total = slides.length;
+            const percent = ((currentSlide + 1) / total) * 100;
+            progressBar.style.width = percent + '%';
+            counter.innerText = (currentSlide + 1) + ' / ' + total;
+            prevBtn.disabled = (currentSlide === 0);
+            nextBtn.disabled = (currentSlide === total - 1);
+        }
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            updateProgress();
+        }
+
+        function nextSlide() {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            }
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const pres = document.querySelector('.presentation');
+        pres.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+        pres.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            if (touchEndX < touchStartX - 40) nextSlide();
+            if (touchEndX > touchStartX + 40) prevSlide();
+        }, { passive: true });
+
+        if (typeof lucide !== 'undefined' && lucide.createIcons) {
+            lucide.createIcons();
+        }
+        updateProgress();
+    </script>
+</body>
+</html>

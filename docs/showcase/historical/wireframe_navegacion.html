@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartAuditorIA - Archivo Histórico</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <style>
+      .historical-content-wrapper { padding: 2rem; background-color: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin: 2rem auto; overflow-x: auto; position: relative;}
+      .back-btn { display: inline-block; margin-bottom: 2rem; color: var(--univalle-red); text-decoration: none; font-weight: 600; border: 1px solid var(--univalle-red); padding: 0.5rem 1rem; border-radius: 4px; transition: all 0.2s;}
+      .back-btn:hover { background-color: var(--univalle-red); color: white; }
+      .historical-content-wrapper h1, .historical-content-wrapper h2 { margin-top: 0; }
+    </style>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+        :root {
+            --primary-blue: #0F1D40; /* Improved High Contrast Navy */
+            --primary-blue-dark: #09122B;
+            --accent-vibrant: #3B82F6;
+            --accent-yellow: #FACC15;
+            --bg-light: #F8FAFC;
+            --text-main: #0F1D40;
+            --text-gray: #475569;
+            --white: #FFFFFF;
+            --sidebar-gradient: linear-gradient(180deg, #0F1D40 0%, #1E3A8A 100%);
+            --bg-gradient: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --border-color: #E2E8F0;
+            --sidebar-width: 280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-light);
+            color: #374151;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6, .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Sidebar Styles */
+        aside {
+            width: var(--sidebar-width);
+            background: var(--sidebar-gradient);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            color: var(--white);
+            z-index: 100;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-section {
+            padding: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-box {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--accent-yellow) 0%, #FDE047 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(250, 204, 21, 0.3);
+            flex-shrink: 0;
+        }
+
+        .logo-box i {
+            color: var(--primary-blue);
+            width: 24px;
+            height: 24px;
+        }
+
+        .logo-text h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .logo-text span {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        nav {
+            flex: 1;
+            padding: 24px 16px;
+        }
+
+        .nav-list {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            gap: 16px;
+            font-weight: 400;
+            font-size: 0.95rem;
+            border: 1px solid transparent;
+        }
+
+        .nav-link i {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(6px);
+            color: var(--white);
+        }
+
+        .nav-link:hover i {
+            opacity: 1;
+        }
+
+        .nav-link.active {
+            background: rgba(250, 204, 21, 0.15);
+            border: 1px solid rgba(250, 204, 21, 0.3);
+            color: var(--white);
+            font-weight: 500;
+        }
+
+        .nav-link.active i {
+            color: var(--accent-yellow);
+            opacity: 1;
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent-yellow) 0%, #FDE047 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-blue);
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .user-info h4 {
+            font-size: 0.875rem;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 140px;
+        }
+
+        .badge {
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            background: rgba(250, 204, 21, 0.2);
+            color: var(--accent-yellow);
+            border: 1px solid rgba(250, 204, 21, 0.3);
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Main Content Styles */
+        main {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            height: 80px;
+            background: var(--white);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+            position: sticky;
+            top: 0;
+            z-index: 90;
+            justify-content: space-between;
+        }
+
+        .header-title h2 {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .header-title p {
+            font-size: 0.875rem;
+            color: var(--text-gray);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .header-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-right: 24px;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .avatar-main {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #3B82F6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .profile-text {
+            text-align: right;
+        }
+
+        .profile-text h4 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .profile-text span {
+            font-size: 0.75rem;
+            color: var(--text-gray);
+        }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: none;
+            background: transparent;
+            color: var(--text-gray);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .btn-icon:hover {
+            background: #F3F4F6;
+            color: var(--primary-blue);
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 40px;
+            background: var(--bg-gradient);
+            flex: 1;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(255, 255, 255, 1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-icon.blue { background: rgba(30, 58, 138, 0.1); color: var(--primary-blue); }
+        .stat-icon.green { background: rgba(16, 185, 129, 0.1); color: #10B981; }
+        .stat-icon.yellow { background: rgba(245, 158, 11, 0.1); color: #F59E0B; }
+        .stat-icon.red { background: rgba(239, 68, 68, 0.1); color: #EF4444; }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-gray);
+            margin-top: 4px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            padding: 24px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        .placeholder-chart {
+            width: 100%;
+            height: 280px;
+            background: #F9FAFB;
+            border: 2px dashed #E5E7EB;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9CA3AF;
+            font-size: 0.875rem;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .placeholder-chart i {
+            width: 32px;
+            height: 32px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Glassmorphism Effect for certain elements */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+    </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="brand">
+                <img src="logoUV_Oficial_Rojo.jpg" alt="Universidad del Valle" class="univalle-logo">
+                <div class="logo-text">Smart<span>AuditorIA</span> <span style="font-size: 1.1rem; color: #666; font-weight: 500; text-transform: none; border-left: 2px solid #ccc; padding-left: 10px; margin-left: 10px;">Archivo Histórico</span></div>
+            </div>
+            <nav class="nav-links">
+                <a href="../index.html">Volver al Inicio</a>
+            </nav>
+        </div>
+    </header>
+    <main class="container">
+      <div style="margin-top: 2rem;">
+        <a href="../index.html" class="back-btn">&larr; Volver al Hub Principal</a>
+      </div>
+      <div class="historical-content-wrapper">
+
+    <aside>
+        <div class="logo-section">
+            <div class="logo-box">
+                <i data-lucide="shield"></i>
+            </div>
+            <div class="logo-text">
+                <h1>SGSRI</h1>
+                <span>Sistema de Gestión</span>
+            </div>
+        </div>
+
+        <nav>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i data-lucide="shield-check"></i>
+                        <span>Activos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i data-lucide="users"></i>
+                        <span>Usuarios</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i data-lucide="bar-chart-3"></i>
+                        <span>Riesgos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="wireframe_wizard.html" class="nav-link">
+                        <i data-lucide="sparkles"></i>
+                        <span>Evaluación IA</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i data-lucide="file-text"></i>
+                        <span>Reportes</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-pill">
+                <div class="avatar">L</div>
+                <div class="user-info">
+                    <h4>Leonardo Bastidas</h4>
+                    <span class="badge">Administrador</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main>
+        <header>
+            <div class="header-title">
+                <h2>Dashboard Principal</h2>
+                <p>Bienvenido al Sistema de Gestión de Riesgos de Información</p>
+            </div>
+
+            <div class="header-actions">
+                <div class="header-profile">
+                    <div class="profile-text">
+                        <h4>Leonardo Bastidas</h4>
+                        <span>Gestor de Seguridad</span>
+                    </div>
+                    <div class="avatar-main">L</div>
+                </div>
+                <button class="btn-icon">
+                    <i data-lucide="settings"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <div class="stats-grid">
+                <div class="stat-card animate-fade-in" style="animation-delay: 0.1s;">
+                    <div class="stat-header">
+                        <div class="stat-icon blue">
+                            <i data-lucide="database"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">124</div>
+                    <div class="stat-label">Activos Registrados</div>
+                </div>
+                <div class="stat-card animate-fade-in" style="animation-delay: 0.2s;">
+                    <div class="stat-header">
+                        <div class="stat-icon green">
+                            <i data-lucide="check-circle"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">85%</div>
+                    <div class="stat-label">Cumplimiento ISO</div>
+                </div>
+                <div class="stat-card animate-fade-in" style="animation-delay: 0.3s;">
+                    <div class="stat-header">
+                        <div class="stat-icon yellow">
+                            <i data-lucide="alert-triangle"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Riesgos Críticos</div>
+                </div>
+                <div class="stat-card animate-fade-in" style="animation-delay: 0.4s;">
+                    <div class="stat-header">
+                        <div class="stat-icon red">
+                            <i data-lucide="activity"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">Incidentes Abiertos</div>
+                </div>
+            </div>
+
+            <div class="main-grid">
+                <div class="card animate-fade-in" style="animation-delay: 0.5s;">
+                    <div class="card-header">
+                        <h3 class="card-title">Matriz de Riesgos Inteligente</h3>
+                        <button class="btn-icon"><i data-lucide="more-vertical"></i></button>
+                    </div>
+                    <div class="placeholder-chart">
+                        <i data-lucide="grid"></i>
+                        <p>Visualización de Matriz de Calor 5x5</p>
+                    </div>
+                </div>
+                <div class="card animate-fade-in glass-card" style="animation-delay: 0.6s;">
+                    <div class="card-header">
+                        <h3 class="card-title">Sugerencias IA</h3>
+                    </div>
+                    <div class="placeholder-chart" style="background: rgba(250, 204, 21, 0.05); border-color: rgba(250, 204, 21, 0.2);">
+                        <i data-lucide="sparkles" style="color: var(--accent-yellow);"></i>
+                        <p style="text-align: center; padding: 0 20px;">El motor RAG sugiere revisar el activo "Servidor ERP" debido a nuevas normativas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Simple interactive simulation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href === '#') {
+                    e.preventDefault();
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update header title based on link text
+                    const text = this.querySelector('span').innerText;
+                    document.querySelector('.header-title h2').innerText = text;
+                }
+            });
+        });
+    </script>
+
+      </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p><strong>SmartAuditorIA</strong> &copy; 2026<br>
+            Trabajo Académico - Universidad del Valle<br>
+            <em>Documento de Archivo Histórico</em></p>
+        </div>
+    </footer>
+</body>
+</html>

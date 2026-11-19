@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hub Principal Vigente | SmartAuditorIA — Universidad del Valle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script src="app.js" defer></script>
+    <style>
+        .version-banner {
+            background: #111827;
+            color: #f9fafb;
+            font-size: 0.82rem;
+            padding: 0.55rem 0;
+            border-bottom: 1px solid #374151;
+        }
+        .version-banner .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .v-pill {
+            background: #cc0000;
+            color: #fff;
+            font-weight: 700;
+            padding: 0.15rem 0.55rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+        }
+        .subnav-bar {
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0.65rem 0;
+        }
+        .subnav-links {
+            display: flex;
+            gap: 0.65rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .subnav-links a {
+            text-decoration: none;
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: #334155;
+            padding: 0.35rem 0.7rem;
+            border-radius: 6px;
+            border: 1px solid transparent;
+        }
+        .subnav-links a.active, .subnav-links a:hover {
+            background: #ffffff;
+            color: #cc0000;
+            border-color: #cbd5e1;
+        }
+        .badge.partial { background-color: #fef3c7; color: #b45309; }
+        .badge.obs { background-color: #e0e7ff; color: #3730a3; }
+        .badge.future { background-color: #f3e8ff; color: #6b21a8; }
+        .badge.failed { background-color: #fee2e2; color: #b91c1c; }
+        .jira-table td, .jira-table th { font-size: 0.82rem; padding: 0.6rem 0.65rem; }
+        .jira-table a { color: #1d4ed8; font-weight: 600; text-decoration: none; }
+        .jira-table a:hover { text-decoration: underline; color: #cc0000; }
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .kpi-box {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--univalle-red);
+            border-radius: 8px;
+            padding: 1rem 1.15rem;
+        }
+        .kpi-box .num { font-size: 1.55rem; font-weight: 800; color: var(--univalle-dark); }
+        .kpi-box .lbl { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+        .slide-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-top: 4px solid #cc0000;
+            border-radius: 10px;
+            padding: 1.5rem 1.75rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.85rem;
+            padding-bottom: 0.65rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .slide-num {
+            background: #111827;
+            color: #ffffff;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 0.25rem 0.65rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        .slide-time {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+        }
+        .slide-card h3 {
+            font-size: 1.25rem;
+            color: #111827;
+            margin-bottom: 0.75rem;
+        }
+        .slide-card ul {
+            margin-left: 1.25rem;
+            margin-bottom: 1rem;
+            color: #374151;
+            font-size: 0.94rem;
+        }
+        .slide-card li { margin-bottom: 0.35rem; }
+        .evidence-bar {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 0.65rem 0.9rem;
+            font-size: 0.83rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.65rem;
+            align-items: center;
+        }
+        .evidence-bar a {
+            color: #1d4ed8;
+            font-weight: 600;
+            text-decoration: none;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 0.2rem 0.55rem;
+            border-radius: 4px;
+        }
+        .evidence-bar a:hover {
+            background: #dbeafe;
+            color: #1e3a8a;
+        }
+    </style>
+</head>
+<body>
+    <div class="version-banner">
+        <div class="container">
+            <div>
+                <span class="v-pill">VERSIÓN VIGENTE v3.2-Final-QC</span>
+                Sustentación Trabajo Integrador 2 (Sprints 1 a 7 + Backlog V4.0) — Ing. Leonardo Javier Bastidas Moreno
+            </div>
+            <div>
+                <a href="historical/index.html" style="color: #93c5fd; text-decoration: underline; font-weight: 600;">Ver Archivo Histórico Preservado (Sesiones 1–3) →</a>
+            </div>
+        </div>
+    </div>
+    <header>
+        <div class="container header-content">
+            <div class="brand">
+                <img src="logoUV_Oficial_Rojo.jpg" alt="Universidad del Valle" class="univalle-logo">
+                <div class="logo-text">Smart<span>AuditorIA</span></div>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html">Hub</a>
+                <a href="presentacion.html">Sustentación (15m)</a>
+                <a href="product_backlog.html">Backlog</a>
+                <a href="release_plan.html">Releases</a>
+                <a href="retrospectiva.html">Retrospectiva</a>
+                <a href="trazabilidad.html">Trazabilidad</a>
+            </nav>
+        </div>
+    </header>
+    <div class="subnav-bar">
+        <div class="container subnav-links">
+            <span style="font-size:0.78rem;font-weight:700;color:#64748b;">ENTREGABLES VIGENTES:</span>
+            <a href="index.html" class="active">1. Hub Principal</a>
+            <a href="presentacion.html" class="">2. Sustentación 15 Min (10 Slides)</a>
+            <a href="product_backlog.html" class="">3. Product Backlog (43 Issues)</a>
+            <a href="release_plan.html" class="">4. Release Plan (V1.0–V4.0)</a>
+            <a href="retrospectiva.html" class="">5. Retrospectiva (Sprints 1–7)</a>
+            <a href="trazabilidad.html" class="">6. Matriz Jira–GitHub–Pruebas</a>
+        </div>
+    </div>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>SmartAuditorIA (SGSRI)</h1>
+                <p>Hub Principal de Sustentación — Gobernanza y Auditoría Inteligente de Activos de Información y Riesgos TI (ISO/IEC 27001, 27002:2022, 27005 y DAFP V7 / MIPG).</p>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="kpi-row">
+                <div class="kpi-box"><div class="num">43 Issues</div><div class="lbl">6 Épicas / 28 Historias / 9 Tareas / 0 Subtareas (SCRUM-13 eliminado)</div></div>
+                <div class="kpi-box"><div class="num">207 SP</div><div class="lbl">189 SP Done (Sprints 1–7) + 18 SP Backlog V4.0</div></div>
+                <div class="kpi-box"><div class="num">111 Tests</div><div class="lbl">45 Backend + 35 Engine + 31 Frontend (100% Pass Local)</div></div>
+                <div class="kpi-box"><div class="num">P@3 = 13,3%</div><div class="lbl">Benchmark RAG Real: 32/93 Controles | p50=13,6ms | p95=161,7ms</div></div>
+                <div class="kpi-box"><div class="num">V2.0 / V3.0</div><div class="lbl">V2.0 (2.ª Versión Funcional) | V3.0 (Operativa hoy en VPS)</div></div>
+            </div>
+
+            <div class="evidence-bar" style="margin-bottom:2rem;">
+                <strong>Accesos Directos Verificados (HTTP 200):</strong>
+                <a href="https://smartauditoria.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog" target="_blank" rel="noopener">Tablero &amp; Backlog Jira Cloud</a>
+                <a href="https://smartauditoria.atlassian.net/jira/software/projects/SCRUM/boards/1/reports" target="_blank" rel="noopener">Sprint Reports Jira</a>
+                <a href="https://github.com/lejabamo/smartauditoria_backend" target="_blank" rel="noopener">Repo Backend</a>
+                <a href="https://github.com/lejabamo/smartauditoria_frontend" target="_blank" rel="noopener">Repo Frontend</a>
+                <a href="https://github.com/lejabamo/smartauditoria_engine" target="_blank" rel="noopener">Repo Engine IA</a>
+                <a href="https://riesgosti.tics.sedcauca.gov.co/login" target="_blank" rel="noopener">App Producción VPS (Login)</a>
+                <a href="https://riesgosti.tics.sedcauca.gov.co/api/health" target="_blank" rel="noopener">API Health VPS</a>
+            </div>
+
+            <h2 class="section-title">Entregables Navegables para la Sustentación de 15 Minutos</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <span class="badge code-found">Sustentación 15 Min</span>
+                    <h3><a href="presentacion.html" style="color:inherit;text-decoration:none;">1. Presentación de 10 Diapositivas (15 Minutos) →</a></h3>
+                    <p>Guion cronometrado de 10 diapositivas con enlaces directos desde cada slide hacia Jira Cloud, commits reales de GitHub, suites de prueba (111 tests locales), resultados del benchmark experimental RAG (<code>Precision@3 = 13,3%</code>, cobertura <code>32/93</code>) y decisiones técnicas derivadas.</p>
+                </div>
+                <div class="card">
+                    <span class="badge code-found">43 Issues / 207 SP</span>
+                    <h3><a href="product_backlog.html" style="color:inherit;text-decoration:none;">2. Product Backlog Conciliado →</a></h3>
+                    <p>Desglose completo de las 6 Épicas (<a href="https://smartauditoria.atlassian.net/browse/SCRUM-5" target="_blank" rel="noopener">SCRUM-5</a> a <a href="https://smartauditoria.atlassian.net/browse/SCRUM-9" target="_blank" rel="noopener">SCRUM-9</a> y <a href="https://smartauditoria.atlassian.net/browse/SCRUM-43" target="_blank" rel="noopener">SCRUM-43</a>), 28 Historias y 9 Tareas, diferenciando funcionalidades <strong>Aceptadas</strong>, <strong>Parciales</strong> y <strong>Pendientes (<code>TRAZABILIDAD PENDIENTE</code>)</strong>.</p>
+                </div>
+                <div class="card">
+                    <span class="badge code-found">V1.0 a V4.0-Backlog</span>
+                    <h3><a href="release_plan.html" style="color:inherit;text-decoration:none;">3. Release Plan y Sprints Reales →</a></h3>
+                    <p>Fechas históricas reales de cierre (<code>completeDate</code>), Sprint Goals extraídos por API REST, identificación de la <strong>2.ª versión funcional (<code>V2.0</code>)</strong> y del <strong>release operativo hoy en VPS (<code>V3.0</code>)</strong> con trazabilidad honesta de despliegue.</p>
+                </div>
+                <div class="card">
+                    <span class="badge code-found">Sprints 1 a 7</span>
+                    <h3><a href="retrospectiva.html" style="color:inherit;text-decoration:none;">4. Retrospectiva y 4 Acciones de Mejora →</a></h3>
+                    <p>Análisis crítico de métricas experimentales de IA, brechas de CI/CD y trazabilidad de las 4 acciones de mejora hacia <a href="https://smartauditoria.atlassian.net/browse/SCRUM-46" target="_blank" rel="noopener">SCRUM-46</a> (<code>HU-028</code>), <a href="https://smartauditoria.atlassian.net/browse/SCRUM-47" target="_blank" rel="noopener">SCRUM-47</a> (<code>HU-029</code>) y <a href="https://smartauditoria.atlassian.net/browse/SCRUM-48" target="_blank" rel="noopener">SCRUM-48</a> (<code>HU-030</code>).</p>
+                </div>
+                <div class="card">
+                    <span class="badge code-found">Auditoría Forense</span>
+                    <h3><a href="trazabilidad.html" style="color:inherit;text-decoration:none;">5. Matriz Jira ↔ GitHub ↔ Pruebas →</a></h3>
+                    <p>Tabla maestra navegable con enlaces verificados (<code>HTTP 200</code>) a cada ticket de Jira y a cada commit real en <code>backend</code>, <code>frontend</code> y <code>engine</code>, archivos de prueba ejecutados y estado DoD sin redondeos.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <section id="historico" style="background-color: var(--bg-card); padding: 3rem 0; border-top: 1px solid var(--border-color);">
+        <div class="container">
+            <h2 class="section-title">Archivo Histórico Preservado (10 Archivos Intactos)</h2>
+            <p style="margin-bottom: 1.5rem; color: var(--text-muted);">
+                Las versiones previas, presentaciones de corte intermedio y wireframes se conservan sin modificación en <code>historical/</code>:
+            </p>
+            <div class="historical-grid">
+                <a href="historical/index.html" class="historical-link">Hub Histórico (Corte Sprints 1–6)</a>
+                <a href="historical/20260320_Presentacion_SGSRI.html" class="historical-link">Presentación Histórica SGSRI (2026-03-20)</a>
+                <a href="historical/20260320_Retrospectiva_Ciclo.html" class="historical-link">Retrospectiva Histórica (Corte Sprints 1–6)</a>
+                <a href="historical/showcase_presentacion.html" class="historical-link">Showcase Inicial</a>
+                <a href="historical/wireframe_wizard.html" class="historical-link">Wireframe: Wizard UI</a>
+                <a href="historical/wireframe_rag_tecnico.html" class="historical-link">Wireframe: RAG Engine</a>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div class="container">
+            <p><strong>SmartAuditorIA (SGSRI) — Versión Vigente v3.2-Final-QC</strong> &copy; 2026<br>
+            Maestría en Computación para el Desarrollo de Aplicaciones Inteligentes — Universidad del Valle</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartAuditorIA - Archivo Histórico</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <style>
+      .historical-content-wrapper { padding: 2rem; background-color: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin: 2rem auto; overflow-x: auto; position: relative;}
+      .back-btn { display: inline-block; margin-bottom: 2rem; color: var(--univalle-red); text-decoration: none; font-weight: 600; border: 1px solid var(--univalle-red); padding: 0.5rem 1rem; border-radius: 4px; transition: all 0.2s;}
+      .back-btn:hover { background-color: var(--univalle-red); color: white; }
+      .historical-content-wrapper h1, .historical-content-wrapper h2 { margin-top: 0; }
+    </style>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+        :root {
+            --primary-blue: #0F1D40; /* High Contrast Navy */
+            --primary-blue-light: #3B82F6;
+            --accent-yellow: #FACC15;
+            --bg-light: #F8FAFC;
+            --white: #FFFFFF;
+            --text-main: #0F1D40;
+            --text-gray: #475569;
+            --border-color: #E2E8F0;
+            --sidebar-width: 280px;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-light);
+            color: #374151;
+            display: flex;
+            min-height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #F9FAFB 0%, #E5E7EB 100%);
+        }
+
+        h1, h2, h3, h4, .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Sidebar Styles */
+        aside {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, #0F1D40 0%, #1E40AF 100%);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: var(--white);
+            flex-shrink: 0;
+        }
+
+        .logo-section {
+            padding: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-box {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-yellow) 0%, #FDE047 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-blue);
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 14px 24px;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            gap: 12px;
+            font-size: 0.9rem;
+        }
+
+        .nav-link.active {
+            color: var(--white);
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--accent-yellow);
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            overflow-y: auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .wizard-header h2 {
+            font-size: 1.75rem;
+            color: var(--primary-blue);
+            font-weight: 700;
+        }
+
+        .wizard-header p {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Stepper */
+        .stepper-container {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin: 0 40px;
+        }
+
+        .stepper-line {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #D1D5DB;
+            z-index: 1;
+        }
+
+        .stepper-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: var(--primary-blue-light);
+            width: 25%;
+            transition: width 0.4s ease;
+        }
+
+        .step {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 80px;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 2px solid #D1D5DB;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #9CA3AF;
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-circle {
+            border-color: var(--primary-blue-light);
+            background: var(--primary-blue-light);
+            color: var(--white);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .step.completed .step-circle {
+            background: var(--success);
+            border-color: var(--success);
+            color: var(--white);
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-gray);
+        }
+
+        .step.active .step-label { color: var(--primary-blue); }
+
+        /* Wizard Cards */
+        .wizard-content {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 32px;
+        }
+
+        .content-card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 12px 40px rgba(30, 58, 138, 0.08);
+            min-height: 520px;
+            display: flex;
+            flex-direction: column;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .card-header {
+            margin-bottom: 32px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+        }
+
+        .card-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--primary-blue);
+            font-size: 1.5rem;
+        }
+
+        /* Form Elements */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+        .input-group { margin-bottom: 24px; }
+        .label { display: block; font-size: 0.875rem; font-weight: 600; color: #4B5563; margin-bottom: 8px; }
+        .input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1.5px solid #E5E7EB;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+        .input:focus { border-color: var(--primary-blue-light); outline: none; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
+        
+        /* Specialized UI Components */
+        .risk-badge {
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+        .badge-red { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid var(--danger); }
+        
+        /* AI Sidebar */
+        .ai-sidebar {
+            background: rgba(30, 58, 138, 0.04);
+            border-radius: 24px;
+            padding: 24px;
+            border: 1px solid rgba(30, 58, 138, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .ai-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            font-size: 1rem;
+        }
+
+        .ai-title i { color: var(--accent-yellow); animation: spin-ai 3s linear infinite; }
+        @keyframes spin-ai { to { transform: rotate(360deg); } }
+
+        .suggestion-card {
+            background: var(--white);
+            padding: 16px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--accent-yellow);
+            animation: fadeIn 0.4s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .suggestion-card h4 { font-size: 0.85rem; color: var(--primary-blue); margin-bottom: 4px; }
+        .suggestion-card p { font-size: 0.7rem; color: var(--text-gray); line-height: 1.4; }
+
+        /* Footer Buttons */
+        .wizard-footer {
+            margin-top: auto;
+            padding-top: 24px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary { background: #E5E7EB; color: #4B5563; }
+        .btn-primary { background: var(--primary-blue); color: var(--white); box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(30, 58, 138, 0.3); }
+
+        /* Step specifics */
+        .control-list { list-style: none; }
+        .control-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: #F9FAFB;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border: 1px solid #E5E7EB;
+            gap: 12px;
+        }
+        .control-item input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
+        
+        .matrix-preview {
+            width: 100px;
+            height: 100px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 2px;
+        }
+        .cell { background: #E5E7EB; border-radius: 2px; }
+        .cell.active { background: var(--danger); box-shadow: 0 0 10px var(--danger); }
+
+        /* Breadcrumb Nav */
+        .breadcrumb-nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .breadcrumb-link {
+            text-decoration: none;
+            color: var(--primary-blue-light);
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .breadcrumb-link:hover { text-decoration: underline; }
+        .breadcrumb-sep { width: 14px; height: 14px; color: var(--text-gray); }
+        .breadcrumb-current { font-size: 0.85rem; color: var(--text-gray); font-weight: 500; }
+    </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="brand">
+                <img src="logoUV_Oficial_Rojo.jpg" alt="Universidad del Valle" class="univalle-logo">
+                <div class="logo-text">Smart<span>AuditorIA</span> <span style="font-size: 1.1rem; color: #666; font-weight: 500; text-transform: none; border-left: 2px solid #ccc; padding-left: 10px; margin-left: 10px;">Archivo Histórico</span></div>
+            </div>
+            <nav class="nav-links">
+                <a href="../index.html">Volver al Inicio</a>
+            </nav>
+        </div>
+    </header>
+    <main class="container">
+      <div style="margin-top: 2rem;">
+        <a href="../index.html" class="back-btn">&larr; Volver al Hub Principal</a>
+      </div>
+      <div class="historical-content-wrapper">
+
+    <aside>
+        <div class="logo-section">
+            <div class="logo-box"><i data-lucide="shield"></i></div>
+            <div>
+                <h4 style="font-weight: 700;">SGSRI</h4>
+                <p style="font-size: 0.65rem; opacity: 0.7;">Smart Auditor IA</p>
+            </div>
+        </div>
+        <nav style="margin-top: 24px;">
+            <a href="#" class="nav-link"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="#" class="nav-link active"><i data-lucide="sparkles"></i> Evaluación IA</a>
+            <a href="#" class="nav-link"><i data-lucide="database"></i> Activos</a>
+            <a href="#" class="nav-link"><i data-lucide="shield-alert"></i> Riesgos</a>
+            <a href="#" class="nav-link"><i data-lucide="file-bar-chart"></i> Reportes</a>
+        </nav>
+    </aside>
+
+    <main>
+        <nav class="breadcrumb-nav">
+            <a href="index.html" class="breadcrumb-link"><i data-lucide="home"></i> Presentación</a>
+            <i data-lucide="chevron-right" class="breadcrumb-sep"></i>
+            <span class="breadcrumb-current">Wizard de Evaluación</span>
+        </nav>
+
+        <header>
+            <div class="wizard-header">
+                <h2>Wizard de Evaluación Inteligente</h2>
+                <p>Análisis de riesgo detallado para: <strong>Servidor de Base de Datos ERP</strong></p>
+            </div>
+            <div style="background: rgba(16, 185, 129, 0.1); color: var(--success); padding: 8px 20px; border-radius: 50px; font-weight: 700; font-size: 0.8rem; display: flex; align-items: center; gap: 8px;">
+                <span style="width: 8px; height: 8px; background: var(--success); border-radius: 50%;"></span>
+                RAG Engine: Ready
+            </div>
+        </header>
+
+        <div class="stepper-container">
+            <div class="stepper-line"><div class="stepper-progress" id="progress-bar"></div></div>
+            <div class="step completed" data-step="1">
+                <div class="step-circle"><i data-lucide="check" style="width: 18px;"></i></div>
+                <div class="step-label">Activo</div>
+            </div>
+            <div class="step active" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Identificación</div>
+            </div>
+            <div class="step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Evaluación</div>
+            </div>
+            <div class="step" data-step="4">
+                <div class="step-circle">4</div>
+                <div class="step-label">Controles</div>
+            </div>
+            <div class="step" data-step="5">
+                <div class="step-circle">5</div>
+                <div class="step-label">Plan Acción</div>
+            </div>
+        </div>
+
+        <div class="wizard-content">
+            <div class="content-card" id="step-content">
+                <!-- Content will be injected by JS -->
+            </div>
+
+            <div class="ai-sidebar" id="ai-sidebar">
+                <div class="ai-title"><i data-lucide="sparkles"></i> Sugerencias AuditorIA</div>
+                <div id="ai-suggestions-list">
+                    <!-- Suggestions will be injected by JS -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        let currentStep = 2; // Starting at ID step for demo
+        const totalSteps = 5;
+
+        const wizardData = {
+            1: { title: "Selección de Activo", icon: "database" },
+            2: { 
+                title: "Identificación del Riesgo", 
+                icon: "shield-alert",
+                content: `
+                    <div class="card-header">
+                        <h3><i data-lucide="shield-alert"></i> Paso 2: Identificación</h3>
+                    </div>
+                    <div class="input-group">
+                        <label class="label">Amenaza Detectada</label>
+                        <select class="input">
+                            <option>Ataque de Ransomware / Malware</option>
+                            <option>Acceso Externo no Autorizado</option>
+                            <option>Falla El├®ctrica Prolongada</option>
+                        </select>
+                    </div>
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label class="label">Vulnerabilidad</label>
+                            <input type="text" class="input" value="S.O. sin parches críticos (CVE-2023-XX)">
+                        </div>
+                        <div class="input-group">
+                            <label class="label">Categoría</label>
+                            <input type="text" class="input" value="Tecnológica / Ciberseguridad" disabled>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label class="label">Escenario de Riesgo</label>
+                        <textarea class="input" style="height: 100px;">Un atacante aprovecha la vulnerabilidad del sistema operativo para cifrar los datos del ERP, deteniendo la operación core.</textarea>
+                    </div>
+                `,
+                suggestions: [
+                    { h: "Riesgos Similares", p: "Activos tipo 'Servidor' en la misma red han reportado intentos de fuerza bruta recientemente." },
+                    { h: "ISO 27005 Contexto", p: "La amenaza de Ransomware se clasifica como 'Alta' en el sector financiero este trimestre." }
+                ]
+            },
+            3: {
+                title: "Evaluación de Riesgo Inherente",
+                icon: "bar-chart-3",
+                content: `
+                    <div class="card-header">
+                        <h3><i data-lucide="bar-chart-3"></i> Paso 3: Evaluación</h3>
+                    </div>
+                    <div class="form-grid" style="grid-template-columns: 2fr 1fr;">
+                        <div>
+                            <div class="input-group">
+                                <label class="label">Probabilidad de Ocurrencia (Inherente)</label>
+                                <select class="input">
+                                    <option>Casi Seguro (Frecuente)</option>
+                                    <option selected>Probable</option>
+                                    <option>Posible</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label class="label">Impacto en el Negocio</label>
+                                <select class="input">
+                                    <option selected>Catastrófico (Extremo)</option>
+                                    <option>Mayor</option>
+                                    <option>Moderado</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: #FFF7F7; border-radius: 20px; border: 1px solid #FEE2E2;">
+                            <span class="label" style="margin-bottom: 12px;">Nivel Riesgo</span>
+                            <div class="risk-badge badge-red">CR├ìTICO (25)</div>
+                            <div class="matrix-preview" style="margin-top: 16px;">
+                                ${Array(24).fill('<div class="cell"></div>').join('')}
+                                <div class="cell active"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label class="label">Justificación del Cálculo</label>
+                        <textarea class="input" style="height: 80px;">Dada la exposición del servidor y la falta de parches, la probabilidad es alta. El impacto es total por ser el núcleo operativo.</textarea>
+                    </div>
+                `,
+                suggestions: [
+                    { h: "Cálculo Inteligente", p: "La IA sugiere 'Probabilidad: Alta' debido a que el servidor no ha sido reiniciado en 120 días." },
+                    { h: "Impacto Financiero", p: "P├®rdida estimada: $450 USD por minuto de inactividad operativa." }
+                ]
+            },
+            4: {
+                title: "Tratamiento y Controles",
+                icon: "shield-check",
+                content: `
+                    <div class="card-header">
+                        <h3><i data-lucide="shield-check"></i> Paso 4: Controles</h3>
+                    </div>
+                    <p class="label">Controles Recomendados por ISO 27002:</p>
+                    <ul class="control-list">
+                        <li class="control-item">
+                            <input type="checkbox" checked>
+                            <div>
+                                <h4 style="font-size: 0.9rem;">A.12.6.1 Gestión de Vulnerabilidades T├®cnicas</h4>
+                                <p style="font-size: 0.7rem; color: var(--text-gray);">Definir proceso de parcheo mensual obligatorio.</p>
+                            </div>
+                        </li>
+                        <li class="control-item">
+                            <input type="checkbox" checked>
+                            <div>
+                                <h4 style="font-size: 0.9rem;">A.9.4.2 Procedimientos de Inicio de Sesión Seguro</h4>
+                                <p style="font-size: 0.7rem; color: var(--text-gray);">Implementación de MFA para administración remota.</p>
+                            </div>
+                        </li>
+                        <li class="control-item">
+                            <input type="checkbox">
+                            <div>
+                                <h4 style="font-size: 0.9rem;">A.18.1.5 Controles Criptográficos</h4>
+                                <p style="font-size: 0.7rem; color: var(--text-gray);">Cifrado de datos en reposo (AES-256).</p>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="input-group" style="margin-top: 16px;">
+                        <label class="label">Eficacia Estimada de Controles (%)</label>
+                        <input type="range" class="input" min="0" max="100" value="85">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-gray); margin-top: 4px;">
+                            <span>0%</span><span>Eficacia Final: 85%</span><span>100%</span>
+                        </div>
+                    </div>
+                `,
+                suggestions: [
+                    { h: "Optimización de Controles", p: "La configuración de parches automáticos reduciría el riesgo un 70% adicional." },
+                    { h: "Referencia Marco Legal", p: "Ley 1273 - El no implementar controles mínimos puede acarrear sanciones de cumplimiento." }
+                ]
+            },
+            5: {
+                title: "Plan de Acción y Tratamiento",
+                icon: "calendar-check",
+                content: `
+                    <div class="card-header">
+                        <h3><i data-lucide="calendar-check"></i> Paso 5: Plan de Acción</h3>
+                    </div>
+                    <div class="input-group">
+                        <label class="label">Opción de Tratamiento</label>
+                        <div style="display: flex; gap: 12px;">
+                            <button class="btn btn-primary" style="padding: 8px 16px; font-size: 0.8rem;">Mitigar</button>
+                            <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.8rem; border: 1px solid #E5E7EB; background: white;">Transferir</button>
+                            <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.8rem; border: 1px solid #E5E7EB; background: white;">Evitar</button>
+                        </div>
+                    </div>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                        <tr style="border-bottom: 2px solid #E5E7EB; text-align: left;">
+                            <th style="padding: 12px;">Acción</th>
+                            <th style="padding: 12px;">Responsable</th>
+                            <th style="padding: 12px;">Plazo</th>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #F3F4F6;">
+                            <td style="padding: 12px;">Actualización de parches críticos OS</td>
+                            <td style="padding: 12px;">TI Infrastructure</td>
+                            <td style="padding: 12px;">48 Horas</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #F3F4F6;">
+                            <td style="padding: 12px;">Despliegue de MFA Admin</td>
+                            <td style="padding: 12px;">Seguridad Info.</td>
+                            <td style="padding: 12px;">7 Días</td>
+                        </tr>
+                    </table>
+                    <div style="margin-top: 24px; padding: 16px; background: rgba(16, 185, 129, 0.05); border-radius: 12px; border: 1px dashed var(--success);">
+                        <p style="color: var(--success); font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px;">
+                            <i data-lucide="info" style="width: 16px;"></i> Riesgo Residual Estimado: BAJO (3)
+                        </p>
+                    </div>
+                `,
+                suggestions: [
+                    { h: "Resumen de Acción", p: "El plan propuesto cumple al 100% con los requisitos de la auditoría externa." },
+                    { h: "Próximo Paso", p: "Exporta el informe en PDF para aprobación del comit├® de riesgos." }
+                ]
+            }
+        };
+
+        function renderStep(step) {
+            const data = wizardData[step];
+            const contentDiv = document.getElementById('step-content');
+            const aiList = document.getElementById('ai-suggestions-list');
+            const progressBar = document.getElementById('progress-bar');
+            
+            // Progress Bar
+            progressBar.style.width = `${((step - 1) / (totalSteps - 1)) * 100}%`;
+
+            // Content
+            contentDiv.innerHTML = data.content + `
+                <div class="wizard-footer">
+                    <button class="btn btn-secondary" onclick="prevStep()" ${step === 2 ? 'disabled' : ''}>
+                        <i data-lucide="chevron-left"></i> Anterior
+                    </button>
+                    <button class="btn btn-primary" onclick="nextStep()">
+                        ${step === 5 ? 'Finalizar Evaluación <i data-lucide="check-circle"></i>' : 'Siguiente Paso <i data-lucide="chevron-right"></i>'}
+                    </button>
+                </div>
+            `;
+
+            // Suggestions
+            aiList.innerHTML = data.suggestions.map(s => `
+                <div class="suggestion-card">
+                    <h4>${s.h}</h4>
+                    <p>${s.p}</p>
+                </div>
+            `).join('');
+
+            // Steps UI
+            document.querySelectorAll('.step').forEach(s => {
+                const sNum = parseInt(s.getAttribute('data-step'));
+                s.classList.remove('active', 'completed');
+                if (sNum === step) s.classList.add('active');
+                if (sNum < step) s.classList.add('completed');
+            });
+
+            lucide.createIcons();
+        }
+
+        window.nextStep = () => {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                renderStep(currentStep);
+            } else {
+                if(confirm('¡Evaluación Finalizada Exitosamente!\n\nSe ha generado un registro para el Servidor ERP.\n¿Deseas volver a la presentación principal?')) {
+                    window.location.href = 'index.html#demo';
+                }
+            }
+        };
+
+        window.prevStep = () => {
+            if (currentStep > 2) {
+                currentStep--;
+                renderStep(currentStep);
+            }
+        };
+
+        renderStep(currentStep);
+    </script>
+
+      </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p><strong>SmartAuditorIA</strong> &copy; 2026<br>
+            Trabajo Académico - Universidad del Valle<br>
+            <em>Documento de Archivo Histórico</em></p>
+        </div>
+    </footer>
+</body>
+</html>

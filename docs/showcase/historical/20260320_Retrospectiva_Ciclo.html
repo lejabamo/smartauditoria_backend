@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retrospectiva SGSRI - SmartAuditorIA | Universidad del Valle</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --univalle-red: #aa1916;
+            --univalle-red-dark: #881311;
+            --univalle-red-light: #fef2f2;
+            --univalle-red-border: #fecaca;
+            --dark: #111827;
+            --dark-secondary: #1f2937;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+            --text-subtle: #6b7280;
+            --bg-page: #f9fafb;
+            --bg-card: #ffffff;
+            --border: #e5e7eb;
+            --border-hover: #d1d5db;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --blue: #2563eb;
+            --blue-light: #eff6ff;
+            --green: #16a34a;
+            --green-light: #f0fdf4;
+            --amber: #d97706;
+            --amber-light: #fffbeb;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 45px 50px;
+            box-shadow: var(--shadow);
+        }
+
+        /* Top Bar */
+        .top-brand {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .brand-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .univalle-logo {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .brand-text h1 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--dark);
+            line-height: 1.2;
+        }
+
+        .brand-text h1 span {
+            color: var(--univalle-red);
+        }
+
+        .brand-text p {
+            font-size: 0.75rem;
+            color: var(--text-subtle);
+        }
+
+        /* Breadcrumb Navigation */
+        nav.breadcrumb-nav {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        nav.breadcrumb-nav a {
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 600;
+            color: var(--text-muted);
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        nav.breadcrumb-nav a:hover {
+            color: var(--univalle-red);
+            background: var(--univalle-red-light);
+        }
+
+        .nav-current {
+            color: var(--univalle-red);
+            font-weight: 700;
+            background: var(--univalle-red-light);
+            border: 1px solid var(--univalle-red-border);
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .repo-links-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            padding: 12px 16px;
+            background: #f9fafb;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .repo-links-bar strong {
+            color: var(--dark);
+        }
+
+        .repo-chip {
+            text-decoration: none;
+            color: var(--text-main);
+            background: white;
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .repo-chip:hover {
+            border-color: var(--univalle-red);
+            color: var(--univalle-red);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .meta {
+            font-size: 0.8rem;
+            color: var(--univalle-red);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .page-title {
+            font-size: 2.35rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .page-title span {
+            color: var(--univalle-red);
+        }
+
+        .author-box {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+
+        .author-box strong {
+            color: var(--dark);
+        }
+
+        .role-tag {
+            display: inline-block;
+            background: var(--univalle-red-light);
+            color: var(--univalle-red);
+            border: 1px solid var(--univalle-red-border);
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: var(--border);
+            margin: 30px 0;
+        }
+
+        section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2 i {
+            color: var(--univalle-red);
+        }
+
+        h3 {
+            font-size: 1.05rem;
+            color: var(--dark);
+            margin: 14px 0 8px;
+            font-weight: 700;
+        }
+
+        .card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .card-green { border-left: 4px solid var(--green); }
+        .card-amber { border-left: 4px solid var(--amber); }
+        .card-blue { border-left: 4px solid var(--blue); }
+        .card-red { border-left: 4px solid var(--univalle-red); }
+
+        ul {
+            list-style: none;
+        }
+
+        li {
+            margin-bottom: 10px;
+            padding-left: 22px;
+            position: relative;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--univalle-red);
+            font-weight: 700;
+        }
+
+        .li-issue::before {
+            content: "•";
+            color: var(--amber);
+            font-size: 1.3rem;
+            line-height: 1;
+        }
+
+        .li-learned::before {
+            content: "→";
+            color: var(--blue);
+            font-weight: 700;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        /* Metrics Table */
+        .table-metrics {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            margin-top: 12px;
+        }
+
+        .table-metrics th {
+            background: #f9fafb;
+            color: var(--text-subtle);
+            text-align: left;
+            padding: 10px 14px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table-metrics td {
+            padding: 12px 14px;
+            border-top: 1px solid var(--border);
+            font-size: 0.85rem;
+            color: var(--text-main);
+        }
+
+        /* Institutional Footer Note */
+        .footer-note {
+            background: #f9fafb;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 18px 24px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 40px;
+        }
+
+        .footer-note strong {
+            color: var(--dark);
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 25px 20px; }
+            .page-title { font-size: 1.85rem; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .repo-links-bar { flex-direction: column; align-items: flex-start; }
+            .table-metrics { font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Top Institutional Brand -->
+        <div class="top-brand">
+            <a href="index.html" class="brand-link">
+                <img src="logoUV_Oficial_Rojo.jpg" alt="Universidad del Valle" class="univalle-logo">
+                <div class="brand-text">
+                    <h1>Smart<span>AuditorIA</span></h1>
+                    <p>Universidad del Valle • Maestría en Computación e IA</p>
+                </div>
+            </a>
+            <div style="font-size: 0.8rem; color: var(--text-subtle);">
+                <strong>Ciclo:</strong> Trabajo Integrador 2 • Sesión 2-3
+            </div>
+        </div>
+
+        <!-- Breadcrumbs Navigation -->
+        <nav class="breadcrumb-nav">
+            <a href="index.html">
+                <i data-lucide="home" style="width: 14px;"></i> Inicio (Hub)
+            </a>
+            <i data-lucide="chevron-right" style="width: 12px; color: #9ca3af;"></i>
+            <a href="20260320_Presentacion_SGSRI.html">
+                <i data-lucide="presentation" style="width: 14px;"></i> Presentación
+            </a>
+            <i data-lucide="chevron-right" style="width: 12px; color: #9ca3af;"></i>
+            <span class="nav-current">Retrospectiva del Ciclo</span>
+        </nav>
+
+        <!-- Quick Access to 3 Repos and Jira -->
+        <div class="repo-links-bar">
+            <strong>Enlaces del Proyecto:</strong>
+            <a href="https://github.com/lejabamo/smartauditoria_frontend" target="_blank" class="repo-chip">
+                <i data-lucide="github" style="width: 13px;"></i> Frontend
+            </a>
+            <a href="https://github.com/lejabamo/smartauditoria_backend" target="_blank" class="repo-chip">
+                <i data-lucide="github" style="width: 13px;"></i> Backend
+            </a>
+            <a href="https://github.com/lejabamo/smartauditoria_engine" target="_blank" class="repo-chip">
+                <i data-lucide="github" style="width: 13px;"></i> Engine IA
+            </a>
+            <a href="https://smartauditoria.atlassian.net/jira/software/projects/SCRUM/summary" target="_blank" class="repo-chip" style="color: var(--blue); border-color: #bfdbfe;">
+                <i data-lucide="trello" style="width: 13px;"></i> Jira SCRUM
+            </a>
+            <a href="https://riesgosti.tics.sedcauca.gov.co/login" target="_blank" class="repo-chip" style="color: var(--univalle-red); border-color: var(--univalle-red-border);">
+                <i data-lucide="server" style="width: 13px;"></i> Producción
+            </a>
+        </div>
+
+        <header>
+            <span class="meta">Documento de Análisis Metodológico</span>
+            <h1 class="page-title">Retrospectiva del Ciclo <span>SGSRI</span></h1>
+            <div class="author-box">
+                <strong>Ing. Leonardo Javier Bastidas Moreno</strong> — Estudiante de Maestría<br>
+                <span class="role-tag">Adaptación Individual: Roles de Arquitecto de Software, Desarrollador Fullstack y Auditor</span>
+            </div>
+        </header>
+
+        <hr>
+
+        <!-- 1. QUÉ FUNCIONÓ -->
+        <section>
+            <h2><i data-lucide="check-circle-2"></i> 1. Qué Funcionó (Fortalezas y Logros Verificados)</h2>
+            <div class="card card-green">
+                <p style="margin-bottom: 14px; font-weight: 600; color: var(--dark);">
+                    Resultados técnicos consolidados durante los Sprints 1 y 2 en el entorno de desarrollo y producción:
+                </p>
+                <div class="grid-2">
+                    <div>
+                        <h3>Backend y Datos (Flask API + MariaDB)</h3>
+                        <ul>
+                            <li><strong>Modelo Relacional de Activos:</strong> Estructuración completa de tablas para activos, clasificaciones CIA y autenticación con roles RBAC (<code>ADMIN</code>, <code>OPERADOR</code>, <code>CONSULTOR</code>).</li>
+                            <li><strong>Motor de Criticidad:</strong> Algoritmo de cálculo de impacto y probabilidad alineado con el marco DAFP V7 y MIPG.</li>
+                            <li><strong>Seguridad de Acceso:</strong> Autenticación JWT con expiración controlada y bloqueo preventivo anti-fuerza bruta tras 5 intentos fallidos.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Frontend y Despliegue en la Nube</h3>
+                        <ul>
+                            <li><strong>Wizard de Auditoría:</strong> Flujo paso a paso con validaciones por etapa que guía la identificación y valoración de riesgos.</li>
+                            <li><strong>Matriz 5x5 Dinámica:</strong> Cuadrícula visual de calor para mapeo de severidad de riesgo inherente y residual (ISO 27005).</li>
+                            <li><strong>Despliegue Cloud en Producción:</strong> Servidor VPS OVH Cloud (IP 51.79.35.88) operativo bajo dominio institucional seguro: <code>https://riesgosti.tics.sedcauca.gov.co</code>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. QUÉ DIFICULTADES SE PRESENTARON -->
+        <section>
+            <h2><i data-lucide="alert-triangle"></i> 2. Qué Dificultades se Presentaron (Retos Reales)</h2>
+            <div class="card card-amber">
+                <p style="margin-bottom: 14px; font-weight: 600; color: var(--dark);">
+                    Obstáculos técnicos y operativos identificados durante la ejecución:
+                </p>
+                <ul>
+                    <li class="li-issue"><strong>Ausencia de Sincronización Automática en Jira:</strong> El backlog y las historias de usuario (SCRUM-12 al SCRUM-35) se administran en Jira Software (<a href="https://smartauditoria.atlassian.net/jira/software/projects/SCRUM/summary" target="_blank" style="color: var(--blue); font-weight: 600;">smartauditoria.atlassian.net/.../summary</a>), pero no se cuenta con integración automática mediante webhooks hacia los repositorios de GitHub, demandando actualización manual de estados.</li>
+                    <li class="li-issue"><strong>Compatibilidad de Dependencias de IA:</strong> Conflictos entre versiones de Python y librerías de embeddings (ChromaDB / PyTorch) en servidores virtuales con recursos de memoria RAM restringidos.</li>
+                    <li class="li-issue"><strong>Estructuración Normativa ISO 27002:2022:</strong> Complejidad para representar los 93 controles de ciberseguridad en un esquema uniforme que permita su consulta sin generar alucinaciones en el modelo LLM.</li>
+                    <li class="li-issue"><strong>Carga Operativa en Trabajo Individual:</strong> La ejecución simultánea de actividades de infraestructura Linux/Nginx, programación React/Flask y documentación académica requirió priorizar estrictamente el alcance para cumplir los hitos de entrega.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 3. QUÉ APRENDIMOS -->
+        <section>
+            <h2><i data-lucide="lightbulb"></i> 3. Qué Aprendimos (Lecciones Clave)</h2>
+            <div class="card card-blue">
+                <ul>
+                    <li class="li-learned"><strong>Pruebas de Integración E2E como Criterio de Verificación:</strong> La automatización de pruebas sobre el entorno de producción (mediante scripts como <code>test_production.py</code>) garantiza la estabilidad del sistema antes de introducir nuevas capas de abstracción.</li>
+                    <li class="li-learned"><strong>Desacoplamiento Estricto de Repositorios:</strong> La separación en tres repositorios independientes (Frontend, Backend y Engine IA) permitió versionar, probar y desplegar componentes sin generar dependencias cruzadas en el código fuente.</li>
+                    <li class="li-learned"><strong>Estrategia Espiral en Sistemas de IA:</strong> Validar primero el flujo de usuario con sugerencias estructuradas (RAG v1) permitió asegurar la experiencia de auditoría antes de desplegar infraestructuras vectoriales complejas (RAG v2 con ChromaDB).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 4. QUÉ ACCIONES DE MEJORA SE PROPONEN -->
+        <section>
+            <h2><i data-lucide="trending-up"></i> 4. Qué Acciones de Mejora se Proponen</h2>
+            <div class="card card-red">
+                <p style="margin-bottom: 12px; font-weight: 600; color: var(--dark);">
+                    Compromisos para el siguiente ciclo y la consolidación de la Tesis de Maestría:
+                </p>
+                <ul>
+                    <li><strong>Acción 1 (Base Vectorial Persistente):</strong> Desplegar ChromaDB con almacenamiento permanente en el servidor dedicado para indexar los 93 controles de la norma ISO/IEC 27002:2022.</li>
+                    <li><strong>Acción 2 (Evaluación Cuantitativa con RAGAS):</strong> Implementar una batería de pruebas objetivas que mida precisión, fidelidad de contexto y relevancia en las recomendaciones de control.</li>
+                    <li><strong>Acción 3 (Automatización CI/CD y Webhook Jira):</strong> Configurar el pipeline en GitHub Actions para despliegue automatizado vía SSH e investigar la conexión formal de webhooks con Jira Software.</li>
+                    <li><strong>Acción 4 (Conector GLPI):</strong> Desarrollar el servicio de ingesta periódica para sincronizar activos de TI directamente desde la base de datos de mesa de ayuda.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 5. CÓMO SE COMPROBARÁ CADA MEJORA -->
+        <section>
+            <h2><i data-lucide="target"></i> 5. Cómo se Comprobará Cada Mejora (Criterios y Métricas)</h2>
+            <div class="card">
+                <p style="margin-bottom: 12px; font-weight: 600; color: var(--dark);">
+                    Matriz de verificación objetiva para el siguiente hito académico:
+                </p>
+                <table class="table-metrics">
+                    <thead>
+                        <tr>
+                            <th>Acción Propuesta</th>
+                            <th>Métrica Cuantitativa Objetivo</th>
+                            <th>Método de Validación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1. Base Vectorial ChromaDB</strong></td>
+                            <td>Tiempo de recuperación &lt; 250 ms sobre los 93 controles ISO 27002.</td>
+                            <td>Pruebas de carga sintética en <code>smartauditoria_engine</code>.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2. Métricas RAGAS</strong></td>
+                            <td>Puntaje de <em>Faithfulness</em> &gt; 0.85 y <em>Context Precision</em> &gt; 0.80.</td>
+                            <td>Ejecución automatizada de evaluación cuantitativa para el informe de tesis.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3. Pipeline CI/CD</strong></td>
+                            <td>Pipeline 100% verde que compile y despliegue en el VPS en &lt; 4 minutos.</td>
+                            <td>Trazabilidad verificable en la pestaña <em>Actions</em> del repositorio GitHub.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4. Ingesta GLPI</strong></td>
+                            <td>Respuesta HTTP 200 en endpoint <code>/api/activos/sync-glpi</code> con mapeo CIA.</td>
+                            <td>Prueba de integración automatizada en suite Pytest del backend.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Institutional Footer Note -->
+        <div class="footer-note">
+            <p><strong>SmartAuditorIA — Sistema de Gestión y Auditoría de Seguridad de Activos de Información</strong></p>
+            <p>Universidad del Valle • Facultad de Ingeniería • Maestría en Computación e Inteligencia Artificial</p>
+            <p style="font-size: 0.8rem; color: var(--text-subtle); margin-top: 4px;">
+                Documento de retrospectiva metodológica elaborado por el Ing. Leonardo Javier Bastidas Moreno
+            </p>
+        </div>
+    </div>
+
+    <script>
+        if (typeof lucide !== 'undefined' && lucide.createIcons) {
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
